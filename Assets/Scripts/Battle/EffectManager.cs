@@ -24,7 +24,7 @@ public class EffectManager : MonoBehaviour
 
     public void SetEffectToMonster(int monsterIdx, int code)
     {
-        var monster = PvpBattleManager.Instance.GetMonster(monsterIdx);
+        var monster = BattleManager.Instance.GetMonster(monsterIdx);
         SetEffect(monster.transform, code);
     }
 
