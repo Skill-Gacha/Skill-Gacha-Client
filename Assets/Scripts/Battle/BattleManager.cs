@@ -49,7 +49,7 @@ public class BattleManager : MonoBehaviour
         {
             var monsterCode = Constants.MonsterCodeFactor + i;
             var monsterPath = $"Monster/Monster{i}";
-            monsterDb.Add(monsterCode, monsterPath);    
+            monsterDb.Add(monsterCode, monsterPath);
         }
 
         Set(GameManager.Instance.Pkt);

@@ -71,9 +71,11 @@ public class UINameChat : MonoBehaviour
     {
         if (_msgList.Count == 0)
             _time = 0;
-        
+        // msgList.Count 즉, 체팅창 리스트에 Count가 0이면 _time 시간을 0으로 설정
+
         _msgList.Add(new MsgData(_time + _holdingTime, text));
-        
+
+
         SetChatText();
     }
     
