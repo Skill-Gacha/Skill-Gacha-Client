@@ -15,6 +15,9 @@ public class GameManager : MonoBehaviour
 
 
     public const string BattleScene = "Battle";
+
+    public const string PvpScene = "Pvp";
+
     public const string TownScene = "Town";
 
     public S_EnterDungeon Pkt;

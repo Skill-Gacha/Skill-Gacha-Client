@@ -29,6 +29,7 @@ public class PvpBattleManager : MonoBehaviour
     // 플레이어(나)의 Animator
     private Animator playerAnimator;
 
+    private Player myPlayer;
 
     // 상대방이 생성 될 위치
     [SerializeField] private Transform[] opponentTrans;
@@ -37,10 +38,10 @@ public class PvpBattleManager : MonoBehaviour
     private Animator opponentAnimator;
 
     // 상대방 정보를 모든 담은 변수
-    [SerializeField] private Player opponentObjs;
+    [HideInInspector] public Player opponentPlayer = null;
 
     // 상대방 정보를 출력해줄 UI
-    [SerializeField] PvpUIOpponentInformation uiOpponentInformation;
+    [SerializeField] private PvpUIOpponentInformation uiOpponentInformation;
 
     // 외부에서 사용할 수 있게 private 변수를 얕은 복사한 대상
     public PvpUIOpponentInformation UIOpponentInformation => uiOpponentInformation;
@@ -110,7 +111,11 @@ public class PvpBattleManager : MonoBehaviour
             trans[i].gameObject.SetActive(select);
 
             if (select)
+            {
                 animator = trans[i].GetComponent<Animator>();
+                if(isPlayer) myPlayer = trans[i].GetComponent<Player>();
+                else opponentPlayer = trans[i].GetComponent<Player>();
+            }
         }
 
         if (isPlayer)
@@ -125,38 +130,41 @@ public class PvpBattleManager : MonoBehaviour
         SetMap(dungeonInfo.DungeonCode);
     }
 
-    // 플레이어가 공격하겠다는 함수
-    public void PlayerHit(bool isPlayer)
-    {
-        Animator actor = isPlayer ? playerAnimator : opponentAnimator;
-        Animator stopper = !isPlayer ? opponentAnimator : playerAnimator;
-
-        TriggerAnim(actor, stopper,Constants.PlayerBattleHit);
-    }
-
-    // 애니메이션이 유효한지 판단 후 animCodeList배열에서
-    // idx에 맞는 애니메이션 코드 가져오기
-    public void PlayerAnim(int idx)
-    {
-        if(idx < 0 || idx >= animCodeList.Length)
-            return;
-
-        var animCode = animCodeList[idx];
-        TriggerAnim(animCode);
-    }
-
-    // 애니메이션 동작하게 만들기
-    void TriggerAnim(Animator actor, Animator stopper, int code)
-    {
-        playerAnimator.transform.localEulerAngles = Vector3.zero;
-        playerAnimator.transform.localPosition = Vector3.zero;
-        playerAnimator.applyRootMotion = code == Constants.PlayerBattleDie;
-        playerAnimator.SetTrigger(code);
-    }
-
     // 맵 설정
     public void SetMap(int id)
     {
         map.SetMap(id);
+    }
+
+    public void HitAnimation(S_HitAnimationNotification hitPacket)
+    {
+        if(myPlayer.PlayerId == hitPacket.PlayerId)
+        {
+            ActionSet actionSet = hitPacket.ActionSet;
+            playerAnimator.SetTrigger(animCodeList[actionSet.AnimCode]);
+            PvpEffectManager.Instance.SetEffectToPlayer(actionSet.EffectCode, true);
+        }
+        else
+        {
+            ActionSet actionSet = hitPacket.ActionSet;
+            opponentAnimator.SetTrigger(animCodeList[actionSet.AnimCode]);
+            PvpEffectManager.Instance.SetEffectToPlayer(actionSet.EffectCode, false);
+        }
+    }
+
+    public void BeatenAnimation(S_BeatenAnimationNotification beatenPacket)
+    {
+        if(myPlayer.PlayerId == beatenPacket.PlayerId)
+        {
+            ActionSet actionSet = beatenPacket.ActionSet;
+            playerAnimator.SetTrigger(animCodeList[actionSet.AnimCode]);
+            PvpEffectManager.Instance.SetEffectToPlayer(actionSet.EffectCode, false);
+        }
+        else
+        {
+            ActionSet actionSet = beatenPacket.ActionSet;
+            opponentAnimator.SetTrigger(animCodeList[actionSet.AnimCode]);
+            PvpEffectManager.Instance.SetEffectToPlayer(actionSet.EffectCode, true);
+        }
     }
 }

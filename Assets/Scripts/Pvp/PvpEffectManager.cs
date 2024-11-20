@@ -28,7 +28,7 @@ public class PvpEffectManager : MonoBehaviour
 
     public void SetEffectToPlayer(int code, bool isPlayer)
     {
-        Transform trans = isPlayer ? playerTrans : oppoentTrans;
+        Transform trans = isPlayer ? oppoentTrans : playerTrans;
         SetEffect(trans, code);
     }
 

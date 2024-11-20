@@ -69,7 +69,7 @@ class PacketHandler
 		S_Despawn despawnPacket = packet as S_Despawn;
 		//IMessage로 온 코드를 S_Despawn으로 정의
 
-		if (despawnPacket == null) 
+		if (despawnPacket == null)
 			return;
 		// 없을 경우 null 반환
 
@@ -272,6 +272,47 @@ class PacketHandler
 
 		if(pkt.ActionSet.AnimCode != 4) BattleManager.Instance.PlayerHit();
 		EffectManager.Instance.SetEffectToPlayer(pkt.ActionSet.EffectCode);
+	}
+	#endregion
+
+
+	#region Pvp
+
+	public static void S_PlayerMatchNotificationHandler(PacketSession session, IMessage packet)
+	{
+		S_PlayerMatchNotification matchPacket = packet as S_PlayerMatchNotification;
+
+		if(matchPacket == null)
+			return;
+		Scene scene = SceneManager.GetActiveScene();
+
+		if(scene.name == GameManager.PvpScene)
+		{
+			PvpBattleManager.Instance.Set(matchPacket);
+		}
+		else
+		{
+			GameManager.Instance.Pvp = matchPacket;
+			SceneManager.LoadScene(GameManager.PvpScene);
+		}
+	}
+
+	public static void S_HitAnimationNotificationHandler(PacketSession session, IMessage packet)
+	{
+		S_HitAnimationNotification hitPacket = packet as S_HitAnimationNotification;
+
+		if(hitPacket == null)
+			return;
+		PvpBattleManager.Instance.HitAnimation(hitPacket);
+	}
+
+	public static void S_BeatenAnimationNotificationHandler(PacketSession session, IMessage packet)
+	{
+		S_BeatenAnimationNotification beatenPacket = packet as S_BeatenAnimationNotification;
+
+		if(beatenPacket == null)
+			return;
+		PvpBattleManager.Instance.BeatenAnimation(beatenPacket);
 	}
 
 	#endregion
