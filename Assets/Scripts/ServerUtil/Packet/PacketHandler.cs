@@ -278,10 +278,17 @@ class PacketHandler
 
 	#region Pvp
 
+	public static void S_PlayerMatchHandler(PacketSession session, IMessage packet)
+	{
+		S_PlayerMatch matchPacket = packet as S_PlayerMatch;
+		if(matchPacket == null)
+			return;
+		//TownManager.Instance
+	}
+
 	public static void S_PlayerMatchNotificationHandler(PacketSession session, IMessage packet)
 	{
 		S_PlayerMatchNotification matchPacket = packet as S_PlayerMatchNotification;
-		Debug.Log("디버깅 해보기"+matchPacket);
 		if(matchPacket == null)
 			return;
 		Scene scene = SceneManager.GetActiveScene();
@@ -316,6 +323,56 @@ class PacketHandler
 			return;
 		PvpBattleManager.Instance.BeatenAnimation(beatenPacket);
 	}
+
+	// public static void S_PlayerStrikeFirstNotificationHandler(PacketSession session, IMessage packet)
+	// {
+	// 	S_PlayerStrikeFirstNotification firstPacket = packet as S_PlayerStrikeFirstNotification;
+
+	// 	if(firstPacket == null)
+	// 		return;
+
+	// 	PvpBattleManager.Instance.StrikeFirstNotification(firstPacket);
+	// }
+	public static void S_UserTurnHandler(PacketSession session, IMessage packet)
+	{
+		S_UserTurn turnPacket = packet as S_UserTurn;
+		if(turnPacket == null)
+			return;
+		Debug.Log("턴 유무 확인 :"+turnPacket.UserTurn);
+		PvpBattleManager.Instance.CheckUserTurn(turnPacket.UserTurn);
+	}
+
+	public static void S_PvpBattleLogHandler(PacketSession session, IMessage packet)
+	{
+		S_PvpBattleLog battleLogPacket =  packet as S_PvpBattleLog;
+
+		if(battleLogPacket == null)
+			return;
+
+		if(battleLogPacket.BattleLog != null)
+		{
+			var pvpUiBattleLog = PvpBattleManager.Instance.PvpUiBattleLog;
+			pvpUiBattleLog.Set(battleLogPacket.BattleLog);
+		}
+	}
+
+	/*
+	    _onRecv.Add((ushort)MsgId.SPlayerCurrencyNotification, MakePacket<S_PlayerCurrencyNotification>);
+        _handler.Add((ushort)MsgId.SPlayerCurrencyNotification, PacketHandler.S_PlayerCurrencyNotificationHandler);
+
+
+        _onRecv.Add((ushort)MsgId.SEnemyActionNotification, MakePacket<S_EnemyActionNotification>);
+        _handler.Add((ushort)MsgId.SEnemyActionNotification, PacketHandler.S_EnemyActionNotificationHandler);
+	*/
+
+	// public static void S_EnemyActionNotificationHandler(PacketSession session, IMessage packet)
+	// {
+	// 	S_EnemyActionNotification enemyActionPacket = packet as S_EnemyActionNotification;
+
+	// 	if(enemyActionPacket == null)
+	// 		return;
+		
+	// }
 
 	#endregion
 }

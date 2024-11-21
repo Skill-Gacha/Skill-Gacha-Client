@@ -62,32 +62,32 @@ class PacketManager
         _handler.Add((ushort)MsgId.SMonsterAction, PacketHandler.S_MonsterActionHandler);
 
         // 패킷 추가 등록
-        //_onRecv.Add((ushort)MsgId.SViewRankPoint, MakePacket<S_ViewRankPoint>);
-        //_handler.Add((ushort)MsgId.SViewRankPoint, PacketHandler.S_ViewRankPointHandler);
+        // _onRecv.Add((ushort)MsgId.SViewRankPoint, MakePacket<S_ViewRankPoint>);
+        // _handler.Add((ushort)MsgId.SViewRankPoint, PacketHandler.S_ViewRankPointHandler);
 
-        //_onRecv.Add((ushort)MsgId.SPlayerStrikeFirstNotification, MakePacket<S_PlayerStrikeFirstNotification>);
-        //_handler.Add((ushort)MsgId.SPlayerStrikeFirstNotification, PacketHandler.S_PlayerStrikeFirstNotificationHandler);
+        // _onRecv.Add((ushort)MsgId.SPlayerStrikeFirstNotification, MakePacket<S_PlayerStrikeFirstNotification>);
+        // _handler.Add((ushort)MsgId.SPlayerStrikeFirstNotification, PacketHandler.S_PlayerStrikeFirstNotificationHandler);
 
-        //_onRecv.Add((ushort)MsgId.SPlayerCurrencyNotification, MakePacket<S_PlayerCurrencyNotification>);
-        //_handler.Add((ushort)MsgId.SPlayerCurrencyNotification, PacketHandler.S_PlayerCurrencyNotificationHandler);
+        // _onRecv.Add((ushort)MsgId.SPlayerCurrencyNotification, MakePacket<S_PlayerCurrencyNotification>);
+        // _handler.Add((ushort)MsgId.SPlayerCurrencyNotification, PacketHandler.S_PlayerCurrencyNotificationHandler);
 
-        //_onRecv.Add((ushort)MsgId.SPlayerMatch, MakePacket<S_PlayerMatch>);
-        //_handler.Add((ushort)MsgId.SPlayerMatch, PacketHandler.S_PlayerMatchHandler);
+        _onRecv.Add((ushort)MsgId.SPlayerMatch, MakePacket<S_PlayerMatch>);
+        _handler.Add((ushort)MsgId.SPlayerMatch, PacketHandler.S_PlayerMatchHandler);
 
         _onRecv.Add((ushort)MsgId.SPlayerMatchNotification, MakePacket<S_PlayerMatchNotification>);
         _handler.Add((ushort)MsgId.SPlayerMatchNotification, PacketHandler.S_PlayerMatchNotificationHandler);
 
-        //_onRecv.Add((ushort)MsgId.SUserTurn, MakePacket<S_UserTurn>);
-        //_handler.Add((ushort)MsgId.SUserTurn, PacketHandler.S_UserTurnHandler);
+        _onRecv.Add((ushort)MsgId.SUserTurn, MakePacket<S_UserTurn>);
+        _handler.Add((ushort)MsgId.SUserTurn, PacketHandler.S_UserTurnHandler);
 
-        //_onRecv.Add((ushort)MsgId.SEnemyActionNotification, MakePacket<S_EnemyActionNotification>);
-        //_handler.Add((ushort)MsgId.SEnemyActionNotification, PacketHandler.S_EnemyActionNotificationHandler);
+        // _onRecv.Add((ushort)MsgId.SEnemyActionNotification, MakePacket<S_EnemyActionNotification>);
+        // _handler.Add((ushort)MsgId.SEnemyActionNotification, PacketHandler.S_EnemyActionNotificationHandler);
 
-        //_onRecv.Add((ushort)MsgId.SGameOverNotification, MakePacket<S_GameOverNotification>);
-        //_handler.Add((ushort)MsgId.SGameOverNotification, PacketHandler.S_GameOverNotificationHandler);
+        // _onRecv.Add((ushort)MsgId.SGameOverNotification, MakePacket<S_GameOverNotification>);
+        // _handler.Add((ushort)MsgId.SGameOverNotification, PacketHandler.S_GameOverNotificationHandler);
 
-        //_onRecv.Add((ushort)MsgId.SEnemyHpNotification, MakePacket<S_EnemyHpNotification>);
-        //_handler.Add((ushort)MsgId.SEnemyHpNotification, PacketHandler.S_EnemyHpNotificationHandler);
+        // _onRecv.Add((ushort)MsgId.SEnemyHpNotification, MakePacket<S_EnemyHpNotification>);
+        // _handler.Add((ushort)MsgId.SEnemyHpNotification, PacketHandler.S_EnemyHpNotificationHandler);
 
         _onRecv.Add((ushort)MsgId.SBeatenAnimationNotification, MakePacket<S_BeatenAnimationNotification>);
         _handler.Add((ushort)MsgId.SBeatenAnimationNotification, PacketHandler.S_BeatenAnimationNotificationHandler);

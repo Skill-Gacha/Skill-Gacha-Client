@@ -1,8 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Google.Protobuf.Collections;
 using Google.Protobuf.Protocol;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PvpBattleManager : MonoBehaviour
 {
@@ -11,14 +14,16 @@ public class PvpBattleManager : MonoBehaviour
     // 싱글톤 방식으로 본인 객체 참조
     public static PvpBattleManager Instance => _instance;
 
-    [SerializeField] private UIScreen uiScreen;
-    [SerializeField] private UIBattleLog uiBattleLog;
+    [SerializeField] private PvpUIScreen pvpUiScreen;
+    [SerializeField] private PvpBattleLog uiBattleLog;
     [SerializeField] private PvpUIPlayerInformation uiPlayerInformation;
 
-    public UIScreen UiScreen => uiScreen;
-    public UIBattleLog UiBattleLog => uiBattleLog;
+    public PvpUIScreen PvpUiScreen => pvpUiScreen;
+    public PvpBattleLog PvpUiBattleLog => uiBattleLog;
 
     public PvpUIPlayerInformation UiPlayerInformation => uiPlayerInformation;
+
+    [SerializeField] private Transform buttons;
 
     // pvp 맵 환경
     [SerializeField] private Maps map;
@@ -46,6 +51,10 @@ public class PvpBattleManager : MonoBehaviour
     // 외부에서 사용할 수 있게 private 변수를 얕은 복사한 대상
     public PvpUIOpponentInformation UIOpponentInformation => uiOpponentInformation;
 
+    // 누구의 유저 턴인지 구분하는 bool
+    bool CheckWhoTurn;
+    // true이면 서버의 matching 당시 playerA의 공격 차례
+    // false이면 서버의 matching 다시 playerB의 공격 차례
 
     // 플레이어(나) 공격, 죽기, 때리기 모션을 hash(인트형) 코드
     private int[] animCodeList = new[]
@@ -91,11 +100,10 @@ public class PvpBattleManager : MonoBehaviour
             // 상대방 캐릭터 3D 모델 설정
             SetCharacter(pvp.OpponentData.PlayerClass, false);
         }
+        Debug.Log(pvp.BattleLog);
 
-        // 버튼 선택 가능 여부는 게임 시작 시 지급을 안 하는 중이라 주석 처리된 상태
-        // 만약 필요하다면 주석 해제
-        // if (pvp.BattleLog != null)
-        //     uiBattleLog.Set(pvp.BattleLog);
+        if (pvp.BattleLog != null)
+            uiBattleLog.Set(pvp.BattleLog);
     }
 
     // 캐릭터 모델 설정 및 애니메이터 할당
@@ -149,6 +157,16 @@ public class PvpBattleManager : MonoBehaviour
             ActionSet actionSet = hitPacket.ActionSet;
             opponentAnimator.SetTrigger(animCodeList[actionSet.AnimCode]);
             PvpEffectManager.Instance.SetEffectToPlayer(actionSet.EffectCode, false);
+        }
+    }
+
+    public void CheckUserTurn(bool UserTurn)
+    {
+        int numChildren = buttons.transform.childCount;
+        Debug.Log("자식 수 : " + numChildren);
+        for(int i = 0; i < numChildren; i++)
+        {
+            Debug.Log("버튼 맞니 : "+buttons.GetChild(i).name);
         }
     }
 
