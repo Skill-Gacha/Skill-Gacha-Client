@@ -14,10 +14,15 @@ public class UIPlayerInformation : MonoBehaviour
     [SerializeField] private TMP_Text txtHp;
     [SerializeField] private Image imgHpFill;
     [SerializeField] private Image imgHpBack;
+    [SerializeField] private Image imgElement;
 
     [SerializeField] private TMP_Text txtMp;
     [SerializeField] private Image imgMpFill;
     [SerializeField] private Image imgMpBack;
+
+    [SerializeField] public Sprite[] elements;
+
+    // private Image elementIcon;
     
     private float fullHP;
     private float curHP;
@@ -27,21 +32,31 @@ public class UIPlayerInformation : MonoBehaviour
     
     private float fillWidth = 634;
     private float fillHeight = 40; 
-
     
-    public void SetLevel(int level)
+    private string[] elementList = {"전기 속성", "땅 속성", "풀 속성", "불 속성", "물 속성"};
+
+    SpriteRenderer spriteRenderer;
+
+    void Start()
     {
-        txtLv.text = $"Lv.{level}";
+       spriteRenderer = GetComponent<SpriteRenderer>(); 
+    }
+    public void SetElement(int element)
+    {
+        int elementIndex = element - 1001;
+        txtLv.text = $"{elementList[elementIndex]}";
+        imgElement.sprite = elements[elementIndex];
     }
 
     public void Set(PlayerStatus playerStatus)
     {
         SetName(playerStatus.PlayerName);
-        SetLevel(playerStatus.PlayerLevel);
+        // SetLevel(playerStatus.PlayerClass);
         SetFullHP(playerStatus.PlayerFullHp);
         SetFullMP(playerStatus.PlayerFullMp);
         SetCurHP(playerStatus.PlayerCurHp);
         SetCurMP(playerStatus.PlayerCurMp);
+        SetElement(playerStatus.PlayerClass);
     }
 
     public void SetName(string nickname)
