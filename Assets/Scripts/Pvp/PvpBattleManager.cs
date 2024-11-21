@@ -71,8 +71,8 @@ public class PvpBattleManager : MonoBehaviour
     public void Set(S_PlayerMatchNotification pvp)
     {
         // 현재는 패킷으로 보내는 부분이 없어서 문제 발생 중
-        // if (pvp.DungeonInfo != null)
-        //     SetDungeon(pvp.DungeonInfo);
+        // if (pvp.dungeonCode != null)
+        //     SetDungeon(pvp.dungeonCode);
 
         // 내 캐릭터 설정
         if (pvp.PlayerData != null)
@@ -125,9 +125,9 @@ public class PvpBattleManager : MonoBehaviour
     }
 
     // 던전 배경 설정 현재는 호출부가 주석 처리된 상태
-    public void SetDungeon(DungeonInfo dungeonInfo)
+    public void SetDungeon(int dungeonCode)
     {
-        SetMap(dungeonInfo.DungeonCode);
+        SetMap(dungeonCode);
     }
 
     // 맵 설정

@@ -281,17 +281,19 @@ class PacketHandler
 	public static void S_PlayerMatchNotificationHandler(PacketSession session, IMessage packet)
 	{
 		S_PlayerMatchNotification matchPacket = packet as S_PlayerMatchNotification;
-
+		Debug.Log("디버깅 해보기"+matchPacket);
 		if(matchPacket == null)
 			return;
 		Scene scene = SceneManager.GetActiveScene();
 
 		if(scene.name == GameManager.PvpScene)
 		{
+			Debug.Log("if 경우");
 			PvpBattleManager.Instance.Set(matchPacket);
 		}
 		else
 		{
+			Debug.Log("그 밖으로 빠지는 경우");
 			GameManager.Instance.Pvp = matchPacket;
 			SceneManager.LoadScene(GameManager.PvpScene);
 		}
@@ -300,7 +302,7 @@ class PacketHandler
 	public static void S_HitAnimationNotificationHandler(PacketSession session, IMessage packet)
 	{
 		S_HitAnimationNotification hitPacket = packet as S_HitAnimationNotification;
-
+		Debug.Log("동작 확인 : "+hitPacket);
 		if(hitPacket == null)
 			return;
 		PvpBattleManager.Instance.HitAnimation(hitPacket);
