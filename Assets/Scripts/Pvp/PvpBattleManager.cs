@@ -162,6 +162,7 @@ public class PvpBattleManager : MonoBehaviour
 
     public void CheckUserTurn(bool UserTurn)
     {
+        Debug.Log("동작 유무 확인"+UserTurn);
         int numChildren = buttons.transform.childCount;
         for(int i = 0; i < numChildren; i++)
         {

@@ -65,9 +65,6 @@ class PacketManager
         // _onRecv.Add((ushort)MsgId.SViewRankPoint, MakePacket<S_ViewRankPoint>);
         // _handler.Add((ushort)MsgId.SViewRankPoint, PacketHandler.S_ViewRankPointHandler);
 
-        // _onRecv.Add((ushort)MsgId.SPlayerStrikeFirstNotification, MakePacket<S_PlayerStrikeFirstNotification>);
-        // _handler.Add((ushort)MsgId.SPlayerStrikeFirstNotification, PacketHandler.S_PlayerStrikeFirstNotificationHandler);
-
         // _onRecv.Add((ushort)MsgId.SPlayerCurrencyNotification, MakePacket<S_PlayerCurrencyNotification>);
         // _handler.Add((ushort)MsgId.SPlayerCurrencyNotification, PacketHandler.S_PlayerCurrencyNotificationHandler);
 
@@ -80,8 +77,8 @@ class PacketManager
         _onRecv.Add((ushort)MsgId.SUserTurn, MakePacket<S_UserTurn>);
         _handler.Add((ushort)MsgId.SUserTurn, PacketHandler.S_UserTurnHandler);
 
-        // _onRecv.Add((ushort)MsgId.SEnemyActionNotification, MakePacket<S_EnemyActionNotification>);
-        // _handler.Add((ushort)MsgId.SEnemyActionNotification, PacketHandler.S_EnemyActionNotificationHandler);
+        _onRecv.Add((ushort)MsgId.SEnemyActionNotification, MakePacket<S_EnemyActionNotification>);
+        _handler.Add((ushort)MsgId.SEnemyActionNotification, PacketHandler.S_EnemyActionNotificationHandler);
 
         // _onRecv.Add((ushort)MsgId.SGameOverNotification, MakePacket<S_GameOverNotification>);
         // _handler.Add((ushort)MsgId.SGameOverNotification, PacketHandler.S_GameOverNotificationHandler);
@@ -94,6 +91,9 @@ class PacketManager
 
         _onRecv.Add((ushort)MsgId.SHitAnimationNotification, MakePacket<S_HitAnimationNotification>);
         _handler.Add((ushort)MsgId.SHitAnimationNotification, PacketHandler.S_HitAnimationNotificationHandler);
+
+		_onRecv.Add((ushort)MsgId.SPvpBattleLog, MakePacket<S_PvpBattleLog>);
+        _handler.Add((ushort)MsgId.SPvpBattleLog, PacketHandler.S_PvpBattleLogHandler);
     }
 
     public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

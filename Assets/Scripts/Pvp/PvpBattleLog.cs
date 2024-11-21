@@ -35,7 +35,7 @@ public class PvpBattleLog : MonoBehaviour
             btnInfos = battleLog.Btns?.ToArray();
         else
             btnInfos = null;
-
+        Debug.Log("Msg : "+battleLog.Msg+"battleLog : "+battleLog.TypingAnimation);
         SetLog(battleLog.Msg, battleLog.TypingAnimation);
     }
     //public PvpUIScreen PvpUiScreen => pvpUiScreen;

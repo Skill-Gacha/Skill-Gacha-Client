@@ -345,13 +345,14 @@ class PacketHandler
 	public static void S_PvpBattleLogHandler(PacketSession session, IMessage packet)
 	{
 		S_PvpBattleLog battleLogPacket =  packet as S_PvpBattleLog;
-
+		Debug.Log("battleLogPacket 확인"+battleLogPacket);
 		if(battleLogPacket == null)
 			return;
 
 		if(battleLogPacket.BattleLog != null)
 		{
 			var pvpUiBattleLog = PvpBattleManager.Instance.PvpUiBattleLog;
+			Debug.Log("BattleLog : "+battleLogPacket.BattleLog);
 			pvpUiBattleLog.Set(battleLogPacket.BattleLog);
 		}
 	}
@@ -364,10 +365,14 @@ class PacketHandler
 			return;
 	}
 
-	public static void S_EnemyHpNotificationHandler(PacketSession session, IMessage packet)
-	{
-		S_ENEMY_HP_NOTIFICATION
-	}
+	// public static void S_EnemyHpNotificationHandler(PacketSession session, IMessage packet)
+	// {
+	// 	S_EnemyHpNotification enemeyHp = packet as S_EnemyHpNotification;
+
+	// 	if(enemeyHp == null)
+	// 		return;
+	// 	PvpBattleManager.Instance.SetEnemenyHp(enemeyHp.Hp);
+	// }
 
 	/*
 	
