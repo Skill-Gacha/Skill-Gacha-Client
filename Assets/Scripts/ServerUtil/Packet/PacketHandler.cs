@@ -356,23 +356,31 @@ class PacketHandler
 		}
 	}
 
+	public static void S_EnemyActionNotificationHandler(PacketSession session, IMessage packet)
+	{
+		S_EnemyActionNotification enemyActionPacket = packet as S_EnemyActionNotification;
+
+		if(enemyActionPacket == null)
+			return;
+	}
+
+	public static void S_EnemyHpNotificationHandler(PacketSession session, IMessage packet)
+	{
+		S_ENEMY_HP_NOTIFICATION
+	}
+
 	/*
-	    _onRecv.Add((ushort)MsgId.SPlayerCurrencyNotification, MakePacket<S_PlayerCurrencyNotification>);
-        _handler.Add((ushort)MsgId.SPlayerCurrencyNotification, PacketHandler.S_PlayerCurrencyNotificationHandler);
+	
+	public static void S_SetMonsterHpHandler(PacketSession session, IMessage packet)
+	{
+		S_SetMonsterHp pkt = packet as S_SetMonsterHp;
+		if (pkt == null)
+			return;
 
-
-        _onRecv.Add((ushort)MsgId.SEnemyActionNotification, MakePacket<S_EnemyActionNotification>);
-        _handler.Add((ushort)MsgId.SEnemyActionNotification, PacketHandler.S_EnemyActionNotificationHandler);
+		BattleManager.Instance.SetMonsterHp(pkt.MonsterIdx, pkt.Hp);
+	}
+	
 	*/
-
-	// public static void S_EnemyActionNotificationHandler(PacketSession session, IMessage packet)
-	// {
-	// 	S_EnemyActionNotification enemyActionPacket = packet as S_EnemyActionNotification;
-
-	// 	if(enemyActionPacket == null)
-	// 		return;
-		
-	// }
 
 	#endregion
 }

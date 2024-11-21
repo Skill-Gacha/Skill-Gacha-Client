@@ -163,10 +163,10 @@ public class PvpBattleManager : MonoBehaviour
     public void CheckUserTurn(bool UserTurn)
     {
         int numChildren = buttons.transform.childCount;
-        Debug.Log("자식 수 : " + numChildren);
         for(int i = 0; i < numChildren; i++)
         {
-            Debug.Log("버튼 맞니 : "+buttons.GetChild(i).name);
+            Button button = buttons.GetChild(i).GetComponent<Button>();
+            button.interactable = UserTurn;
         }
     }
 
@@ -184,5 +184,10 @@ public class PvpBattleManager : MonoBehaviour
             opponentAnimator.SetTrigger(animCodeList[actionSet.AnimCode]);
             PvpEffectManager.Instance.SetEffectToPlayer(actionSet.EffectCode, true);
         }
+    }
+
+    public void SetEnemenyHp(int hp)
+    {
+
     }
 }
