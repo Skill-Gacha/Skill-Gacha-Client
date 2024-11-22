@@ -191,13 +191,11 @@ class PacketHandler
 		if (pkt == null)
 			return;
 
-		if(BattleManager.Instance != null)
+		if(PvpBattleManager.Instance != null)
 		{
-			Debug.Log("PvP 입니다.");
-		}
-		else if(PvpBattleManager.Instance != null)
-		{
-			Debug.Log("Pve 입니다");
+			var pvpUiScreen = PvpBattleManager.Instance.PvpUiScreen;
+			pvpUiScreen.Set(pkt.ScreenText);
+			return;
 		}
 
 		if (pkt.ScreenText != null)

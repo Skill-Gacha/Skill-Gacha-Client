@@ -80,8 +80,7 @@ public class PvpBattleManager : MonoBehaviour
     public void Set(S_PlayerMatchNotification pvp)
     {
         // 현재는 패킷으로 보내는 부분이 없어서 문제 발생 중
-        // if (pvp.dungeonCode != null)
-        //     SetDungeon(pvp.dungeonCode);
+        SetDungeon(pvp.DungeonCode);
 
         // 내 캐릭터 설정
         if (pvp.PlayerData != null)
