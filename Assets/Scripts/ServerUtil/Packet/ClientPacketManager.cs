@@ -86,17 +86,17 @@ class PacketManager
 		_onRecv.Add((ushort)MsgId.SPvpBattleLog, MakePacket<S_PvpBattleLog>);
         _handler.Add((ushort)MsgId.SPvpBattleLog, PacketHandler.S_PvpBattleLogHandler);
 
-		_onRecv.Add((ushort)MsgId.SPlayerAction, MakePacket<S_PvpPlayerAction>);
-        _handler.Add((ushort)MsgId.SPlayerAction, PacketHandler.S_PvpPlayerActionHandler);
+		_onRecv.Add((ushort)MsgId.SPvpPlayerAction, MakePacket<S_PvpPlayerAction>);
+        _handler.Add((ushort)MsgId.SPvpPlayerAction, PacketHandler.S_PvpPlayerActionHandler);
 
 		_onRecv.Add((ushort)MsgId.SPvpEnemyAction, MakePacket<S_PvpEnemyAction>);
         _handler.Add((ushort)MsgId.SPvpEnemyAction, PacketHandler.S_PvpEnemyActionHandler);
 
-        _onRecv.Add((ushort)MsgId.SSetPlayerHp, MakePacket<S_SetPvpPlayerHp>);
-        _handler.Add((ushort)MsgId.SSetPlayerHp, PacketHandler.S_SetPvpPlayerHpHandler);
+        _onRecv.Add((ushort)MsgId.SSetPvpPlayerHp, MakePacket<S_SetPvpPlayerHp>);
+        _handler.Add((ushort)MsgId.SSetPvpPlayerHp, PacketHandler.S_SetPvpPlayerHpHandler);
 
-        _onRecv.Add((ushort)MsgId.SSetPlayerMp, MakePacket<S_SetPvpPlayerMp>);
-        _handler.Add((ushort)MsgId.SSetPlayerMp, PacketHandler.S_SetPvpPlayerMpHandler);
+        _onRecv.Add((ushort)MsgId.SSetPvpPlayerMp, MakePacket<S_SetPvpPlayerMp>);
+        _handler.Add((ushort)MsgId.SSetPvpPlayerMp, PacketHandler.S_SetPvpPlayerMpHandler);
     }
 
     public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
