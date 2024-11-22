@@ -77,23 +77,29 @@ class PacketManager
         _onRecv.Add((ushort)MsgId.SUserTurn, MakePacket<S_UserTurn>);
         _handler.Add((ushort)MsgId.SUserTurn, PacketHandler.S_UserTurnHandler);
 
-        _onRecv.Add((ushort)MsgId.SEnemyActionNotification, MakePacket<S_EnemyActionNotification>);
-        _handler.Add((ushort)MsgId.SEnemyActionNotification, PacketHandler.S_EnemyActionNotificationHandler);
-
         // _onRecv.Add((ushort)MsgId.SGameOverNotification, MakePacket<S_GameOverNotification>);
         // _handler.Add((ushort)MsgId.SGameOverNotification, PacketHandler.S_GameOverNotificationHandler);
 
         // _onRecv.Add((ushort)MsgId.SEnemyHpNotification, MakePacket<S_EnemyHpNotification>);
         // _handler.Add((ushort)MsgId.SEnemyHpNotification, PacketHandler.S_EnemyHpNotificationHandler);
 
-        _onRecv.Add((ushort)MsgId.SBeatenAnimationNotification, MakePacket<S_BeatenAnimationNotification>);
-        _handler.Add((ushort)MsgId.SBeatenAnimationNotification, PacketHandler.S_BeatenAnimationNotificationHandler);
-
-        _onRecv.Add((ushort)MsgId.SHitAnimationNotification, MakePacket<S_HitAnimationNotification>);
-        _handler.Add((ushort)MsgId.SHitAnimationNotification, PacketHandler.S_HitAnimationNotificationHandler);
-
 		_onRecv.Add((ushort)MsgId.SPvpBattleLog, MakePacket<S_PvpBattleLog>);
         _handler.Add((ushort)MsgId.SPvpBattleLog, PacketHandler.S_PvpBattleLogHandler);
+
+		_onRecv.Add((ushort)MsgId.SPlayerAction, MakePacket<S_PvpPlayerAction>);
+        _handler.Add((ushort)MsgId.SPlayerAction, PacketHandler.S_PvpPlayerActionHandler);
+
+		_onRecv.Add((ushort)MsgId.SPlayerAction, MakePacket<S_PvpEnemyAction>);
+        _handler.Add((ushort)MsgId.SPlayerAction, PacketHandler.S_PvpEnemyActionHandler);
+
+        // _onRecv.Add((ushort)MsgId.SPlayerAction, MakePacket<S_SetPvpPlayerHp>);
+        // _handler.Add((ushort)MsgId.SPlayerAction, PacketHandler.S_SetPvpPlayerHpHandler);
+
+        // _onRecv.Add((ushort)MsgId.SPlayerAction, MakePacket<S_SetPvpPlayerMp>);
+        // _handler.Add((ushort)MsgId.SPlayerAction, PacketHandler.S_SetPvpPlayerMpHandler);
+
+        // _onRecv.Add((ushort)MsgId.SPlayerAction, MakePacket<S_SetPvpEnemyHp>);
+        // _handler.Add((ushort)MsgId.SPlayerAction, PacketHandler.S_SetPvpEnemyMpHandler);
     }
 
     public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

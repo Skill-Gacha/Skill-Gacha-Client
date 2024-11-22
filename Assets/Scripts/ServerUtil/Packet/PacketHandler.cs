@@ -306,33 +306,6 @@ class PacketHandler
 		}
 	}
 
-	public static void S_HitAnimationNotificationHandler(PacketSession session, IMessage packet)
-	{
-		S_HitAnimationNotification hitPacket = packet as S_HitAnimationNotification;
-		Debug.Log("동작 확인 : "+hitPacket);
-		if(hitPacket == null)
-			return;
-		PvpBattleManager.Instance.HitAnimation(hitPacket);
-	}
-
-	public static void S_BeatenAnimationNotificationHandler(PacketSession session, IMessage packet)
-	{
-		S_BeatenAnimationNotification beatenPacket = packet as S_BeatenAnimationNotification;
-
-		if(beatenPacket == null)
-			return;
-		PvpBattleManager.Instance.BeatenAnimation(beatenPacket);
-	}
-
-	// public static void S_PlayerStrikeFirstNotificationHandler(PacketSession session, IMessage packet)
-	// {
-	// 	S_PlayerStrikeFirstNotification firstPacket = packet as S_PlayerStrikeFirstNotification;
-
-	// 	if(firstPacket == null)
-	// 		return;
-
-	// 	PvpBattleManager.Instance.StrikeFirstNotification(firstPacket);
-	// }
 	public static void S_UserTurnHandler(PacketSession session, IMessage packet)
 	{
 		S_UserTurn turnPacket = packet as S_UserTurn;
@@ -357,35 +330,69 @@ class PacketHandler
 		}
 	}
 
-	public static void S_EnemyActionNotificationHandler(PacketSession session, IMessage packet)
+	public static void S_PvpPlayerActionHandler(PacketSession session, IMessage packet)
 	{
-		S_EnemyActionNotification enemyActionPacket = packet as S_EnemyActionNotification;
-
-		if(enemyActionPacket == null)
-			return;
+		// 내 행동은 true를 HandlePvpAction에 전달
+		HandlePvpAction(packet, true);
 	}
 
-	// public static void S_EnemyHpNotificationHandler(PacketSession session, IMessage packet)
-	// {
-	// 	S_EnemyHpNotification enemeyHp = packet as S_EnemyHpNotification;
-
-	// 	if(enemeyHp == null)
-	// 		return;
-	// 	PvpBattleManager.Instance.SetEnemenyHp(enemeyHp.Hp);
-	// }
-
-	/*
-	
-	public static void S_SetMonsterHpHandler(PacketSession session, IMessage packet)
+	public static void S_PvpEnemyActionHandler(PacketSession session, IMessage packet)
 	{
-		S_SetMonsterHp pkt = packet as S_SetMonsterHp;
-		if (pkt == null)
-			return;
-
-		BattleManager.Instance.SetMonsterHp(pkt.MonsterIdx, pkt.Hp);
+		// 상대방 행동은 false를 HandlePvpAction에 전달
+		HandlePvpAction(packet, false);
 	}
-	
-	*/
+
+	public static void HandlePvpAction(IMessage packet, bool isMyAction)
+	{
+		if (isMyAction)
+		{
+			S_PvpPlayerAction playerActionPacket = packet as S_PvpPlayerAction;
+			if (playerActionPacket == null) return;
+
+			ProcessPvpAction(playerActionPacket.ActionSet, isMyAction);
+		}
+		else
+		{
+			S_PvpEnemyAction enemyActionPacket = packet as S_PvpEnemyAction;
+			if (enemyActionPacket == null) return;
+
+			ProcessPvpAction(enemyActionPacket.ActionSet, isMyAction);
+		}
+	}
+
+	private static void ProcessPvpAction(ActionSet actionSet, bool isMyAction)
+	{
+		var animCode = actionSet.AnimCode;
+		var effectCode = actionSet.EffectCode;
+
+		// 맞는 사람 처리(나 : true, 상대방 : false)
+		if (animCode != 1)
+			PvpBattleManager.Instance.PlayerHit(!isMyAction);
+
+		// 때리는 사람 처리(나 : true, 상대방 : false)
+		PvpBattleManager.Instance.PlayerAnim(animCode, isMyAction);
+
+		// 맞는 이펙트 처리(상대방 : true, 나 : false)
+		if (animCode != 1)
+			PvpEffectManager.Instance.SetEffectToPlayer(effectCode, isMyAction);
+	}
+	// 상대방이 때린다 => 나 맞는다 O
+	// 나 때린다 => 상대방 맞는다 O
+
+	// 상대방이 때린다 => 나 죽는다 O
+	// 나 때린다 => 상대방 죽는다 O
+
+	// 나 죽는다 => 이팩트 2번 발생 막았나? O
+	// 상대방이 죽는다 => 이팩트 2번 발생 막았나? O
+
+	public static void S_EnemyHpNotificationHandler(Session session, IMessage packet)
+	{
+		S_EnemyHpNotification enemyHp = packet as S_EnemyHpNotification;
+
+		if(enemyHp == null) return;
+
+		PvpBattleManager.Instance.SetEnemeyHp(enemyHp.Hp)
+	}
 
 	#endregion
 }

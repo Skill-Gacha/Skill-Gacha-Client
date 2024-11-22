@@ -26,15 +26,15 @@ public class PvpEffectManager : MonoBehaviour
         _instance = this;
     }
 
-    public void SetEffectToPlayer(int code, bool isPlayer)
+    public void SetEffectToPlayer(int code, bool isMyPlayer)
     {
-        Transform trans = isPlayer ? oppoentTrans : playerTrans;
+        Transform trans = isMyPlayer ?  oppoentTrans : playerTrans;
         SetEffect(trans, code);
     }
 
     void SetEffect(Transform tr, int code)
     {
-        var calcId = code - Constants.EffectCodeFactor;
+        int calcId = code - Constants.EffectCodeFactor;
         // 효과 코드와 효과 코드 개수를 나타내는 상수와 빼
         // 배열의 효과 index를 가져온다.
         if(calcId < 0 || calcId >= effects.Length)
@@ -44,7 +44,7 @@ public class PvpEffectManager : MonoBehaviour
         if (calcId < fullSkillIdx)
         {
             //효과가 발생할 위치 설정
-            var pos = new Vector3(tr.position.x, effects[calcId].transform.position.y, tr.position.z);
+            Vector3 pos = new Vector3(tr.position.x, effects[calcId].transform.position.y, tr.position.z);
             effects[calcId].transform.position = pos;
         }
 

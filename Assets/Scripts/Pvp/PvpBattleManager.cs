@@ -144,22 +144,6 @@ public class PvpBattleManager : MonoBehaviour
         map.SetMap(id);
     }
 
-    public void HitAnimation(S_HitAnimationNotification hitPacket)
-    {
-        if(myPlayer.PlayerId == hitPacket.PlayerId)
-        {
-            ActionSet actionSet = hitPacket.ActionSet;
-            playerAnimator.SetTrigger(animCodeList[actionSet.AnimCode]);
-            PvpEffectManager.Instance.SetEffectToPlayer(actionSet.EffectCode, true);
-        }
-        else
-        {
-            ActionSet actionSet = hitPacket.ActionSet;
-            opponentAnimator.SetTrigger(animCodeList[actionSet.AnimCode]);
-            PvpEffectManager.Instance.SetEffectToPlayer(actionSet.EffectCode, false);
-        }
-    }
-
     public void CheckUserTurn(bool UserTurn)
     {
         Debug.Log("동작 유무 확인"+UserTurn);
@@ -171,24 +155,31 @@ public class PvpBattleManager : MonoBehaviour
         }
     }
 
-    public void BeatenAnimation(S_BeatenAnimationNotification beatenPacket)
+    public void PlayerHit(bool isMyPlayer)
     {
-        if(myPlayer.PlayerId == beatenPacket.PlayerId)
-        {
-            ActionSet actionSet = beatenPacket.ActionSet;
-            playerAnimator.SetTrigger(animCodeList[actionSet.AnimCode]);
-            PvpEffectManager.Instance.SetEffectToPlayer(actionSet.EffectCode, false);
-        }
-        else
-        {
-            ActionSet actionSet = beatenPacket.ActionSet;
-            opponentAnimator.SetTrigger(animCodeList[actionSet.AnimCode]);
-            PvpEffectManager.Instance.SetEffectToPlayer(actionSet.EffectCode, true);
-        }
+        TriggerPlayerAction(Constants.PlayerBattleHit, isMyPlayer);
     }
 
-    public void SetEnemenyHp(int hp)
+    public void PlayerAnim(int idx, bool isMyPlayer)
     {
+        if (idx < 0 || idx >= animCodeList.Length) return;
 
+        int animCode = animCodeList[idx];
+        TriggerPlayerAction(animCode, isMyPlayer);
+    }
+
+    private void TriggerPlayerAction(int code, bool isMyPlayer)
+    {
+        Animator animator = isMyPlayer ? playerAnimator : opponentAnimator;
+
+        animator.transform.localEulerAngles = Vector3.zero;
+        animator.transform.localPosition = Vector3.zero;
+        animator.applyRootMotion = code == Constants.PlayerBattleDie;
+        animator.SetTrigger(code);
+    }
+
+    public void SetEnemeyHp(int hp)
+    {
+        
     }
 }

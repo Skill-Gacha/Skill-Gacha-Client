@@ -148,6 +148,14 @@ public class BattleManager : MonoBehaviour
         TriggerAnim(Constants.PlayerBattleHit);
     }
 
+    void TriggerAnim(int code)
+    {
+        playerAnimator.transform.localEulerAngles = Vector3.zero;
+        playerAnimator.transform.localPosition = Vector3.zero;
+        playerAnimator.applyRootMotion = code == Constants.PlayerBattleDie;
+        playerAnimator.SetTrigger(code);
+    }
+
     public void PlayerAnim(int idx)
     {
         if(idx < 0 || idx >= animCodeList.Length)
@@ -155,14 +163,6 @@ public class BattleManager : MonoBehaviour
         
         var animCode = animCodeList[idx];
         TriggerAnim(animCode);
-    }
-
-    void TriggerAnim(int code)
-    {
-        playerAnimator.transform.localEulerAngles = Vector3.zero;
-        playerAnimator.transform.localPosition = Vector3.zero;
-        playerAnimator.applyRootMotion = code == Constants.PlayerBattleDie;
-        playerAnimator.SetTrigger(code);
     }
 
     public void SetMap(int id)
