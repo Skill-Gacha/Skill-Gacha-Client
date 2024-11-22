@@ -385,13 +385,17 @@ class PacketHandler
 	// 나 죽는다 => 이팩트 2번 발생 막았나? O
 	// 상대방이 죽는다 => 이팩트 2번 발생 막았나? O
 
+	public static void S_SetPvpPlayerHpHandler(Session session, IMessage packet)
+	{
+		S_SetPlayerHp playerHpPacket = packet as S_SetPlayerHp;
+
+	}
+
 	public static void S_EnemyHpNotificationHandler(Session session, IMessage packet)
 	{
 		S_EnemyHpNotification enemyHp = packet as S_EnemyHpNotification;
 
 		if(enemyHp == null) return;
-
-		PvpBattleManager.Instance.SetEnemeyHp(enemyHp.Hp)
 	}
 
 	#endregion
