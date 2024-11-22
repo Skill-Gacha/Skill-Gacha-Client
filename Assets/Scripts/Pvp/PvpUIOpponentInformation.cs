@@ -12,6 +12,11 @@ public class PvpUIOpponentInformation : MonoBehaviour
 
     [SerializeField] private GameObject checkArrow;
 
+
+    [SerializeField] private Image imageElement;
+
+    [SerializeField] private Sprite[] elementSprite;
+
     [SerializeField] private TMP_Text txtName;
     [SerializeField] private TMP_Text txtHp;
     [SerializeField] private Image imgNameBg;
@@ -33,6 +38,13 @@ public class PvpUIOpponentInformation : MonoBehaviour
         SetName(playerStatus.PlayerName);
         SetFullHP(playerStatus.PlayerFullHp);
         SetCurHP(playerStatus.PlayerCurHp);
+        SetElement(playerStatus.PlayerClass);
+    }
+
+    public void SetElement(int element)
+    {
+        int elementIndex = element - 1001;
+        imageElement.sprite = elementSprite[elementIndex];
     }
 
     public void SetName(string nickname)

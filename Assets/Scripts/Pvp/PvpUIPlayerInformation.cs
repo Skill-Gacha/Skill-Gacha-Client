@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class PvpUIPlayerInformation : MonoBehaviour
 {
-    [SerializeField] private TMP_Text txtLv;
+    [SerializeField] private TMP_Text txtElement;
     [SerializeField] private TMP_Text txtName;
 
     [SerializeField] private TMP_Text txtHp;
@@ -16,8 +16,15 @@ public class PvpUIPlayerInformation : MonoBehaviour
     [SerializeField] private Image imgHpBack;
 
     [SerializeField] private TMP_Text txtMp;
+
+    [SerializeField] private Image imgElement;
+
     [SerializeField] private Image imgMpFill;
     [SerializeField] private Image imgMpBack;
+
+    [SerializeField] private Sprite[] elementSprite;
+
+    private string[] elementList = {"전기 속성", "땅 속성", "풀 속성", "불 속성", "물 속성"};
 
     private float fullHP;
     private float curHP;
@@ -29,15 +36,17 @@ public class PvpUIPlayerInformation : MonoBehaviour
     private float fillHeight = 40;
 
 
-    public void SetLevel(int level)
+    public void SetElement(int element)
     {
-        txtLv.text = $"Lv.{level}";
+        int elementIndex = element - 1001;
+        imgElement.sprite = elementSprite[elementIndex];
+        txtElement.text = $"{elementList[elementIndex]}";
     }
 
     public void Set(PlayerStatus playerStatus)
     {
         SetName(playerStatus.PlayerName);
-        SetLevel(playerStatus.PlayerLevel);
+        SetElement(playerStatus.PlayerClass);
         SetFullHP(playerStatus.PlayerFullHp);
         SetFullMP(playerStatus.PlayerFullMp);
         SetCurHP(playerStatus.PlayerCurHp);
