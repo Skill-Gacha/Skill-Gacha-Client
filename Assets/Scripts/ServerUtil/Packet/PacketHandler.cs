@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using ServerCore;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -13,9 +14,12 @@ class PacketHandler
 
 	public static void S_EnterHandler(PacketSession session, IMessage packet)
 	{
+		Debug.Log("동작유무 확인");
         S_Enter enterPacket = packet as S_Enter;
         if (enterPacket == null)
 	        return;
+
+		Debug.Log("동작유무 확인 : "+enterPacket.Player);
 		TownManager.Instance.Spawn(enterPacket.Player);
 	}
 
@@ -388,6 +392,11 @@ class PacketHandler
 	public static void S_SetPvpPlayerHpHandler(Session session, IMessage packet)
 	{
 		S_SetPlayerHp playerHpPacket = packet as S_SetPlayerHp;
+
+	}
+
+	public static void S_SetPvpPlayerMpHandler(Session session, IMessage packet)
+	{
 
 	}
 
