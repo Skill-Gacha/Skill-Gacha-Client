@@ -26,15 +26,16 @@ public class PvpEffectManager : MonoBehaviour
         _instance = this;
     }
 
-    public void SetEffectToPlayer(int code, bool isMyPlayer)
+    public void SetEffectToPlayer(int? code, bool isMyPlayer)
     {
         Transform trans = isMyPlayer ?  oppoentTrans : playerTrans;
         SetEffect(trans, code);
     }
 
-    void SetEffect(Transform tr, int code)
+    void SetEffect(Transform tr, int? code)
     {
-        int calcId = code - Constants.EffectCodeFactor;
+        // 뒤의 ?? 두개는 앞의 값이 null일 경우 기본적으로 이 값으로 처리하겠다는 의미 입니다.
+        int calcId = code - Constants.EffectCodeFactor ?? Constants.EffectCodeFactor;
         // 효과 코드와 효과 코드 개수를 나타내는 상수와 빼
         // 배열의 효과 index를 가져온다.
         if(calcId < 0 || calcId >= effects.Length)

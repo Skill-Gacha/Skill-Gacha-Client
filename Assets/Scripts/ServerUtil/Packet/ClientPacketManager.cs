@@ -77,9 +77,6 @@ class PacketManager
         _onRecv.Add((ushort)MsgId.SUserTurn, MakePacket<S_UserTurn>);
         _handler.Add((ushort)MsgId.SUserTurn, PacketHandler.S_UserTurnHandler);
 
-        // _onRecv.Add((ushort)MsgId.SGameOverNotification, MakePacket<S_GameOverNotification>);
-        // _handler.Add((ushort)MsgId.SGameOverNotification, PacketHandler.S_GameOverNotificationHandler);
-
         _onRecv.Add((ushort)MsgId.SSetEnemyHp, MakePacket<S_SetPvpEnemyHp>);
         _handler.Add((ushort)MsgId.SSetEnemyHp, PacketHandler.S_SetEnemyHpHandler);
 

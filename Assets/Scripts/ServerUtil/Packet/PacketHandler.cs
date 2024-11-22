@@ -14,12 +14,10 @@ class PacketHandler
 
 	public static void S_EnterHandler(PacketSession session, IMessage packet)
 	{
-		Debug.Log("동작유무 확인");
         S_Enter enterPacket = packet as S_Enter;
         if (enterPacket == null)
 	        return;
 
-		Debug.Log("동작유무 확인 : "+enterPacket.Player);
 		TownManager.Instance.Spawn(enterPacket.Player);
 	}
 
@@ -193,6 +191,15 @@ class PacketHandler
 		if (pkt == null)
 			return;
 
+		if(BattleManager.Instance != null)
+		{
+			Debug.Log("PvP 입니다.");
+		}
+		else if(PvpBattleManager.Instance != null)
+		{
+			Debug.Log("Pve 입니다");
+		}
+
 		if (pkt.ScreenText != null)
 		{
 			var uiScreen = BattleManager.Instance.UiScreen;
@@ -287,7 +294,6 @@ class PacketHandler
 		S_PlayerMatch matchPacket = packet as S_PlayerMatch;
 		if(matchPacket == null)
 			return;
-		//TownManager.Instance
 	}
 
 	public static void S_PlayerMatchNotificationHandler(PacketSession session, IMessage packet)
@@ -299,12 +305,10 @@ class PacketHandler
 
 		if(scene.name == GameManager.PvpScene)
 		{
-			Debug.Log("if 경우");
 			PvpBattleManager.Instance.Set(matchPacket);
 		}
 		else
 		{
-			Debug.Log("그 밖으로 빠지는 경우");
 			GameManager.Instance.Pvp = matchPacket;
 			SceneManager.LoadScene(GameManager.PvpScene);
 		}
@@ -315,21 +319,18 @@ class PacketHandler
 		S_UserTurn turnPacket = packet as S_UserTurn;
 		if(turnPacket == null)
 			return;
-		Debug.Log("턴 유무 확인 :"+turnPacket.UserTurn);
 		PvpBattleManager.Instance.CheckUserTurn(turnPacket.UserTurn);
 	}
 
 	public static void S_PvpBattleLogHandler(PacketSession session, IMessage packet)
 	{
 		S_PvpBattleLog battleLogPacket =  packet as S_PvpBattleLog;
-		Debug.Log("battleLogPacket 확인"+battleLogPacket);
 		if(battleLogPacket == null)
 			return;
 
 		if(battleLogPacket.BattleLog != null)
 		{
 			var pvpUiBattleLog = PvpBattleManager.Instance.PvpUiBattleLog;
-			Debug.Log("BattleLog : "+battleLogPacket.BattleLog);
 			pvpUiBattleLog.Set(battleLogPacket.BattleLog);
 		}
 	}
@@ -367,27 +368,17 @@ class PacketHandler
 	private static void ProcessPvpAction(ActionSet actionSet, bool isMyAction)
 	{
 		var animCode = actionSet.AnimCode;
-		var effectCode = actionSet.EffectCode;
+		int? effectCode = actionSet.EffectCode;
 
 		// 맞는 사람 처리(나 : true, 상대방 : false)
-		if (animCode != 1)
-			PvpBattleManager.Instance.PlayerHit(!isMyAction);
+		if(effectCode is not null) PvpBattleManager.Instance.PlayerHit(!isMyAction);
 
 		// 때리는 사람 처리(나 : true, 상대방 : false)
 		PvpBattleManager.Instance.PlayerAnim(animCode, isMyAction);
 
 		// 맞는 이펙트 처리(상대방 : true, 나 : false)
-		if (animCode != 1)
-			PvpEffectManager.Instance.SetEffectToPlayer(effectCode, isMyAction);
+		if(effectCode is not null) PvpEffectManager.Instance.SetEffectToPlayer(effectCode, isMyAction);
 	}
-	// 상대방이 때린다 => 나 맞는다 O
-	// 나 때린다 => 상대방 맞는다 O
-
-	// 상대방이 때린다 => 나 죽는다 O
-	// 나 때린다 => 상대방 죽는다 O
-
-	// 나 죽는다 => 이팩트 2번 발생 막았나? O
-	// 상대방이 죽는다 => 이팩트 2번 발생 막았나? O
 
 	public static void S_SetPvpPlayerHpHandler(Session session, IMessage packet)
 	{

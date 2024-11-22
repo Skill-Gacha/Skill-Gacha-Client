@@ -99,6 +99,7 @@ public class PvpBattleManager : MonoBehaviour
             uiOpponentInformation.Set(pvp.OpponentData);
             // 상대방 캐릭터 3D 모델 설정
             SetCharacter(pvp.OpponentData.PlayerClass, false);
+            uiOpponentInformation.gameObject.SetActive(true);
         }
         Debug.Log(pvp.BattleLog);
 
@@ -165,6 +166,7 @@ public class PvpBattleManager : MonoBehaviour
         if (idx < 0 || idx >= animCodeList.Length) return;
 
         int animCode = animCodeList[idx];
+        Debug.Log("죽는 코드 확인"+ animCode+"나(true) 상대 유무(false) : "+isMyPlayer);
         TriggerPlayerAction(animCode, isMyPlayer);
     }
 
