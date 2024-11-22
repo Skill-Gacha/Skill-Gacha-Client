@@ -1,0 +1,14 @@
+Font: LINE Seed Sans  Style: ExtraBold
+Point Size: 309   SP/PD Ratio: 1.6%
+
+Characters included: 97/99
+Missing characters: 2
+Excluded characters: 0
+
+Characters missing from font file:
+----------------------------------------
+ID: 96	Hex: 60	Char [`]
+ID: 9633	Hex: 25A1	Char [□]
+
+Characters excluded from packing:
+----------------------------------------
