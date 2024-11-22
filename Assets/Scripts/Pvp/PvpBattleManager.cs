@@ -172,14 +172,9 @@ public class PvpBattleManager : MonoBehaviour
     {
         Animator animator = isMyPlayer ? playerAnimator : opponentAnimator;
 
-        animator.transform.localEulerAngles = Vector3.zero;
+        animator.transform.localEulerAngles = isMyPlayer ? Vector3.zero : new Vector3(0,180,0);
         animator.transform.localPosition = Vector3.zero;
         animator.applyRootMotion = code == Constants.PlayerBattleDie;
         animator.SetTrigger(code);
-    }
-
-    public void SetEnemeyHp(int hp)
-    {
-        
     }
 }
