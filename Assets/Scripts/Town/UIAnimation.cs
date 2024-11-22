@@ -7,6 +7,9 @@ using UnityEngine.UI;
 public class UIAnimation : MonoBehaviour
 {
     [SerializeField] private Button btnBattle;
+
+    [SerializeField] private Button btnPvp;
+
     [SerializeField] private Button[] btnList;
     private MyPlayer mPlayer;
     

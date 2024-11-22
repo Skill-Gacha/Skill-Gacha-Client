@@ -70,3 +70,6 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+Assets/StompyRobot/SRDebugger/PlaymakerIntegration.unitypackage.meta
+Assets/_External/MasterStylizedFX/MSFURP2D.unitypackage.meta
+Assets/_External/MasterStylizedFX/MSFURP.unitypackage.meta
