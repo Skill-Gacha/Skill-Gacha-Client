@@ -47,7 +47,7 @@ public class PvpUIScreen : MonoBehaviour
             }
             else
             {
-                C_PlayerResponse response = new C_PlayerResponse() { ResponseCode = 0 };
+                C_PvpPlayerResponse response = new C_PvpPlayerResponse { ResponseCode = 0 };
                 GameManager.Network.Send(response);
             }
         }
