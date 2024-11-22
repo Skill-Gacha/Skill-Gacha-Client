@@ -389,33 +389,36 @@ class PacketHandler
 	// 나 죽는다 => 이팩트 2번 발생 막았나? O
 	// 상대방이 죽는다 => 이팩트 2번 발생 막았나? O
 
-	// public static void S_SetPvpPlayerHpHandler(Session session, IMessage packet)
-	// {
-	// 	S_SetPlayerHp playerHp = packet as S_SetPlayerHp;
+	public static void S_SetPvpPlayerHpHandler(Session session, IMessage packet)
+	{
+		S_SetPvpPlayerHp playerHp = packet as S_SetPvpPlayerHp;
+		Debug.Log("내 체력 : "+playerHp.Hp);
 
-	// 	var playerInfo = PvpBattleManager.Instance.UiPlayerInformation;
-	// 	playerInfo.SetCurMP(playerHp.Hp);
-	// }
 
-	// public static void S_SetPvpPlayerMpHandler(Session session, IMessage packet)
-	// {
-	// 	S_SetPvpPlayerMp playerMp = packet as S_SetPvpPlayerMp;
+		var playerInfo = PvpBattleManager.Instance.UiPlayerInformation;
+		playerInfo.SetCurHP(playerHp.Hp);
+	}
 
-	// 	if(playerMp == null) return;
+	public static void S_SetPvpPlayerMpHandler(Session session, IMessage packet)
+	{
+		S_SetPvpPlayerMp playerMp = packet as S_SetPvpPlayerMp;
+		Debug.Log("내 MP : "+playerMp.Mp);
 
-	// 	var playerInfo = PvpBattleManager.Instance.UiPlayerInformation;
-	// 	playerInfo.SetCurMP(playerMp.Mp);
-	// }
+		if(playerMp == null) return;
 
-	// public static void S_EnemyHpNotificationHandler(Session session, IMessage packet)
-	// {
-	// 	S_EnemyHpNotification enemyHp = packet as S_EnemyHpNotification;
+		var playerInfo = PvpBattleManager.Instance.UiPlayerInformation;
+		playerInfo.SetCurMP(playerMp.Mp);
+	}
 
-	// 	if(enemyHp == null) return;
+	public static void S_SetEnemyHpHandler(Session session, IMessage packet)
+	{
+		S_SetPvpEnemyHp enemyHp = packet as S_SetPvpEnemyHp;
+		Debug.Log("상대방 체력 : "+enemyHp.Hp);
+		if(enemyHp == null) return;
 
-	// 	var opponentInfo = PvpBattleManager.Instance.UIOpponentInformation;
-	// 	opponentInfo.SetCurHP(enemyHp.Hp);
-	// }
+		var opponentInfo = PvpBattleManager.Instance.UIOpponentInformation;
+		opponentInfo.SetCurHP(enemyHp.Hp);
+	}
 
 	#endregion
 }

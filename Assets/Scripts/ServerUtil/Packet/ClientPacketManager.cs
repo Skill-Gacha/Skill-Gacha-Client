@@ -19,7 +19,7 @@ class PacketManager
 
 	Dictionary<ushort, Action<PacketSession, ArraySegment<byte>, ushort>> _onRecv = new Dictionary<ushort, Action<PacketSession, ArraySegment<byte>, ushort>>();
 	Dictionary<ushort, Action<PacketSession, IMessage>> _handler = new Dictionary<ushort, Action<PacketSession, IMessage>>();
-		
+
 	public Action<PacketSession, IMessage, ushort> CustomHandler { get; set; }
 
     public void Register()
@@ -80,8 +80,8 @@ class PacketManager
         // _onRecv.Add((ushort)MsgId.SGameOverNotification, MakePacket<S_GameOverNotification>);
         // _handler.Add((ushort)MsgId.SGameOverNotification, PacketHandler.S_GameOverNotificationHandler);
 
-        _onRecv.Add((ushort)MsgId.SEnemyHpNotification, MakePacket<S_EnemyHpNotification>);
-        _handler.Add((ushort)MsgId.SEnemyHpNotification, PacketHandler.S_EnemyHpNotificationHandler);
+        _onRecv.Add((ushort)MsgId.SSetEnemyHp, MakePacket<S_SetPvpEnemyHp>);
+        _handler.Add((ushort)MsgId.SSetEnemyHp, PacketHandler.S_SetEnemyHpHandler);
 
 		_onRecv.Add((ushort)MsgId.SPvpBattleLog, MakePacket<S_PvpBattleLog>);
         _handler.Add((ushort)MsgId.SPvpBattleLog, PacketHandler.S_PvpBattleLogHandler);
