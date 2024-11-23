@@ -25,7 +25,7 @@ public class PvpUIOpponentInformation : MonoBehaviour
     private float fullHP;
     private float curHP;
 
-    private float fillWidth = 180;
+    private float fillWidth = 230;
     private float fillHeight = 30;
 
     private void Start()
@@ -50,7 +50,7 @@ public class PvpUIOpponentInformation : MonoBehaviour
     public void SetName(string nickname)
     {
         txtName.text = nickname;
-        imgNameBg.rectTransform.sizeDelta = new Vector2(txtName.preferredWidth + 50, 50);
+        // imgNameBg.rectTransform.sizeDelta = new Vector2(txtName.preferredWidth + 50, 50);
     }
 
     public void SetFullHP(float hp, bool recover = true)
