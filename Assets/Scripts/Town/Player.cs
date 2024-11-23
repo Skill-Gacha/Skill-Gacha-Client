@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Google.Protobuf.Protocol;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -15,9 +16,6 @@ public class Player : MonoBehaviour
     private string nickname;
 
     private UIChat uiChat;
-
-    private UIGold uIGold;
-
     private Vector3 goalPos;
     private Quaternion goalRot;
 
@@ -101,7 +99,6 @@ public class Player : MonoBehaviour
             SenderName = nickname,
             ChatMsg = msg
         };
-
         GameManager.Network.Send(chatPacket);
     }
 
@@ -135,10 +132,5 @@ public class Player : MonoBehaviour
 
 
         lastPos = transform.position;
-    }
-
-    public void RecvGold(int gold)
-    {
-        uIGold.setGold(gold);
     }
 }

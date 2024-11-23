@@ -94,6 +94,9 @@ class PacketManager
 
         _onRecv.Add((ushort)MsgId.SSetPvpPlayerMp, MakePacket<S_SetPvpPlayerMp>);
         _handler.Add((ushort)MsgId.SSetPvpPlayerMp, PacketHandler.S_SetPvpPlayerMpHandler);
+
+        _onRecv.Add((ushort)MsgId.SOpenStoreResponse, MakePacket<S_OpenStoreResponse>);
+        _handler.Add((ushort)MsgId.SOpenStoreResponse, PacketHandler.S_OpenStoreResponseHandler);
     }
 
     public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
@@ -117,7 +120,7 @@ class PacketManager
 	{
 		T pkt = new T();
 		pkt.MergeFrom(buffer.Array, buffer.Offset + 5, buffer.Count - 5);
-		
+
 		if (CustomHandler != null)
 		{
 			CustomHandler.Invoke(session, pkt, id);
@@ -126,7 +129,7 @@ class PacketManager
 		{
 			Action<PacketSession, IMessage> action = null;
 			if (_handler.TryGetValue(id, out action))
-				action.Invoke(session, pkt);	
+				action.Invoke(session, pkt);
 		}
 	}
 

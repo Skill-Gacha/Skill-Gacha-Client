@@ -26,11 +26,11 @@ public class TownManager : MonoBehaviour
     [SerializeField] private UIAnimation uiAnimation;
     [SerializeField] private UIChat uiChat;
 
+    [SerializeField] private UIStore uiStore;
+
+    public UIStore UIStore => uiStore;
+
     public UIChat UiChat => uiChat;
-
-    [SerializeField] private UIGold uiGold;
-
-    public UIGold UiGold => uiGold;
 
     [SerializeField] private TMP_Text txtServer;
 
@@ -189,9 +189,6 @@ public class TownManager : MonoBehaviour
 
         // 유저가 선택 가능한 감정표현 UI 활성화
         uiAnimation.gameObject.SetActive(true);
-
-        // 유저 골드 UI 활성화
-        uiGold.gameObject.SetActive(true);
     }
 
     public void Pvp()

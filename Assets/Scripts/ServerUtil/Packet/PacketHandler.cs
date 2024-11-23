@@ -122,7 +122,6 @@ class PacketHandler
 
 		var player = TownManager.Instance.GetPlayerAvatarById(animationPacket.PlayerId);
 		// 해당 플레이어의 Id를 바탕으로 유저 정보를 가져온다.
-
 		if (player)
 		{
 			player.Animation(animCode);
@@ -143,7 +142,6 @@ class PacketHandler
 
 		var player = TownManager.Instance.GetPlayerAvatarById(chatPacket.PlayerId);
 		// id에 따른 유저의 모든 정보를 가져온다.
-
 		if (player)
 		{
 			player.RecvMessage(msg);
@@ -381,7 +379,6 @@ class PacketHandler
 	public static void S_SetPvpPlayerHpHandler(Session session, IMessage packet)
 	{
 		S_SetPvpPlayerHp playerHp = packet as S_SetPvpPlayerHp;
-		Debug.Log("내 체력 : "+playerHp.Hp);
 
 
 		var playerInfo = PvpBattleManager.Instance.UiPlayerInformation;
@@ -391,7 +388,6 @@ class PacketHandler
 	public static void S_SetPvpPlayerMpHandler(Session session, IMessage packet)
 	{
 		S_SetPvpPlayerMp playerMp = packet as S_SetPvpPlayerMp;
-		Debug.Log("내 MP : "+playerMp.Mp);
 
 		if(playerMp == null) return;
 
@@ -402,11 +398,18 @@ class PacketHandler
 	public static void S_SetEnemyHpHandler(Session session, IMessage packet)
 	{
 		S_SetPvpEnemyHp enemyHp = packet as S_SetPvpEnemyHp;
-		Debug.Log("상대방 체력 : "+enemyHp.Hp);
 		if(enemyHp == null) return;
 
 		var opponentInfo = PvpBattleManager.Instance.UIOpponentInformation;
 		opponentInfo.SetCurHP(enemyHp.Hp);
+	}
+
+	public static void S_OpenStoreResponseHandler(Session session, IMessage packet)
+	{
+		S_OpenStoreResponse openStore = packet as S_OpenStoreResponse;
+		Debug.Log("정상 수신 : "+openStore.PlayerId);
+		Debug.Log("ProductList : "+openStore.ProductList);
+		TownManager.Instance.UIStore.ShowStoreUi(openStore);
 	}
 
 	#endregion
