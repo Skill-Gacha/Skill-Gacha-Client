@@ -122,7 +122,6 @@ class PacketHandler
 
 		var player = TownManager.Instance.GetPlayerAvatarById(animationPacket.PlayerId);
 		// 해당 플레이어의 Id를 바탕으로 유저 정보를 가져온다.
-
 		if (player)
 		{
 			player.Animation(animCode);
@@ -143,7 +142,6 @@ class PacketHandler
 
 		var player = TownManager.Instance.GetPlayerAvatarById(chatPacket.PlayerId);
 		// id에 따른 유저의 모든 정보를 가져온다.
-
 		if (player)
 		{
 			player.RecvMessage(msg);
@@ -368,20 +366,20 @@ class PacketHandler
 		var animCode = actionSet.AnimCode;
 		int? effectCode = actionSet.EffectCode;
 
-		// 맞는 사람 처리(나 : true, 상대방 : false)
-		if(effectCode is not null) PvpBattleManager.Instance.PlayerHit(!isMyAction);
-
 		// 때리는 사람 처리(나 : true, 상대방 : false)
 		PvpBattleManager.Instance.PlayerAnim(animCode, isMyAction);
 
 		// 맞는 이펙트 처리(상대방 : true, 나 : false)
-		if(effectCode is not null) PvpEffectManager.Instance.SetEffectToPlayer(effectCode, isMyAction);
+		if(effectCode is not null)
+		{
+			PvpEffectManager.Instance.SetEffectToPlayer(effectCode, isMyAction);
+			PvpBattleManager.Instance.PlayerHit(!isMyAction);
+		}
 	}
 
 	public static void S_SetPvpPlayerHpHandler(Session session, IMessage packet)
 	{
 		S_SetPvpPlayerHp playerHp = packet as S_SetPvpPlayerHp;
-		Debug.Log("내 체력 : "+playerHp.Hp);
 
 
 		var playerInfo = PvpBattleManager.Instance.UiPlayerInformation;
@@ -391,7 +389,6 @@ class PacketHandler
 	public static void S_SetPvpPlayerMpHandler(Session session, IMessage packet)
 	{
 		S_SetPvpPlayerMp playerMp = packet as S_SetPvpPlayerMp;
-		Debug.Log("내 MP : "+playerMp.Mp);
 
 		if(playerMp == null) return;
 
@@ -402,13 +399,35 @@ class PacketHandler
 	public static void S_SetEnemyHpHandler(Session session, IMessage packet)
 	{
 		S_SetPvpEnemyHp enemyHp = packet as S_SetPvpEnemyHp;
-		Debug.Log("상대방 체력 : "+enemyHp.Hp);
 		if(enemyHp == null) return;
 
 		var opponentInfo = PvpBattleManager.Instance.UIOpponentInformation;
 		opponentInfo.SetCurHP(enemyHp.Hp);
 	}
 
+	#endregion
+
+	#region Shore
+	public static void S_OpenStoreResponseHandler(Session session, IMessage packet)
+	{
+		S_OpenStoreResponse openStore = packet as S_OpenStoreResponse;
+		TownManager.Instance.UIStore.ShowStoreUi(openStore);
+	}
+
+	public static void S_BuyItemResponseHandler(Session session, IMessage packet)
+	{
+		S_BuyItemResponse buyItem = packet as S_BuyItemResponse;
+		TownManager.Instance.UIStore.BuyItem(buyItem);
+	}
+
+	#endregion
+
+	#region Inventory
+
+	public static void S_InventoryViewResponseHandler(Session session, IMessage packet)
+	{
+
+	}
 	#endregion
 }
 

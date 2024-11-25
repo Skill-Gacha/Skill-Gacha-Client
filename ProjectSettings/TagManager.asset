@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Collide
   - Bullet
+  - Store
   layers:
   - Default
   - TransparentFX

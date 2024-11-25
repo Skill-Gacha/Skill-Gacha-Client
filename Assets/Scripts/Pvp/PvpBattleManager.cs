@@ -51,11 +51,6 @@ public class PvpBattleManager : MonoBehaviour
     // 외부에서 사용할 수 있게 private 변수를 얕은 복사한 대상
     public PvpUIOpponentInformation UIOpponentInformation => uiOpponentInformation;
 
-    // 누구의 유저 턴인지 구분하는 bool
-    bool CheckWhoTurn;
-    // true이면 서버의 matching 당시 playerA의 공격 차례
-    // false이면 서버의 matching 다시 playerB의 공격 차례
-
     // 플레이어(나) 공격, 죽기, 때리기 모션을 hash(인트형) 코드
     private int[] animCodeList = new[]
     {
@@ -100,8 +95,7 @@ public class PvpBattleManager : MonoBehaviour
             SetCharacter(pvp.OpponentData.PlayerClass, false);
             uiOpponentInformation.gameObject.SetActive(true);
         }
-        Debug.Log(pvp.BattleLog);
-
+        
         if (pvp.BattleLog != null)
             uiBattleLog.Set(pvp.BattleLog);
     }
@@ -146,7 +140,6 @@ public class PvpBattleManager : MonoBehaviour
 
     public void CheckUserTurn(bool UserTurn)
     {
-        Debug.Log("동작 유무 확인"+UserTurn);
         int numChildren = buttons.transform.childCount;
         for(int i = 0; i < numChildren; i++)
         {
@@ -165,7 +158,6 @@ public class PvpBattleManager : MonoBehaviour
         if (idx < 0 || idx >= animCodeList.Length) return;
 
         int animCode = animCodeList[idx];
-        Debug.Log("죽는 코드 확인"+ animCode+"나(true) 상대 유무(false) : "+isMyPlayer);
         TriggerPlayerAction(animCode, isMyPlayer);
     }
 
