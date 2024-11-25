@@ -404,12 +404,28 @@ class PacketHandler
 		opponentInfo.SetCurHP(enemyHp.Hp);
 	}
 
+	#endregion
+
+	#region Shore
 	public static void S_OpenStoreResponseHandler(Session session, IMessage packet)
 	{
 		S_OpenStoreResponse openStore = packet as S_OpenStoreResponse;
 		TownManager.Instance.UIStore.ShowStoreUi(openStore);
 	}
 
+	public static void S_BuyItemResponseHandler(Session session, IMessage packet)
+	{
+
+	}
+
+	#endregion
+
+	#region Inventory
+
+	public static void S_InvetoryViewResponseHandler(Session session, IMessage packet)
+	{
+
+	}
 	#endregion
 }
 

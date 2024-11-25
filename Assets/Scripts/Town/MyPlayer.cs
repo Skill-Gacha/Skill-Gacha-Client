@@ -50,9 +50,9 @@ public class MyPlayer : MonoBehaviour
                 agent.SetDestination(rayHit.point);
             }
         }
-        if(Input.GetKeyDown(KeyCode.I))
+        if(Input.GetKeyUp(KeyCode.I))
         {
-            Inventory();
+            //Inventory();
             return;
         }
         CheckMove();
@@ -99,8 +99,9 @@ public class MyPlayer : MonoBehaviour
         }
     }
 
-    void Inventory()
+    void Inventory(bool check)
     {
+
     }
     int count = 0;
     public void StoreUI(bool check)
