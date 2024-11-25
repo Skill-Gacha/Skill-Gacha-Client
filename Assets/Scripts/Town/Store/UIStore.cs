@@ -52,7 +52,7 @@ public class UIStore : MonoBehaviour
         if(!buyItem.Success) return;
 
         int itemIdx = buyItem.ItemId - Constants.ItemCodeFactor - 1;
-        txtGold.text =  buyItem.ChangeGold.ToString("NO");
+        txtGold.text =  buyItem.ChangeGold.ToString("N0");
         int slashIndex = txtReserveAndLimit[itemIdx].text.IndexOf('/');
         txtReserveAndLimit[itemIdx].text = buyItem.Reserve +" "+txtReserveAndLimit[itemIdx].text.Substring(slashIndex).Trim();
     }
