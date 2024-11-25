@@ -23,10 +23,10 @@ public class UIAnimation : MonoBehaviour
                 PlayAnimation(idx);
             });
         }
-        
+
         mPlayer = TownManager.Instance.myPlayer.mPlayer;
     }
-    
+
     private void PlayAnimation(int idx)
     {
         if (mPlayer == null)

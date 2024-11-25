@@ -30,6 +30,7 @@ public class TownManager : MonoBehaviour
 
     public UIStore UIStore => uiStore;
 
+
     public UIChat UiChat => uiChat;
 
     [SerializeField] private TMP_Text txtServer;

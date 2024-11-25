@@ -103,11 +103,10 @@ public class MyPlayer : MonoBehaviour
     {
 
     }
-    int count = 0;
+
     public void StoreUI(bool check)
     {
         if(!check) return;
-        Debug.Log("check"+check+"count : "+(++count));
         C_OpenStoreRequest packet = new C_OpenStoreRequest();
         GameManager.Network.Send(packet);
     }

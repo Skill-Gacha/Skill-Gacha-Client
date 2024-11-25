@@ -366,14 +366,15 @@ class PacketHandler
 		var animCode = actionSet.AnimCode;
 		int? effectCode = actionSet.EffectCode;
 
-		// 맞는 사람 처리(나 : true, 상대방 : false)
-		if(effectCode is not null) PvpBattleManager.Instance.PlayerHit(!isMyAction);
-
 		// 때리는 사람 처리(나 : true, 상대방 : false)
 		PvpBattleManager.Instance.PlayerAnim(animCode, isMyAction);
 
 		// 맞는 이펙트 처리(상대방 : true, 나 : false)
-		if(effectCode is not null) PvpEffectManager.Instance.SetEffectToPlayer(effectCode, isMyAction);
+		if(effectCode is not null)
+		{
+			PvpEffectManager.Instance.SetEffectToPlayer(effectCode, isMyAction);
+			PvpBattleManager.Instance.PlayerHit(!isMyAction);
+		}
 	}
 
 	public static void S_SetPvpPlayerHpHandler(Session session, IMessage packet)
@@ -415,14 +416,15 @@ class PacketHandler
 
 	public static void S_BuyItemResponseHandler(Session session, IMessage packet)
 	{
-
+		S_BuyItemResponse buyItem = packet as S_BuyItemResponse;
+		TownManager.Instance.UIStore.BuyItem(buyItem);
 	}
 
 	#endregion
 
 	#region Inventory
 
-	public static void S_InvetoryViewResponseHandler(Session session, IMessage packet)
+	public static void S_InventoryViewResponseHandler(Session session, IMessage packet)
 	{
 
 	}

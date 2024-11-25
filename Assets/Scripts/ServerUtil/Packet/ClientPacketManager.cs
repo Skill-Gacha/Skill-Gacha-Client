@@ -102,7 +102,7 @@ class PacketManager
         _handler.Add((ushort)MsgId.SBuyItemResponse, PacketHandler.S_BuyItemResponseHandler);
 
         _onRecv.Add((ushort)MsgId.SInventoryViewResponse, MakePacket<S_InventoryViewResponse>);
-        _handler.Add((ushort)MsgId.SInventoryViewResponse, PacketHandler.S_InvetoryViewResponseHandler);
+        _handler.Add((ushort)MsgId.SInventoryViewResponse, PacketHandler.S_InventoryViewResponseHandler);
     }
 
     public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

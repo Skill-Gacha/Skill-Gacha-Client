@@ -10,8 +10,14 @@ using UnityEngine.UI;
 public class UIStore : MonoBehaviour
 {
     [SerializeField] private Button[] btns;
+
+    [SerializeField] private TMP_Text txtPurchaseStatus;
+
     [SerializeField] private TMP_Text[] txtReserveAndLimit;
     [SerializeField] private TMP_Text[] txtPrice;
+
+    [SerializeField] private TMP_Text txtGold;
+    [SerializeField] private TMP_Text txtStone;
     private void Start()
     {
         for (int i = 0; i < btns.Length; i++)
@@ -26,8 +32,9 @@ public class UIStore : MonoBehaviour
 
     public void ShowStoreUi(S_OpenStoreResponse openStore)
     {
-        int gold = openStore.Gold;
-        int stone = openStore.Stone;
+        txtPurchaseStatus.gameObject.SetActive(false);
+        txtGold.text =  string.Format("{0:n0}", openStore.Gold.ToString());
+        txtStone.text = string.Format("{0:n0}", openStore.Stone.ToString());
         var products = openStore.ProductList.ToArray();
         for(int i = 0; i < txtReserveAndLimit.Length; i++)
         {
@@ -36,9 +43,21 @@ public class UIStore : MonoBehaviour
         }
     }
 
+    public void BuyItem(S_BuyItemResponse buyItem)
+    {
+        txtPurchaseStatus.gameObject.SetActive(true);
+        txtPurchaseStatus.text = buyItem.Success ? "구매 성공!!" : "구매 실패...";
+        txtPurchaseStatus.color = buyItem.Success ? new Color32(255,255,255,255) : new Color32(255,0,0,255);
+        if(!buyItem.Success) return;
+
+        int itemIdx = buyItem.ItemId - Constants.ItemCodeFactor - 1;
+        txtGold.text =  string.Format("{0:n0}", buyItem.ChangeGold.ToString());
+        txtReserveAndLimit[itemIdx].text = buyItem.Reserve + " / 3";
+    }
+
     private void BuyProduct(int idx)
     {
-        C_BuyItemRequest buyItem = new C_BuyItemRequest { ItemId = idx + 4000 };
+        C_BuyItemRequest buyItem = new C_BuyItemRequest { ItemId = idx + Constants.ItemCodeFactor };
         GameManager.Network.Send(buyItem);
     }
 }
