@@ -21,6 +21,8 @@ public class MyPlayer : MonoBehaviour
 
     private bool isInsideStore = false;
 
+    private bool isVillageHead = false;
+
     private void Awake()
     {
         eSystem = TownManager.Instance.E_System;
@@ -65,7 +67,16 @@ public class MyPlayer : MonoBehaviour
             ToggleStoreUI();
             return;
         }
+        else if(Input.GetKeyDown(KeyCode.F) && isVillageHead)
+        {
+            ToggleVillage();
+        }
         CheckMove();
+    }
+
+    public void ToggleVillage()
+    {
+        //bool isActive = TownManager.Instance.UIVillage.gameObject.activeSelf;
     }
 
     public void AnimationExecute(int animIdx)
@@ -129,12 +140,20 @@ public class MyPlayer : MonoBehaviour
         {
             isInsideStore = true;
         }
+        else if(other.CompareTag("VillageHead"))
+        {
+            isVillageHead = true;
+        }
     }
 
     private void  OnTriggerExit(Collider other) {
         if(other.CompareTag("Store"))
         {
             isInsideStore = false;
+        }
+        else if(other.CompareTag("VillageHead"))
+        {
+            isVillageHead = false;
         }
     }
 }
