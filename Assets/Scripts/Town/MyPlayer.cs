@@ -50,10 +50,10 @@ public class MyPlayer : MonoBehaviour
                 agent.SetDestination(rayHit.point);
             }
         }
-        if(Input.GetKeyUp(KeyCode.I))
+        if (Input.GetKeyUp(KeyCode.I))
         {
             bool check = TownManager.Instance.UIInventory.gameObject.activeSelf;
-            InventoryUI(check);
+            InventoryUI(!check);
             TownManager.Instance.UIInventory.gameObject.SetActive(!check);
             return;
         }
