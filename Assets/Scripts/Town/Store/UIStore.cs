@@ -33,8 +33,8 @@ public class UIStore : MonoBehaviour
     public void ShowStoreUi(S_OpenStoreResponse openStore)
     {
         txtPurchaseStatus.gameObject.SetActive(false);
-        txtGold.text =  string.Format("{0:n0}", openStore.Gold.ToString());
-        txtStone.text = string.Format("{0:n0}", openStore.Stone.ToString());
+        txtGold.text = openStore.Gold.ToString("N0");
+        txtStone.text = openStore.Stone.ToString("N0");
         var products = openStore.ProductList.ToArray();
         for(int i = 0; i < txtReserveAndLimit.Length; i++)
         {
@@ -52,7 +52,7 @@ public class UIStore : MonoBehaviour
         if(!buyItem.Success) return;
 
         int itemIdx = buyItem.ItemId - Constants.ItemCodeFactor - 1;
-        txtGold.text =  string.Format("{0:n0}", buyItem.ChangeGold.ToString());
+        txtGold.text =  buyItem.ChangeGold.ToString("NO");
         int slashIndex = txtReserveAndLimit[itemIdx].text.IndexOf('/');
         txtReserveAndLimit[itemIdx].text = buyItem.Reserve +" "+txtReserveAndLimit[itemIdx].text.Substring(slashIndex).Trim();
     }
