@@ -19,6 +19,8 @@ public class MyPlayer : MonoBehaviour
 
     private List<int> animHash = new List<int>();
 
+    private bool isInsideStore = false;
+
     private void Awake()
     {
         eSystem = TownManager.Instance.E_System;
@@ -50,9 +52,15 @@ public class MyPlayer : MonoBehaviour
                 agent.SetDestination(rayHit.point);
             }
         }
-        if(Input.GetKeyUp(KeyCode.I))
+        if(Input.GetKeyDown(KeyCode.I))
         {
             //Inventory();
+            return;
+        }
+
+        if(Input.GetKeyDown(KeyCode.F) && isInsideStore)
+        {
+            ToggleStoreUI();
             return;
         }
         CheckMove();
@@ -87,15 +95,30 @@ public class MyPlayer : MonoBehaviour
         lastPos = transform.position;
     }
 
-    private void OnTriggerStay(Collider other)
+    public void StoreUI(bool check)
     {
-        if(other.tag == "Store")
+        if(!check) return;
+        C_OpenStoreRequest packet = new C_OpenStoreRequest();
+        GameManager.Network.Send(packet);
+    }
+
+    private void ToggleStoreUI()
+    {
+        bool isActive = TownManager.Instance.UIStore.gameObject.activeSelf;
+
+        if(!isActive)
         {
-            if(Input.GetKeyUp(KeyCode.F))
-            {
-                StoreUI(!TownManager.Instance.UIStore.gameObject.activeSelf);
-                TownManager.Instance.UIStore.gameObject.SetActive(!TownManager.Instance.UIStore.gameObject.activeSelf);
-            }
+            C_OpenStoreRequest packet = new C_OpenStoreRequest();
+            GameManager.Network.Send(packet);
+        }
+
+        TownManager.Instance.UIStore.gameObject.SetActive(!isActive);
+    }
+
+    private void  OnTriggerEnter(Collider other) {
+        if(other.CompareTag("Store"))
+        {
+            isInsideStore = true;
         }
     }
 
@@ -104,10 +127,10 @@ public class MyPlayer : MonoBehaviour
 
     }
 
-    public void StoreUI(bool check)
-    {
-        if(!check) return;
-        C_OpenStoreRequest packet = new C_OpenStoreRequest();
-        GameManager.Network.Send(packet);
+    private void  OnTriggerExit(Collider other) {
+        if(other.CompareTag("Store"))
+        {
+            isInsideStore = false;
+        }
     }
 }
