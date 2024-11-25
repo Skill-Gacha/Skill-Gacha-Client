@@ -44,6 +44,11 @@ public class Player : MonoBehaviour
         uiNameChat.SetName(nickname);
     }
 
+    public string GetNickname()
+    {
+        return this.nickname;
+    }
+
     public void SetIsMine(bool isMine)
     {
         IsMine = isMine;

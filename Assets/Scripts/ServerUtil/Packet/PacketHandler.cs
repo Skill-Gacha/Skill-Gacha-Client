@@ -407,8 +407,6 @@ class PacketHandler
 	public static void S_OpenStoreResponseHandler(Session session, IMessage packet)
 	{
 		S_OpenStoreResponse openStore = packet as S_OpenStoreResponse;
-		Debug.Log("정상 수신 : "+openStore.PlayerId);
-		Debug.Log("ProductList : "+openStore.ProductList);
 		TownManager.Instance.UIStore.ShowStoreUi(openStore);
 	}
 

@@ -1556,7 +1556,7 @@ GameObject:
   - component: {fileID: 7388292593505977742}
   - component: {fileID: 1589738932085450867}
   - component: {fileID: 2075369095008506869}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: UINameChat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2538,7 +2538,7 @@ GameObject:
   - component: {fileID: 2010561888966408205}
   - component: {fileID: 2820908879834123757}
   - component: {fileID: 7515675330079883931}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: bg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2733,7 +2733,7 @@ GameObject:
   - component: {fileID: 2432935926044314329}
   - component: {fileID: 1582712895462859901}
   - component: {fileID: 1635578976983269604}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: chat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3256,7 +3256,7 @@ GameObject:
   - component: {fileID: 4999884034202559595}
   - component: {fileID: 188966384265007907}
   - component: {fileID: 4351687087485787778}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: txt
   m_TagString: Untagged
   m_Icon: {fileID: 0}

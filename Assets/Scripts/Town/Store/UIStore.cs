@@ -2,13 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Google.Protobuf.Protocol;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIStore : MonoBehaviour
 {
     [SerializeField] private Button[] btns;
-    private Product[] products;
+    [SerializeField] private TMP_Text[] txtReserveAndLimit;
+    [SerializeField] private TMP_Text[] txtPrice;
     private void Start()
     {
         for (int i = 0; i < btns.Length; i++)
@@ -23,20 +26,19 @@ public class UIStore : MonoBehaviour
 
     public void ShowStoreUi(S_OpenStoreResponse openStore)
     {
-        Debug.Log("OpenStore : "+openStore);
         int gold = openStore.Gold;
         int stone = openStore.Stone;
-
-        if(openStore.ProductList is { Count: > 0})
-            products = openStore.ProductList?.ToArray();
-
-        Debug.Log("gold : "+gold+", stone : "+stone);
-        Debug.Log("product : "+products);
+        var products = openStore.ProductList.ToArray();
+        for(int i = 0; i < txtReserveAndLimit.Length; i++)
+        {
+            txtReserveAndLimit[i].text = products[i].Reserve + " / 3";
+            txtPrice[i].text = products[i].Price.ToString();
+        }
     }
 
     private void BuyProduct(int idx)
     {
-        C_BuyItemRequest buyItem = new C_BuyItemRequest { ItemId = idx };
+        C_BuyItemRequest buyItem = new C_BuyItemRequest { ItemId = idx + 4000 };
         GameManager.Network.Send(buyItem);
     }
 }

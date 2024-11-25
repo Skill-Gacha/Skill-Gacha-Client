@@ -11,8 +11,8 @@ public class StoreKeeper : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        // TODO:한 명의 유저만 감지될 수 있도록 변경하기
-        if (other.tag == "Player")
+        Player player = other.GetComponent<Player>();
+        if (other.tag == "Player" && GameManager.Instance.UserName.Equals(player.GetNickname()))
         {
             fKey.gameObject.SetActive(true);
             fKey.transform.LookAt(Camera.main.transform);

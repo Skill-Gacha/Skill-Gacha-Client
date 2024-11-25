@@ -91,7 +91,7 @@ public class MyPlayer : MonoBehaviour
     {
         if(other.tag == "Store")
         {
-            if(Input.GetKeyDown(KeyCode.F))
+            if(Input.GetKeyUp(KeyCode.F))
             {
                 StoreUI(!TownManager.Instance.UIStore.gameObject.activeSelf);
                 TownManager.Instance.UIStore.gameObject.SetActive(!TownManager.Instance.UIStore.gameObject.activeSelf);
@@ -102,12 +102,11 @@ public class MyPlayer : MonoBehaviour
     void Inventory()
     {
     }
-
+    int count = 0;
     public void StoreUI(bool check)
     {
         if(!check) return;
-        Debug.Log("check"+check);
-        Debug.Log("전송 확인");
+        Debug.Log("check"+check+"count : "+(++count));
         C_OpenStoreRequest packet = new C_OpenStoreRequest();
         GameManager.Network.Send(packet);
     }
