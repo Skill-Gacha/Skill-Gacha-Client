@@ -47,7 +47,7 @@ public class UIStore : MonoBehaviour
     {
         txtPurchaseStatus.gameObject.SetActive(true);
         txtPurchaseStatus.text = buyItem.Success ? "구매 성공!!" : "구매 실패...";
-        txtPurchaseStatus.color = buyItem.Success ? new Color32(255,255,255,255) : new Color32(255,0,0,255);
+        txtPurchaseStatus.color = buyItem.Success ? new Color32(0,255,0,255) : new Color32(255,0,0,255);
         if(!buyItem.Success) return;
 
         int itemIdx = buyItem.ItemId - Constants.ItemCodeFactor - 1;

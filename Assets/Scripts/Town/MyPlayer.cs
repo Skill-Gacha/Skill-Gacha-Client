@@ -54,7 +54,6 @@ public class MyPlayer : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.I))
         {
-            //Inventory();
             return;
         }
 
@@ -120,11 +119,6 @@ public class MyPlayer : MonoBehaviour
         {
             isInsideStore = true;
         }
-    }
-
-    void Inventory(bool check)
-    {
-
     }
 
     private void  OnTriggerExit(Collider other) {
