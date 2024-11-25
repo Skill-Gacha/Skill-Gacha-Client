@@ -19,8 +19,6 @@ public class MyPlayer : MonoBehaviour
 
     private List<int> animHash = new List<int>();
 
-    private bool isInsideStore = false;
-
     private void Awake()
     {
         eSystem = TownManager.Instance.E_System;
@@ -52,15 +50,11 @@ public class MyPlayer : MonoBehaviour
                 agent.SetDestination(rayHit.point);
             }
         }
-        if(Input.GetKeyDown(KeyCode.I))
+        if(Input.GetKeyUp(KeyCode.I))
         {
-            //Inventory();
-            return;
-        }
-
-        if(Input.GetKeyDown(KeyCode.F) && isInsideStore)
-        {
-            ToggleStoreUI();
+            bool check = TownManager.Instance.UIInventory.gameObject.activeSelf;
+            InventoryUI(check);
+            TownManager.Instance.UIInventory.gameObject.SetActive(!check);
             return;
         }
         CheckMove();
@@ -95,42 +89,20 @@ public class MyPlayer : MonoBehaviour
         lastPos = transform.position;
     }
 
+    int count = 0;
+    void InventoryUI(bool check)
+    {
+        if (!check) return;
+        Debug.Log("check" + check + "count : " + (++count));
+        C_InventoryViewRequest packet = new C_InventoryViewRequest();
+        GameManager.Network.Send(packet);
+    }
+      
     public void StoreUI(bool check)
     {
         if(!check) return;
+        Debug.Log("check"+check+"count : "+(++count));
         C_OpenStoreRequest packet = new C_OpenStoreRequest();
         GameManager.Network.Send(packet);
-    }
-
-    private void ToggleStoreUI()
-    {
-        bool isActive = TownManager.Instance.UIStore.gameObject.activeSelf;
-
-        if(!isActive)
-        {
-            C_OpenStoreRequest packet = new C_OpenStoreRequest();
-            GameManager.Network.Send(packet);
-        }
-
-        TownManager.Instance.UIStore.gameObject.SetActive(!isActive);
-    }
-
-    private void  OnTriggerEnter(Collider other) {
-        if(other.CompareTag("Store"))
-        {
-            isInsideStore = true;
-        }
-    }
-
-    void Inventory(bool check)
-    {
-
-    }
-
-    private void  OnTriggerExit(Collider other) {
-        if(other.CompareTag("Store"))
-        {
-            isInsideStore = false;
-        }
     }
 }
