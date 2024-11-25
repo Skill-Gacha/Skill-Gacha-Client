@@ -88,20 +88,15 @@ public class MyPlayer : MonoBehaviour
 
         lastPos = transform.position;
     }
-
-    int count = 0;
     void InventoryUI(bool check)
     {
         if (!check) return;
-        Debug.Log("check" + check + "count : " + (++count));
         C_InventoryViewRequest packet = new C_InventoryViewRequest();
         GameManager.Network.Send(packet);
     }
-      
     public void StoreUI(bool check)
     {
         if(!check) return;
-        Debug.Log("check"+check+"count : "+(++count));
         C_OpenStoreRequest packet = new C_OpenStoreRequest();
         GameManager.Network.Send(packet);
     }

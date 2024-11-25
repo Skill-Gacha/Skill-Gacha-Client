@@ -13,38 +13,17 @@ public class UIInventory : MonoBehaviour
     [SerializeField] private TMP_Text[] txtReserveAndLimit;
     [SerializeField] private TMP_Text txtGold;
     [SerializeField] private TMP_Text txtStone;
-    //[SerializeField] private TMP_Text[] txtPrice;
-    private void Start()
-    {
-        //for (int i = 0; i < btns.Length; i++)
-        //{
-        //    int idx = i + 1;
-        //    btns[i].onClick.AddListener(() =>
-        //    {
-        //        BuyProduct(idx);
-        //    });
-        //}
-    }
 
     public void ShowInventoryUi(S_InventoryViewResponse openInventory)
     {
-        //int gold = openInventory.Gold;
-        //int stone = openInventory.Stone;
-
         txtGold.text = openInventory.Gold.ToString("N0");
         txtStone.text = openInventory.Stone.ToString("N0");
 
         var products = openInventory.ProductList.ToArray();
-        for (int i = 0; i < txtReserveAndLimit.Length; i++)
+        for (int i = 0; i < products.Length; i++)
         {
-            if(i<3)
-            {
-                txtReserveAndLimit[i].text = products[i].Reserve + " / 3";
-            }
-            else
-            {
-                txtReserveAndLimit[i].text = products[i].Reserve + " / 1";
-            }
+            int slashIndex = txtReserveAndLimit[i].text.IndexOf('/');
+            txtReserveAndLimit[i].text = products[i].Reserve + " " + txtReserveAndLimit[i].text.Substring(slashIndex).Trim();
         }
     }
 }

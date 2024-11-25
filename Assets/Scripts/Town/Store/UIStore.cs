@@ -38,7 +38,8 @@ public class UIStore : MonoBehaviour
         var products = openStore.ProductList.ToArray();
         for(int i = 0; i < txtReserveAndLimit.Length; i++)
         {
-            txtReserveAndLimit[i].text = products[i].Reserve + " / 3";
+            int slashIndex = txtReserveAndLimit[i].text.IndexOf('/');
+            txtReserveAndLimit[i].text = products[i].Reserve + txtReserveAndLimit[i].text.Substring(slashIndex).Trim();
             txtPrice[i].text = products[i].Price.ToString();
         }
     }
@@ -52,7 +53,8 @@ public class UIStore : MonoBehaviour
 
         int itemIdx = buyItem.ItemId - Constants.ItemCodeFactor - 1;
         txtGold.text =  string.Format("{0:n0}", buyItem.ChangeGold.ToString());
-        txtReserveAndLimit[itemIdx].text = buyItem.Reserve + " / 3";
+        int slashIndex = txtReserveAndLimit[itemIdx].text.IndexOf('/');
+        txtReserveAndLimit[itemIdx].text = buyItem.Reserve +" "+txtReserveAndLimit[itemIdx].text.Substring(slashIndex).Trim();
     }
 
     private void BuyProduct(int idx)
