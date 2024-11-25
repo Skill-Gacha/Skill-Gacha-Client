@@ -27,9 +27,10 @@ public class TownManager : MonoBehaviour
     [SerializeField] private UIChat uiChat;
 
     [SerializeField] private UIStore uiStore;
+    [SerializeField] private UIInventory uiInventory;
 
     public UIStore UIStore => uiStore;
-
+    public UIInventory UIInventory => uiInventory;
 
     public UIChat UiChat => uiChat;
 
