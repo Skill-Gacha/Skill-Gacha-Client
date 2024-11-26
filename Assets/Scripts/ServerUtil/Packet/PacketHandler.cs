@@ -424,12 +424,21 @@ class PacketHandler
 
 	#region Inventory
 
-	   public static void S_InventoryViewResponseHandler(Session session, IMessage packet)
+	public static void S_InventoryViewResponseHandler(Session session, IMessage packet)
    	{
         S_InventoryViewResponse openInventory = packet as S_InventoryViewResponse;
-      TownManager.Instance.UIInventory.ShowInventoryUi(openInventory);
-
+      	TownManager.Instance.UIInventory.ShowInventoryUi(openInventory);
     }
+
+	#endregion
+
+	#region
+
+	public static void S_ViewRankPointHandler(Session session, IMessage packet)
+	{
+		S_ViewRankPoint viewPoint = packet as S_ViewRankPoint;
+		TownManager.Instance.UIRank.ViewRankUi(viewPoint);
+	}
 
 	#endregion
 }

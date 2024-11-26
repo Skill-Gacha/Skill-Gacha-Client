@@ -54,14 +54,13 @@ public class MyPlayer : MonoBehaviour
                 agent.SetDestination(rayHit.point);
             }
         }
-        if(Input.GetKeyDown(KeyCode.I))
+        if(Input.GetKeyDown(KeyCode.I) && !isInsideStore && !isVillageHead)
         {
             bool check = TownManager.Instance.UIInventory.gameObject.activeSelf;
             InventoryUI(!check);
             TownManager.Instance.UIInventory.gameObject.SetActive(!check);
             return;
         }
-
         if(Input.GetKeyDown(KeyCode.F) && isInsideStore)
         {
             ToggleStoreUI();
@@ -69,14 +68,24 @@ public class MyPlayer : MonoBehaviour
         }
         else if(Input.GetKeyDown(KeyCode.F) && isVillageHead)
         {
-            ToggleVillage();
+            ToggleRank();
+            return;
         }
         CheckMove();
     }
 
-    public void ToggleVillage()
+    public void ToggleRank()
     {
-        //bool isActive = TownManager.Instance.UIVillage.gameObject.activeSelf;
+        bool isActive = TownManager.Instance.UIRank.gameObject.activeSelf;
+
+        if(!isActive)
+        {
+            Debug.Log("서버로 요청 보내기");
+            C_ViewRankPoint packet = new C_ViewRankPoint();
+            GameManager.Network.Send(packet);
+        }
+
+        TownManager.Instance.UIRank.gameObject.SetActive(!isActive);
     }
 
     public void AnimationExecute(int animIdx)

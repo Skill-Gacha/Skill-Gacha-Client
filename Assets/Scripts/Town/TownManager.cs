@@ -30,9 +30,9 @@ public class TownManager : MonoBehaviour
 
     public UIStore UIStore => uiStore;
 
-    [SerializeField] private UIVillage uIVillage;
+    [SerializeField] private UIRank uIRank;
 
-    public UIVillage UIVillage => uIVillage;
+    public UIRank UIRank => uIRank;
 
     [SerializeField] private UIInventory uiInventory;
 
