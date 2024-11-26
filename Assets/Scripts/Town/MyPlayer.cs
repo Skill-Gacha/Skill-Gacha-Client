@@ -54,19 +54,19 @@ public class MyPlayer : MonoBehaviour
                 agent.SetDestination(rayHit.point);
             }
         }
-        if(Input.GetKeyDown(KeyCode.I) && !isInsideStore && !isVillageHead)
+        if(Input.GetKeyDown(KeyCode.I) && !TownManager.Instance.UIStore.gameObject.activeSelf && !TownManager.Instance.UIRank.gameObject.activeSelf)
         {
             bool check = TownManager.Instance.UIInventory.gameObject.activeSelf;
             InventoryUI(!check);
             TownManager.Instance.UIInventory.gameObject.SetActive(!check);
             return;
         }
-        if(Input.GetKeyDown(KeyCode.F) && isInsideStore)
+        if(Input.GetKeyDown(KeyCode.F) && !TownManager.Instance.UIInventory.gameObject.activeSelf && !TownManager.Instance.UIRank.gameObject.activeSelf)
         {
             ToggleStoreUI();
             return;
         }
-        else if(Input.GetKeyDown(KeyCode.F) && isVillageHead)
+        else if(Input.GetKeyDown(KeyCode.F) && !TownManager.Instance.UIStore.gameObject.activeSelf && !TownManager.Instance.UIInventory.gameObject.activeSelf)
         {
             ToggleRank();
             return;
