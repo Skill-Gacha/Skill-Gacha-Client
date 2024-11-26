@@ -265,7 +265,9 @@ class PacketHandler
 		monster.Hit();
 
 		BattleManager.Instance.PlayerAnim(pkt.ActionSet.AnimCode);
-		EffectManager.Instance.SetEffectToMonster(pkt.TargetMonsterIdx, pkt.ActionSet.EffectCode);
+
+		if(pkt.TargetMonsterIdx == -1) EffectManager.Instance.SetEffectToPlayer(pkt.ActionSet.EffectCode);
+		else EffectManager.Instance.SetEffectToMonster(pkt.TargetMonsterIdx, pkt.ActionSet.EffectCode);
 	}
 
 	public static void S_MonsterActionHandler(PacketSession session, IMessage packet)

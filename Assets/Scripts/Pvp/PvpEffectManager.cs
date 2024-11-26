@@ -28,7 +28,8 @@ public class PvpEffectManager : MonoBehaviour
 
     public void SetEffectToPlayer(int? code, bool isMyPlayer)
     {
-        Transform trans = isMyPlayer ?  oppoentTrans : playerTrans;
+        // code가 3028이하일 경우 상대방 공격 및 디버프 코드이고, 초과일 경우 본인 버프
+        Transform trans = isMyPlayer || code <= 3028 ?  oppoentTrans : playerTrans;
         SetEffect(trans, code);
     }
 
