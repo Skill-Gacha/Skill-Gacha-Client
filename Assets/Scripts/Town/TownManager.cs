@@ -13,7 +13,7 @@ public class TownManager : MonoBehaviour
 {
     private static TownManager _instance = null;
     public static TownManager Instance => _instance;
-    
+
     [SerializeField] private CinemachineFreeLook freeLook;
     [SerializeField] private Transform spawnArea;
     [SerializeField] private EventSystem eSystem;
@@ -29,6 +29,10 @@ public class TownManager : MonoBehaviour
     [SerializeField] private UIStore uiStore;
 
     public UIStore UIStore => uiStore;
+
+    [SerializeField] private UIRank uIRank;
+
+    public UIRank UIRank => uIRank;
 
     [SerializeField] private UIInventory uiInventory;
 
