@@ -31,8 +31,7 @@ namespace ServerCore
 					sizeBuffer[2] = buffer.Array[buffer.Offset + 1];
 					sizeBuffer[3] = buffer.Array[buffer.Offset + 0];
 					int dataSize = BitConverter.ToInt32(sizeBuffer, 0);
-					
-					
+
 					// 패킷이 완전체로 도착했는지 확인
 					//ushort dataSize = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
 					if (buffer.Count < dataSize)
@@ -45,7 +44,7 @@ namespace ServerCore
 					buffer = new ArraySegment<byte>(buffer.Array, buffer.Offset + dataSize, buffer.Count - dataSize);
 				}
 			}
-			
+
 			return processLen;
 		}
 

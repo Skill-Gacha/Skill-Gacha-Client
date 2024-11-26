@@ -6,6 +6,9 @@ public class Constants
     public const int MonsterCodeFactor = 2000;
     public const int EffectCodeFactor = 3001;
     public const int DungeonCodeFactor = 5000;
+    public const int ItemCodeFactor = 4000;
+
+    public const int MaxRankList = 10;
 
     public static readonly int TownPlayerMove = Animator.StringToHash("Move");
     public static readonly int TownPlayerAnim1 = Animator.StringToHash("Anim1");

@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Collide
   - Bullet
+  - Store
+  - VillageHead
   layers:
   - Default
   - TransparentFX

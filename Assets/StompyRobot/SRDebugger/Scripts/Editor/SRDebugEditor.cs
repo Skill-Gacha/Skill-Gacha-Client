@@ -41,11 +41,10 @@ namespace SRDebugger.Editor
             AssetDatabase.SaveAssets(); // In case any pending changes to files about to be moved
 
             // Try and unload the settings asset to prevent errors later (harmless error, but annoying)
-            SRInternalEditorUtil.EditorSettings.ClearCache(); 
+            SRInternalEditorUtil.EditorSettings.ClearCache();
             GC.Collect();
             EditorUtility.UnloadUnusedAssetsImmediate(true);
 #endif
-           
             AssetDatabase.ReleaseCachedFileHandles();
 
             SetCompileDefine(DisableSRDebuggerCompileDefine, !enable);
