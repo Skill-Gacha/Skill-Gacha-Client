@@ -24,7 +24,7 @@ public class UIEnhance : MonoBehaviour
     [SerializeField] private TMP_Text txtMyStone;
 
     private string[] rankNames = { "[노말]", "[레어]", "[에픽]", "[유니크]", "[레전더리]" };
-    private int[] skillCodeList;
+    private List<int> skillCodeList = new List<int>();
 
     private void Start()
     {
@@ -52,20 +52,20 @@ public class UIEnhance : MonoBehaviour
         txtMyStone.text = openEnhance.Stone.ToString("N0");
         //보유 스킬
         var skillCodes = openEnhance.SkillCode.ToArray();
-        Debug.Log(skillCodes[0]);
         for (int i = 0; i < skillCodes.Length; i++)
         {
             int skillCode = skillCodes[i];
-            skillCodeList[i] = skillCode;
+            skillCodeList.Add(skillCode);
             var skillData = SkillDataManager.GetSkillById(skillCode);
             string skillName = skillData.skillName;
             int skillRank = skillData.rank;
             txtSkills[i].text = skillName + "\n" + rankNames[skillRank - 100];
         }
     }
+
     private void SkillChoice(int idx)
     {
-        int targetSkill = skillCodeList[idx];
+        int targetSkill = skillCodeList[idx - 1];
         int targetSkillRank = SkillDataManager.GetSkillById(targetSkill).rank;
         // 강화 비용 표시
         if (targetSkillRank == 100)
