@@ -8,25 +8,25 @@ public static class SkillDataManager
 
     public static void LoadSkillData()
     {
-        // JSON ÆÄÀÏ ·Îµå
+        // JSON íŒŒì¼ ë¡œë“œ
         TextAsset textAsset = Resources.Load<TextAsset>("Data/skillData");
         if (textAsset == null)
         {
-            Debug.LogError("skillData.json ÆÄÀÏÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù!");
+            Debug.LogError("skillData.json íŒŒì¼ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤!");
             return;
         }
 
-        // JSON ÆÄ½Ì
+        // JSON íŒŒì‹±
         SkillData = JsonUtility.FromJson<SkillClass>(textAsset.text);
-        Debug.Log("Skill data ·Îµå ¿Ï·á!");
+        Debug.Log("Skill data ë¡œë“œ ì™„ë£Œ!");
     }
 
-    // Æ¯Á¤ ½ºÅ³ ID·Î ½ºÅ³ µ¥ÀÌÅÍ¸¦ Ã£´Â ¸Ş¼­µå
+    // íŠ¹ì • ìŠ¤í‚¬ IDë¡œ ìŠ¤í‚¬ ë°ì´í„°ë¥¼ ì°¾ëŠ” ë©”ì„œë“œ
     public static SkillData GetSkillById(int skillId)
     {
         if (SkillData == null)
         {
-            Debug.LogError("SkillData°¡ ·ÎµåµÇÁö ¾Ê¾Ò½À´Ï´Ù. LoadSkillData()¸¦ È£ÃâÇÏ¼¼¿ä.");
+            Debug.LogError("SkillDataê°€ ë¡œë“œë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤. LoadSkillData()ë¥¼ í˜¸ì¶œí•˜ì„¸ìš”.");
             return null;
         }
 

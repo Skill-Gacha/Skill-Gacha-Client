@@ -20,6 +20,7 @@ public class MyPlayer : MonoBehaviour
     private List<int> animHash = new List<int>();
 
     private bool isInsideStore = false;
+    private bool isInsideEnhance = false;
 
     private void Awake()
     {
@@ -42,7 +43,7 @@ public class MyPlayer : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0))
         {
             if(eSystem.IsPointerOverGameObject()) return;
 
@@ -63,6 +64,12 @@ public class MyPlayer : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.F) && isInsideStore)
         {
             ToggleStoreUI();
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.F) && isInsideEnhance)
+        {
+            ToggleEnhanceUI();
             return;
         }
         CheckMove();
@@ -110,6 +117,12 @@ public class MyPlayer : MonoBehaviour
         C_OpenStoreRequest packet = new C_OpenStoreRequest();
         GameManager.Network.Send(packet);
     }
+    public void EnhanceUI(bool check)
+    {
+        if(!check) return;
+        C_EnhanceUiRequest packet = new C_EnhanceUiRequest();
+        GameManager.Network.Send(packet);
+    }
 
     private void ToggleStoreUI()
     {
@@ -123,18 +136,40 @@ public class MyPlayer : MonoBehaviour
 
         TownManager.Instance.UIStore.gameObject.SetActive(!isActive);
     }
+    private void ToggleEnhanceUI()
+    {
+        bool isActive = TownManager.Instance.UIEnhance.gameObject.activeSelf;
 
-    private void  OnTriggerEnter(Collider other) {
-        if(other.CompareTag("Store"))
+        if (!isActive)
+        {
+            C_EnhanceUiRequest packet = new C_EnhanceUiRequest();
+            GameManager.Network.Send(packet);
+        }
+
+        TownManager.Instance.UIEnhance.gameObject.SetActive(!isActive);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Store"))
         {
             isInsideStore = true;
         }
+        else if (other.CompareTag("Enhance"))
+        {
+            isInsideEnhance = true;
+        }
     }
 
-    private void  OnTriggerExit(Collider other) {
-        if(other.CompareTag("Store"))
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Store"))
         {
             isInsideStore = false;
+        }
+        else if(other.CompareTag("Enhance"))
+        {
+            isInsideEnhance = false;
         }
     }
 }

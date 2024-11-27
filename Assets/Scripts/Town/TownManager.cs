@@ -13,7 +13,7 @@ public class TownManager : MonoBehaviour
 {
     private static TownManager _instance = null;
     public static TownManager Instance => _instance;
-    
+
     [SerializeField] private CinemachineFreeLook freeLook;
     [SerializeField] private Transform spawnArea;
     [SerializeField] private EventSystem eSystem;
@@ -27,8 +27,10 @@ public class TownManager : MonoBehaviour
     [SerializeField] private UIChat uiChat;
 
     [SerializeField] private UIStore uiStore;
+    [SerializeField] private UIEnhance uiEnhance;
 
     public UIStore UIStore => uiStore;
+    public UIEnhance UIEnhance => uiEnhance;
 
     [SerializeField] private UIInventory uiInventory;
 
@@ -145,8 +147,8 @@ public class TownManager : MonoBehaviour
             // 오류 상황! 나는 던전이나 PVP로 이동했어서 마을에 없어야 했음
             var prevPlayer = playerList[playerId];
             playerList[playerId] = player;
-            if(prevPlayer)
-                Destroy(prevPlayer.gameObject);
+            if (prevPlayer)
+            Destroy(prevPlayer.gameObject);
             // 기존 유저 정보와 케릭터를 제거하고, 새롭게 넣어줍니다.
 
             // Destroy는 Unity에서 GameObject를 제거해주는 함수 입니다.
@@ -207,7 +209,7 @@ public class TownManager : MonoBehaviour
         if (playerList.ContainsKey(playerId))
             // playerList(마을 안에 있는 유저 정보)(딕셔너리, Map)에 playerId가 포함 돼 있으면
             return playerList[playerId];
-            // playerId(key)에 따른 value인 유저 정보를 반환해준다.
+        // playerId(key)에 따른 value인 유저 정보를 반환해준다.
         return null;
     }
 }

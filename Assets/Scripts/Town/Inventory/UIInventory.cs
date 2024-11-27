@@ -17,7 +17,7 @@ public class UIInventory : MonoBehaviour
     public void ShowInventoryUi(S_InventoryViewResponse openInventory)
     {
         var skill = SkillDataManager.GetSkillById(1);
-        Debug.Log($"ÀÎº¥Åä¸® È£Ãâ ½Ã ºÒ·¯¿Â ½ºÅ³ ID: {skill.id}");
+        Debug.Log($"ì¸ë²¤í† ë¦¬ í˜¸ì¶œ ì‹œ ë¶ˆëŸ¬ì˜¨ ìŠ¤í‚¬ ID: {skill.id}");
         txtGold.text = openInventory.Gold.ToString("N0");
         txtStone.text = openInventory.Stone.ToString("N0");
 

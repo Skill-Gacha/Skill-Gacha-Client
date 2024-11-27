@@ -407,7 +407,7 @@ class PacketHandler
 
 	#endregion
 
-	#region Shore
+	#region Store
 	public static void S_OpenStoreResponseHandler(Session session, IMessage packet)
 	{
 		S_OpenStoreResponse openStore = packet as S_OpenStoreResponse;
@@ -431,6 +431,23 @@ class PacketHandler
 
     }
 
-	#endregion
+    #endregion
+
+    #region Enhance
+
+    public static void S_EnhanceUiResponseHandler(Session session, IMessage packet)
+    {
+        S_EnhanceUiResponse openEnhance = packet as S_EnhanceUiResponse;
+        TownManager.Instance.UIEnhance.ShowEnhanceUi(openEnhance);
+
+    }
+
+    public static void S_EnhanceResponseHandler(Session session, IMessage packet)
+    {
+        S_EnhanceResponse enhanceSuccess = packet as S_EnhanceResponse;
+        TownManager.Instance.UIEnhance.EnhanceSuccess(enhanceSuccess);
+    }
+
+    #endregion
 }
 
