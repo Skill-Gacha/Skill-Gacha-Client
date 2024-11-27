@@ -293,7 +293,7 @@ class PacketHandler
 		S_PlayerMatch matchPacket = packet as S_PlayerMatch;
 		if(matchPacket == null)
 			return;
-		TownManager.Instance.UIMatching.ViewMatch();
+		TownManager.Instance.UIMatching.StartMatch();
 	}
 
 	public static void S_PlayerMatchNotificationHandler(PacketSession session, IMessage packet)
@@ -303,8 +303,7 @@ class PacketHandler
 			return;
 		Scene scene = SceneManager.GetActiveScene();
 
-
-		TownManager.Instance.UIMatching.setMatching(TownManager.Instance.UIMatching.getMatching());
+		TownManager.Instance.UIMatching.StopMatch();
 		if(scene.name == GameManager.PvpScene)
 		{
 			PvpBattleManager.Instance.Set(matchPacket);

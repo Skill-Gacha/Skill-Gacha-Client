@@ -5,8 +5,9 @@ using UnityEngine;
 public class UIMatching : MonoBehaviour
 {
     [SerializeField] private Transform progress;
-    private bool isMatching = false;
-    public void ViewMatch() {
+
+    public void StartMatch() {
+        this.gameObject.SetActive(true);
         StartCoroutine(SpinProgress());
     }
 
@@ -14,21 +15,15 @@ public class UIMatching : MonoBehaviour
     {
         while(true)
         {
-            Debug.Log("확인");
             progress.transform.localEulerAngles = new Vector3(0, 0, progress.transform.localEulerAngles.z - 1);
-            yield return new WaitUntil(()=> !isMatching);
-            isMatching = !isMatching;
-            this.gameObject.SetActive(isMatching);
+            yield return null;
         }
+
     }
 
-    public void setMatching(bool isMatching)
+    public void StopMatch()
     {
-        this.isMatching = isMatching;
-    }
-
-    public bool getMatching()
-    {
-        return this.isMatching;
+        StopCoroutine(SpinProgress());
+        this.gameObject.SetActive(false);
     }
 }
