@@ -80,7 +80,6 @@ public class MyPlayer : MonoBehaviour
 
         if(!isActive)
         {
-            Debug.Log("서버로 요청 보내기");
             C_ViewRankPoint packet = new C_ViewRankPoint();
             GameManager.Network.Send(packet);
         }

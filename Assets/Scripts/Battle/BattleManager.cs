@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Google.Protobuf.Collections;
 using Google.Protobuf.Protocol;
 using UnityEngine;
@@ -115,10 +116,10 @@ public class BattleManager : MonoBehaviour
             var monsterPath = monsterDb.GetValueOrDefault(monsterCode, baseMonsterPath);
             var monsterRes = Resources.Load<Monster>(monsterPath);
             var monster = Instantiate(monsterRes, monsterSpawnPos[i]);
-            
+
             monsterObjs.Add(monster);
             monsterUis.Add(monster.UiMonsterInfo);
-            
+
             monster.UiMonsterInfo.SetName(monsterInfo.MonsterName);
             monster.UiMonsterInfo.SetFullHP(monsterInfo.MonsterHp);
         }
@@ -128,9 +129,9 @@ public class BattleManager : MonoBehaviour
     {
         if(idx < 0 || idx >= monsterUis.Count)
             return;
-        
         monsterUis[idx].SetCurHP(hp);
     }
+
 
     public Monster GetMonster(int idx)
     {
@@ -141,6 +142,11 @@ public class BattleManager : MonoBehaviour
         }
 
         return null;
+    }
+
+    public List<Monster> GetMonster(int[] monsterIndex)
+    {
+        return monsterIndex.Where(index => index >= 0 && index < monsterObjs.Count).Select(index => monsterObjs[index]).ToList();
     }
 
     public void PlayerHit()
@@ -160,7 +166,7 @@ public class BattleManager : MonoBehaviour
     {
         if(idx < 0 || idx >= animCodeList.Length)
             return;
-        
+
         var animCode = animCodeList[idx];
         TriggerAnim(animCode);
     }
