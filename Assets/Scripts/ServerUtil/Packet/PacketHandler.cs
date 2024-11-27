@@ -295,6 +295,7 @@ class PacketHandler
 		S_PlayerMatch matchPacket = packet as S_PlayerMatch;
 		if(matchPacket == null)
 			return;
+		TownManager.Instance.UIMatching.ViewMatch();
 	}
 
 	public static void S_PlayerMatchNotificationHandler(PacketSession session, IMessage packet)
@@ -304,6 +305,8 @@ class PacketHandler
 			return;
 		Scene scene = SceneManager.GetActiveScene();
 
+
+		TownManager.Instance.UIMatching.setMatching(TownManager.Instance.UIMatching.getMatching());
 		if(scene.name == GameManager.PvpScene)
 		{
 			PvpBattleManager.Instance.Set(matchPacket);
