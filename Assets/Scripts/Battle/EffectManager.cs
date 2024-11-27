@@ -10,7 +10,7 @@ public class EffectManager : MonoBehaviour
     [SerializeField] private GameObject[] effects;
     [SerializeField] private Transform playerPos;
 
-    int fullSkillIdx = 23;
+    int fullSkillIdx = 27;
 
     void Awake()
     {
