@@ -4,6 +4,7 @@ using ServerCore;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -260,17 +261,14 @@ class PacketHandler
 		S_PlayerAction pkt = packet as S_PlayerAction;
 		if (pkt == null)
 			return;
-		if(pkt.TargetMonsterIdx != -1)
-		{
-			Monster monster = BattleManager.Instance.GetMonster(pkt.TargetMonsterIdx);
-			monster.Hit();
-		}
+		int[] monsterIndex = pkt.TargetMonsterIdx.ToArray();
+		if(monsterIndex.Length != 0) BattleManager.Instance.GetMonster(monsterIndex).ForEach(monster => monster.Hit());
 
 		BattleManager.Instance.PlayerAnim(pkt.ActionSet.AnimCode);
 
 		Debug.Log("패키지 EffectCode : "+pkt.ActionSet.EffectCode);
-		if(pkt.TargetMonsterIdx == -1) EffectManager.Instance.SetEffectToPlayer(pkt.ActionSet.EffectCode);
-		else EffectManager.Instance.SetEffectToMonster(pkt.TargetMonsterIdx, pkt.ActionSet.EffectCode);
+		if(monsterIndex.Length == 0) EffectManager.Instance.SetEffectToPlayer(pkt.ActionSet.EffectCode);
+		else EffectManager.Instance.SetEffectToMonster(monsterIndex, pkt.ActionSet.EffectCode);
 	}
 
 	public static void S_MonsterActionHandler(PacketSession session, IMessage packet)
