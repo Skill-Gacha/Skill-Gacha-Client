@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,8 @@ public class UIEnhance : MonoBehaviour
 
     [SerializeField] private TMP_Text[] txtSkills;
 
+    [SerializeField] private TMP_Text txtNotice;
+
     [SerializeField] private TMP_Text txtEnhance;
 
     [SerializeField] private Button btnEnhance;
@@ -24,7 +27,12 @@ public class UIEnhance : MonoBehaviour
     [SerializeField] private TMP_Text txtMyStone;
 
     private string[] rankNames = { "[노말]", "[레어]", "[에픽]", "[유니크]", "[레전더리]" };
+    private string[] costGoldList = { "1,000", "3,000", "5,000", "10,000" };
+    private string[] costStoneList = { "5", "20", "30", "50" };
     private List<int> skillCodeList = new List<int>();
+    private int ChoosenSkill = -1;
+
+    private bool alreadyHaveSkill = false;
 
     private void Start()
     {
@@ -45,8 +53,8 @@ public class UIEnhance : MonoBehaviour
         txtCostGold.text = "0";
         txtCostStone.text = "0";
         // 강화 안내 문구
-        txtEnhance.text = "강화할 스킬을 선택해 주세요.";
-        txtEnhance.color = new Color32(255, 255, 255, 255);
+        txtNotice.text = "강화할 스킬을 선택해 주세요.";
+        txtNotice.color = new Color32(255, 255, 255, 255);
         // 보유 재화
         txtMyGold.text = openEnhance.Gold.ToString("N0");
         txtMyStone.text = openEnhance.Stone.ToString("N0");
@@ -65,49 +73,48 @@ public class UIEnhance : MonoBehaviour
 
     private void SkillChoice(int idx)
     {
-        int targetSkill = skillCodeList[idx - 1];
-        int targetSkillRank = SkillDataManager.GetSkillById(targetSkill).rank;
-        // 강화 비용 표시
-        if (targetSkillRank == 100)
+        ChoosenSkill = skillCodeList[idx - 1];
+        // 상위 스킬을 보유하고 있는지 확인
+        int nextSkill = ChoosenSkill + 5;
+        if (skillCodeList.Contains(nextSkill))
+        {
+            alreadyHaveSkill = true;
+        }
+        else
+        {
+            alreadyHaveSkill = false;
+        }
+
+        int targetSkillRank = SkillDataManager.GetSkillById(ChoosenSkill).rank;
+        // 강화 가능 여부 및 비용 표시
+        if (targetSkillRank < 104 && alreadyHaveSkill == false)
         {
             txtEnhance.text = "강화가 가능한 스킬입니다.";
-            txtCostGold.text = "1,000";
-            txtCostStone.text = "5";
+            txtEnhance.color = new Color32(255, 255, 255, 255);
+            txtCostGold.text = costGoldList[targetSkillRank - 100];
+            txtCostStone.text = costStoneList[targetSkillRank - 100];
+            
         }
-        if (targetSkillRank == 101)
-        {
-            txtEnhance.text = "강화가 가능한 스킬입니다.";
-            txtCostGold.text = "3,000";
-            txtCostStone.text = "20";
-        }
-        if (targetSkillRank == 102)
-        {
-            txtEnhance.text = "강화가 가능한 스킬입니다.";
-            txtCostGold.text = "5,000";
-            txtCostStone.text = "30";
-        }
-        if (targetSkillRank == 103)
-        {
-            txtEnhance.text = "강화가 가능한 스킬입니다.";
-            txtCostGold.text = "10,000";
-            txtCostStone.text = "50";
-        }
-        if (targetSkillRank == 104)
+        else if (targetSkillRank == 104)
         {
             txtEnhance.text = "강화가 불가능한 스킬입니다.";
+            txtEnhance.color = new Color32(255, 122, 119, 255);
             txtCostGold.text = "-";
             txtCostStone.text = "-";
         }
-        // 스킬을 선택해 둔 상태에서만 강화 버튼 클릭 이벤트 감지
-        btnEnhance.onClick.AddListener(() =>
+        else if(alreadyHaveSkill == true)
         {
-            EnhanceSkillRequest(targetSkill);
-        });
+            txtEnhance.text = "이미 상위 스킬을 보유 중입니다.";
+            txtEnhance.color = new Color32(255, 122, 119, 255);
+            txtCostGold.text = "-";
+            txtCostStone.text = "-";
+        }
     }
-    private void EnhanceSkillRequest(int targetSkillCode)
+
+    public void WantEnhance()
     {
-        // 서버에 스킬 강화 요청
-        C_EnhanceRequest targetSkill = new C_EnhanceRequest { SkillCode = targetSkillCode };
+        if (alreadyHaveSkill) return;
+        C_EnhanceRequest targetSkill = new C_EnhanceRequest { SkillCode = ChoosenSkill };
         GameManager.Network.Send(targetSkill);
     }
 
