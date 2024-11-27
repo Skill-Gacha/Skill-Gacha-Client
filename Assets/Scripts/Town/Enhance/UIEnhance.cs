@@ -40,6 +40,7 @@ public class UIEnhance : MonoBehaviour
 
     public void ShowEnhanceUi(S_EnhanceUiResponse openEnhance)
     {
+        Debug.Log(openEnhance);
         // 강화 비용 초기화
         txtCostGold.text = "0";
         txtCostStone.text = "0";
@@ -51,7 +52,8 @@ public class UIEnhance : MonoBehaviour
         txtMyStone.text = openEnhance.Stone.ToString("N0");
         //보유 스킬
         var skillCodes = openEnhance.SkillCode.ToArray();
-        for(int i = 0; i < skillCodes.Length; i++)
+        Debug.Log(skillCodes[0]);
+        for (int i = 0; i < skillCodes.Length; i++)
         {
             int skillCode = skillCodes[i];
             skillCodeList[i] = skillCode;
