@@ -22,6 +22,8 @@ public class MyPlayer : MonoBehaviour
     private bool isInsideStore = false;
 
     private bool isVillageHead = false;
+    
+    private bool isEnhance = false;
 
     private void Awake()
     {
@@ -153,6 +155,10 @@ public class MyPlayer : MonoBehaviour
         {
             isVillageHead = true;
         }
+        else if(other.CompareTag("Enhance"))
+        {
+            isEnhance = true;
+        }
     }
 
     private void  OnTriggerExit(Collider other) {
@@ -163,6 +169,10 @@ public class MyPlayer : MonoBehaviour
         else if(other.CompareTag("VillageHead"))
         {
             isVillageHead = false;
+        }
+        else if(other.CompareTag("Enhance"))
+        {
+            isEnhance = false;
         }
     }
 }

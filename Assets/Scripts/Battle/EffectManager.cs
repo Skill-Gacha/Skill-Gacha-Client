@@ -10,7 +10,7 @@ public class EffectManager : MonoBehaviour
     [SerializeField] private GameObject[] effects;
     [SerializeField] private Transform playerPos;
 
-    int fullSkillIdx = 23;
+    int fullSkillIdx = 27;
 
     void Awake()
     {
@@ -36,11 +36,8 @@ public class EffectManager : MonoBehaviour
             return;
 
 
-        if (calcId < fullSkillIdx)
-        {
-            var pos = new Vector3(tr.position.x, effects[calcId].transform.position.y, tr.position.z);
-            effects[calcId].transform.position = pos;
-        }
+        var pos = new Vector3(tr.position.x, effects[calcId].transform.position.y, tr.position.z);
+        effects[calcId].transform.position = pos;
 
         effects[calcId].gameObject.SetActive(false);
         effects[calcId].gameObject.SetActive(true);
