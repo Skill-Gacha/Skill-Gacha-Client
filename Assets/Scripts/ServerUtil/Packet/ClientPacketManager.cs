@@ -61,13 +61,6 @@ class PacketManager
         _onRecv.Add((ushort)MsgId.SMonsterAction, MakePacket<S_MonsterAction>);
         _handler.Add((ushort)MsgId.SMonsterAction, PacketHandler.S_MonsterActionHandler);
 
-        // 패킷 추가 등록
-        // _onRecv.Add((ushort)MsgId.SViewRankPoint, MakePacket<S_ViewRankPoint>);
-        // _handler.Add((ushort)MsgId.SViewRankPoint, PacketHandler.S_ViewRankPointHandler);
-
-        // _onRecv.Add((ushort)MsgId.SPlayerCurrencyNotification, MakePacket<S_PlayerCurrencyNotification>);
-        // _handler.Add((ushort)MsgId.SPlayerCurrencyNotification, PacketHandler.S_PlayerCurrencyNotificationHandler);
-
         _onRecv.Add((ushort)MsgId.SPlayerMatch, MakePacket<S_PlayerMatch>);
         _handler.Add((ushort)MsgId.SPlayerMatch, PacketHandler.S_PlayerMatchHandler);
 
