@@ -63,12 +63,12 @@ public class MyPlayer : MonoBehaviour
             TownManager.Instance.UIInventory.gameObject.SetActive(!check);
             return;
         }
-        if(Input.GetKeyDown(KeyCode.F) && !TownManager.Instance.UIInventory.gameObject.activeSelf && !TownManager.Instance.UIRank.gameObject.activeSelf)
+        if(Input.GetKeyDown(KeyCode.F) && isInsideStore && !TownManager.Instance.UIInventory.gameObject.activeSelf && !TownManager.Instance.UIRank.gameObject.activeSelf)
         {
             ToggleStoreUI();
             return;
         }
-        else if(Input.GetKeyDown(KeyCode.F) && !TownManager.Instance.UIStore.gameObject.activeSelf && !TownManager.Instance.UIInventory.gameObject.activeSelf)
+        else if(Input.GetKeyDown(KeyCode.F) && isVillageHead && !TownManager.Instance.UIStore.gameObject.activeSelf && !TownManager.Instance.UIInventory.gameObject.activeSelf)
         {
             ToggleRank();
             return;
@@ -82,7 +82,6 @@ public class MyPlayer : MonoBehaviour
 
         if(!isActive)
         {
-            Debug.Log("서버로 요청 보내기");
             C_ViewRankPoint packet = new C_ViewRankPoint();
             GameManager.Network.Send(packet);
         }
