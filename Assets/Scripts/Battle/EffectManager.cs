@@ -36,11 +36,8 @@ public class EffectManager : MonoBehaviour
             return;
 
 
-        if (calcId < fullSkillIdx)
-        {
-            var pos = new Vector3(tr.position.x, effects[calcId].transform.position.y, tr.position.z);
-            effects[calcId].transform.position = pos;
-        }
+        var pos = new Vector3(tr.position.x, effects[calcId].transform.position.y, tr.position.z);
+        effects[calcId].transform.position = pos;
 
         effects[calcId].gameObject.SetActive(false);
         effects[calcId].gameObject.SetActive(true);

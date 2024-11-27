@@ -268,6 +268,7 @@ class PacketHandler
 
 		BattleManager.Instance.PlayerAnim(pkt.ActionSet.AnimCode);
 
+		Debug.Log("패키지 EffectCode : "+pkt.ActionSet.EffectCode);
 		if(pkt.TargetMonsterIdx == -1) EffectManager.Instance.SetEffectToPlayer(pkt.ActionSet.EffectCode);
 		else EffectManager.Instance.SetEffectToMonster(pkt.TargetMonsterIdx, pkt.ActionSet.EffectCode);
 	}
@@ -373,11 +374,15 @@ class PacketHandler
 		// 때리는 사람 처리(나 : true, 상대방 : false)
 		PvpBattleManager.Instance.PlayerAnim(animCode, isMyAction);
 
-		// 맞는 이펙트 처리(상대방 : true, 나 : false)
-		if(effectCode is not null)
+		if(effectCode is not null && effectCode <= 3028)
 		{
+			// 맞는 이펙트 처리(상대방 : true, 나 : false)
 			PvpEffectManager.Instance.SetEffectToPlayer(effectCode, isMyAction);
 			PvpBattleManager.Instance.PlayerHit(!isMyAction);
+		}
+		else if(effectCode is not null && effectCode > 3028)
+		{
+			PvpEffectManager.Instance.SetEffectToPlayer(effectCode, !isMyAction);
 		}
 	}
 
