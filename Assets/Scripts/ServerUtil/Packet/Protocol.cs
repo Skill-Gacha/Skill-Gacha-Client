@@ -52,7 +52,7 @@ namespace Google.Protobuf.Protocol {
             "dGxlTG9nIhsKDVNfU2V0UGxheWVySHASCgoCaHAYASABKAIiGwoNU19TZXRQ",
             "bGF5ZXJNcBIKCgJtcBgBIAEoAiIwCg5TX1NldE1vbnN0ZXJIcBISCgptb25z",
             "dGVySWR4GAEgASgFEgoKAmhwGAIgASgCIlIKDlNfUGxheWVyQWN0aW9uEhgK",
-            "EHRhcmdldE1vbnN0ZXJJZHgYASABKAUSJgoJYWN0aW9uU2V0GAIgASgLMhMu",
+            "EHRhcmdldE1vbnN0ZXJJZHgYASADKAUSJgoJYWN0aW9uU2V0GAIgASgLMhMu",
             "UHJvdG9jb2wuQWN0aW9uU2V0IlMKD1NfTW9uc3RlckFjdGlvbhIYChBhY3Rp",
             "b25Nb25zdGVySWR4GAEgASgFEiYKCWFjdGlvblNldBgCIAEoCzITLlByb3Rv",
             "Y29sLkFjdGlvblNldCIRCg9DX1ZpZXdSYW5rUG9pbnQiVQoPU19WaWV3UmFu",
@@ -4792,7 +4792,7 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public S_PlayerAction(S_PlayerAction other) : this() {
-      targetMonsterIdx_ = other.targetMonsterIdx_;
+      targetMonsterIdx_ = other.targetMonsterIdx_.Clone();
       actionSet_ = other.actionSet_ != null ? other.actionSet_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -4804,13 +4804,12 @@ namespace Google.Protobuf.Protocol {
 
     /// <summary>Field number for the "targetMonsterIdx" field.</summary>
     public const int TargetMonsterIdxFieldNumber = 1;
-    private int targetMonsterIdx_;
+    private static readonly pb::FieldCodec<int> _repeated_targetMonsterIdx_codec
+        = pb::FieldCodec.ForInt32(10);
+    private readonly pbc::RepeatedField<int> targetMonsterIdx_ = new pbc::RepeatedField<int>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int TargetMonsterIdx {
+    public pbc::RepeatedField<int> TargetMonsterIdx {
       get { return targetMonsterIdx_; }
-      set {
-        targetMonsterIdx_ = value;
-      }
     }
 
     /// <summary>Field number for the "actionSet" field.</summary>
@@ -4837,7 +4836,7 @@ namespace Google.Protobuf.Protocol {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (TargetMonsterIdx != other.TargetMonsterIdx) return false;
+      if(!targetMonsterIdx_.Equals(other.targetMonsterIdx_)) return false;
       if (!object.Equals(ActionSet, other.ActionSet)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -4845,7 +4844,7 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (TargetMonsterIdx != 0) hash ^= TargetMonsterIdx.GetHashCode();
+      hash ^= targetMonsterIdx_.GetHashCode();
       if (actionSet_ != null) hash ^= ActionSet.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -4863,10 +4862,7 @@ namespace Google.Protobuf.Protocol {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (TargetMonsterIdx != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(TargetMonsterIdx);
-      }
+      targetMonsterIdx_.WriteTo(output, _repeated_targetMonsterIdx_codec);
       if (actionSet_ != null) {
         output.WriteRawTag(18);
         output.WriteMessage(ActionSet);
@@ -4880,10 +4876,7 @@ namespace Google.Protobuf.Protocol {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (TargetMonsterIdx != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(TargetMonsterIdx);
-      }
+      targetMonsterIdx_.WriteTo(ref output, _repeated_targetMonsterIdx_codec);
       if (actionSet_ != null) {
         output.WriteRawTag(18);
         output.WriteMessage(ActionSet);
@@ -4897,9 +4890,7 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (TargetMonsterIdx != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(TargetMonsterIdx);
-      }
+      size += targetMonsterIdx_.CalculateSize(_repeated_targetMonsterIdx_codec);
       if (actionSet_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(ActionSet);
       }
@@ -4914,9 +4905,7 @@ namespace Google.Protobuf.Protocol {
       if (other == null) {
         return;
       }
-      if (other.TargetMonsterIdx != 0) {
-        TargetMonsterIdx = other.TargetMonsterIdx;
-      }
+      targetMonsterIdx_.Add(other.targetMonsterIdx_);
       if (other.actionSet_ != null) {
         if (actionSet_ == null) {
           ActionSet = new global::Google.Protobuf.Protocol.ActionSet();
@@ -4937,8 +4926,9 @@ namespace Google.Protobuf.Protocol {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
+          case 10:
           case 8: {
-            TargetMonsterIdx = input.ReadInt32();
+            targetMonsterIdx_.AddEntriesFrom(input, _repeated_targetMonsterIdx_codec);
             break;
           }
           case 18: {
@@ -4962,8 +4952,9 @@ namespace Google.Protobuf.Protocol {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
+          case 10:
           case 8: {
-            TargetMonsterIdx = input.ReadInt32();
+            targetMonsterIdx_.AddEntriesFrom(ref input, _repeated_targetMonsterIdx_codec);
             break;
           }
           case 18: {

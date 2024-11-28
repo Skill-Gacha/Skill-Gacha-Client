@@ -21,6 +21,7 @@ public class MyPlayer : MonoBehaviour
 
     private bool isInsideStore = false;
     private bool isInsideEnhance = false;
+    private bool isVillageHead = false;
 
     private void Awake()
     {
@@ -53,26 +54,41 @@ public class MyPlayer : MonoBehaviour
                 agent.SetDestination(rayHit.point);
             }
         }
-        if(Input.GetKeyDown(KeyCode.I))
+        if(Input.GetKeyDown(KeyCode.I) && !TownManager.Instance.UIStore.gameObject.activeSelf && !TownManager.Instance.UIRank.gameObject.activeSelf)
         {
             bool check = TownManager.Instance.UIInventory.gameObject.activeSelf;
             InventoryUI(!check);
             TownManager.Instance.UIInventory.gameObject.SetActive(!check);
             return;
         }
-
-        if(Input.GetKeyDown(KeyCode.F) && isInsideStore)
+        if(Input.GetKeyDown(KeyCode.F) && isInsideStore && !TownManager.Instance.UIInventory.gameObject.activeSelf && !TownManager.Instance.UIRank.gameObject.activeSelf)
         {
             ToggleStoreUI();
             return;
         }
-
         if (Input.GetKeyDown(KeyCode.F) && isInsideEnhance)
         {
             ToggleEnhanceUI();
+        }
+        else if(Input.GetKeyDown(KeyCode.F) && isVillageHead && !TownManager.Instance.UIStore.gameObject.activeSelf && !TownManager.Instance.UIInventory.gameObject.activeSelf)
+        {
+            ToggleRank();
             return;
         }
         CheckMove();
+    }
+
+    public void ToggleRank()
+    {
+        bool isActive = TownManager.Instance.UIRank.gameObject.activeSelf;
+
+        if(!isActive)
+        {
+            C_ViewRankPoint packet = new C_ViewRankPoint();
+            GameManager.Network.Send(packet);
+        }
+
+        TownManager.Instance.UIRank.gameObject.SetActive(!isActive);
     }
 
     public void AnimationExecute(int animIdx)
@@ -159,6 +175,10 @@ public class MyPlayer : MonoBehaviour
         {
             isInsideEnhance = true;
         }
+        else if(other.CompareTag("VillageHead"))
+        {
+            isVillageHead = true;
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -170,6 +190,10 @@ public class MyPlayer : MonoBehaviour
         else if(other.CompareTag("Enhance"))
         {
             isInsideEnhance = false;
+        }
+        else if(other.CompareTag("VillageHead"))
+        {
+            isVillageHead = false;
         }
     }
 }

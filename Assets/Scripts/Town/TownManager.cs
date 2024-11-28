@@ -29,8 +29,16 @@ public class TownManager : MonoBehaviour
     [SerializeField] private UIStore uiStore;
     [SerializeField] private UIEnhance uiEnhance;
 
+    [SerializeField] private UIMatching uIMatching;
+
+    public UIMatching UIMatching => uIMatching;
+
     public UIStore UIStore => uiStore;
     public UIEnhance UIEnhance => uiEnhance;
+
+    [SerializeField] private UIRank uIRank;
+
+    public UIRank UIRank => uIRank;
 
     [SerializeField] private UIInventory uiInventory;
 
