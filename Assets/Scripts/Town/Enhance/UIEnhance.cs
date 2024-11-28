@@ -140,6 +140,7 @@ public class UIEnhance : MonoBehaviour
     public void EnhanceSuccess(S_EnhanceResponse enhanceSuccess)
     {
         // 강화 성공 여부 출력
+        txtEnhance.gameObject.SetActive(true);
         txtEnhance.text = enhanceSuccess.Success ? "<강화 성공>" : "<강화 실패>";
         txtEnhance.color = enhanceSuccess.Success ? new Color32(162, 234, 255, 255) : new Color32(255, 122, 119, 255);
     }
