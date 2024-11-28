@@ -132,7 +132,6 @@ public class UIEnhance : MonoBehaviour
     public void WantEnhance()
     {
         if (alreadyHaveSkill) return;
-        
         C_EnhanceRequest targetSkill = new C_EnhanceRequest { SkillCode = choosenSkill };
         GameManager.Network.Send(targetSkill);
     }
