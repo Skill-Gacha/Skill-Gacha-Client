@@ -5,6 +5,7 @@ using Google.Protobuf.Protocol;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+//using static System.Net.Mime.MediaTypeNames;
 
 public class PvpUIOpponentInformation : MonoBehaviour
 {
@@ -25,7 +26,7 @@ public class PvpUIOpponentInformation : MonoBehaviour
     private float fullHP;
     private float curHP;
 
-    private float fillWidth = 180;
+    private float fillWidth = 230;
     private float fillHeight = 30;
 
     private void Start()
@@ -50,7 +51,7 @@ public class PvpUIOpponentInformation : MonoBehaviour
     public void SetName(string nickname)
     {
         txtName.text = nickname;
-        imgNameBg.rectTransform.sizeDelta = new Vector2(txtName.preferredWidth + 50, 50);
+        // imgNameBg.rectTransform.sizeDelta = new Vector2(txtName.preferredWidth + 50, 50);
     }
 
     public void SetFullHP(float hp, bool recover = true)
@@ -66,7 +67,7 @@ public class PvpUIOpponentInformation : MonoBehaviour
     {
         curHP = Mathf.Min(hp, fullHP);
         txtHp.text = hp.ToString("0");
-        float per = curHP/fullHP;
+        float per = curHP / fullHP;
         imgHpFill.rectTransform.sizeDelta = new Vector2(fillWidth * per, fillHeight);
     }
 }
