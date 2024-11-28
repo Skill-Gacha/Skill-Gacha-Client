@@ -4,6 +4,7 @@ using ServerCore;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -260,14 +261,14 @@ class PacketHandler
 		S_PlayerAction pkt = packet as S_PlayerAction;
 		if (pkt == null)
 			return;
-
-		Monster monster = BattleManager.Instance.GetMonster(pkt.TargetMonsterIdx);
-		monster.Hit();
+		int[] monsterIndex = pkt.TargetMonsterIdx.ToArray();
+		if(monsterIndex.Length != 0) BattleManager.Instance.GetMonster(monsterIndex).ForEach(monster => monster.Hit());
 
 		BattleManager.Instance.PlayerAnim(pkt.ActionSet.AnimCode);
 
-		if(pkt.TargetMonsterIdx == -1) EffectManager.Instance.SetEffectToPlayer(pkt.ActionSet.EffectCode);
-		else EffectManager.Instance.SetEffectToMonster(pkt.TargetMonsterIdx, pkt.ActionSet.EffectCode);
+		Debug.Log("패키지 EffectCode : "+pkt.ActionSet.EffectCode);
+		if(monsterIndex.Length == 0) EffectManager.Instance.SetEffectToPlayer(pkt.ActionSet.EffectCode);
+		else EffectManager.Instance.SetEffectToMonster(monsterIndex, pkt.ActionSet.EffectCode);
 	}
 
 	public static void S_MonsterActionHandler(PacketSession session, IMessage packet)
@@ -292,6 +293,7 @@ class PacketHandler
 		S_PlayerMatch matchPacket = packet as S_PlayerMatch;
 		if(matchPacket == null)
 			return;
+		TownManager.Instance.UIMatching.StartMatch();
 	}
 
 	public static void S_PlayerMatchNotificationHandler(PacketSession session, IMessage packet)
@@ -301,6 +303,7 @@ class PacketHandler
 			return;
 		Scene scene = SceneManager.GetActiveScene();
 
+		TownManager.Instance.UIMatching.StopMatch();
 		if(scene.name == GameManager.PvpScene)
 		{
 			PvpBattleManager.Instance.Set(matchPacket);
@@ -371,11 +374,15 @@ class PacketHandler
 		// 때리는 사람 처리(나 : true, 상대방 : false)
 		PvpBattleManager.Instance.PlayerAnim(animCode, isMyAction);
 
-		// 맞는 이펙트 처리(상대방 : true, 나 : false)
-		if(effectCode is not null)
+		if(effectCode is not null && effectCode <= 3028)
 		{
+			// 맞는 이펙트 처리(상대방 : true, 나 : false)
 			PvpEffectManager.Instance.SetEffectToPlayer(effectCode, isMyAction);
 			PvpBattleManager.Instance.PlayerHit(!isMyAction);
+		}
+		else if(effectCode is not null && effectCode > 3028)
+		{
+			PvpEffectManager.Instance.SetEffectToPlayer(effectCode, !isMyAction);
 		}
 	}
 
@@ -409,7 +416,7 @@ class PacketHandler
 
 	#endregion
 
-	#region Shore
+	#region Store
 	public static void S_OpenStoreResponseHandler(Session session, IMessage packet)
 	{
 		S_OpenStoreResponse openStore = packet as S_OpenStoreResponse;
@@ -432,7 +439,24 @@ class PacketHandler
       	TownManager.Instance.UIInventory.ShowInventoryUi(openInventory);
     }
 
-	#endregion
+    #endregion
+
+    #region Enhance
+
+    public static void S_EnhanceUiResponseHandler(Session session, IMessage packet)
+    {
+        S_EnhanceUiResponse openEnhance = packet as S_EnhanceUiResponse;
+        TownManager.Instance.UIEnhance.ShowEnhanceUi(openEnhance);
+
+    }
+
+    public static void S_EnhanceResponseHandler(Session session, IMessage packet)
+    {
+        S_EnhanceResponse enhanceSuccess = packet as S_EnhanceResponse;
+        TownManager.Instance.UIEnhance.EnhanceSuccess(enhanceSuccess);
+    }
+
+    #endregion
 
 	#region
 

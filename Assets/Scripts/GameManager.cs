@@ -34,6 +34,8 @@ public class GameManager : MonoBehaviour
             _instance = this;
         
             network = new NetworkManager();
+
+            SkillDataManager.LoadSkillData();
         
             DontDestroyOnLoad(gameObject);
         }

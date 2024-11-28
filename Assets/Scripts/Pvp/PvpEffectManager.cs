@@ -26,10 +26,11 @@ public class PvpEffectManager : MonoBehaviour
         _instance = this;
     }
 
+
     public void SetEffectToPlayer(int? code, bool isMyPlayer)
     {
         // code가 3028이하일 경우 상대방 공격 및 디버프 코드이고, 초과일 경우 본인 버프
-        Transform trans = isMyPlayer || code <= 3028 ?  oppoentTrans : playerTrans;
+        Transform trans = isMyPlayer ?  oppoentTrans : playerTrans;
         SetEffect(trans, code);
     }
 
@@ -42,13 +43,9 @@ public class PvpEffectManager : MonoBehaviour
         if(calcId < 0 || calcId >= effects.Length)
             return;
 
-        // 범위 밖 index이면 실행 안 시키기
-        if (calcId < fullSkillIdx)
-        {
-            //효과가 발생할 위치 설정
-            Vector3 pos = new Vector3(tr.position.x, effects[calcId].transform.position.y, tr.position.z);
-            effects[calcId].transform.position = pos;
-        }
+        //효과가 발생할 위치 설정
+        Vector3 pos = new Vector3(tr.position.x, effects[calcId].transform.position.y, tr.position.z);
+        effects[calcId].transform.position = pos;
 
         //효과 출력
         effects[calcId].gameObject.SetActive(false);

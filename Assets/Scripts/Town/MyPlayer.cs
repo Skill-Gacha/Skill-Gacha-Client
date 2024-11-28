@@ -20,7 +20,7 @@ public class MyPlayer : MonoBehaviour
     private List<int> animHash = new List<int>();
 
     private bool isInsideStore = false;
-
+    private bool isInsideEnhance = false;
     private bool isVillageHead = false;
 
     private void Awake()
@@ -44,7 +44,7 @@ public class MyPlayer : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0))
         {
             if(eSystem.IsPointerOverGameObject()) return;
 
@@ -54,19 +54,23 @@ public class MyPlayer : MonoBehaviour
                 agent.SetDestination(rayHit.point);
             }
         }
-        if(Input.GetKeyDown(KeyCode.I) && !TownManager.Instance.UIRank.gameObject.activeSelf && !TownManager.Instance.UIStore.gameObject.activeSelf)
+        if(Input.GetKeyDown(KeyCode.I) && !TownManager.Instance.UIStore.gameObject.activeSelf && !TownManager.Instance.UIRank.gameObject.activeSelf)
         {
             bool check = TownManager.Instance.UIInventory.gameObject.activeSelf;
             InventoryUI(!check);
             TownManager.Instance.UIInventory.gameObject.SetActive(!check);
             return;
         }
-        if(Input.GetKeyDown(KeyCode.F) && isInsideStore && !TownManager.Instance.UIInventory.gameObject.activeSelf)
+        if(Input.GetKeyDown(KeyCode.F) && isInsideStore && !TownManager.Instance.UIInventory.gameObject.activeSelf && !TownManager.Instance.UIRank.gameObject.activeSelf)
         {
             ToggleStoreUI();
             return;
         }
-        else if(Input.GetKeyDown(KeyCode.F) && isVillageHead && !TownManager.Instance.UIInventory.gameObject.activeSelf)
+        if (Input.GetKeyDown(KeyCode.F) && isInsideEnhance)
+        {
+            ToggleEnhanceUI();
+        }
+        else if(Input.GetKeyDown(KeyCode.F) && isVillageHead && !TownManager.Instance.UIStore.gameObject.activeSelf && !TownManager.Instance.UIInventory.gameObject.activeSelf)
         {
             ToggleRank();
             return;
@@ -80,7 +84,6 @@ public class MyPlayer : MonoBehaviour
 
         if(!isActive)
         {
-            Debug.Log("서버로 요청 보내기");
             C_ViewRankPoint packet = new C_ViewRankPoint();
             GameManager.Network.Send(packet);
         }
@@ -130,6 +133,12 @@ public class MyPlayer : MonoBehaviour
         C_OpenStoreRequest packet = new C_OpenStoreRequest();
         GameManager.Network.Send(packet);
     }
+    public void EnhanceUI(bool check)
+    {
+        if(!check) return;
+        C_EnhanceUiRequest packet = new C_EnhanceUiRequest();
+        GameManager.Network.Send(packet);
+    }
 
     private void ToggleStoreUI()
     {
@@ -143,11 +152,28 @@ public class MyPlayer : MonoBehaviour
 
         TownManager.Instance.UIStore.gameObject.SetActive(!isActive);
     }
+    private void ToggleEnhanceUI()
+    {
+        bool isActive = TownManager.Instance.UIEnhance.gameObject.activeSelf;
 
-    private void  OnTriggerEnter(Collider other) {
-        if(other.CompareTag("Store"))
+        if (!isActive)
+        {
+            C_EnhanceUiRequest packet = new C_EnhanceUiRequest();
+            GameManager.Network.Send(packet);
+        }
+
+        TownManager.Instance.UIEnhance.gameObject.SetActive(!isActive);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Store"))
         {
             isInsideStore = true;
+        }
+        else if (other.CompareTag("Enhance"))
+        {
+            isInsideEnhance = true;
         }
         else if(other.CompareTag("VillageHead"))
         {
@@ -155,10 +181,15 @@ public class MyPlayer : MonoBehaviour
         }
     }
 
-    private void  OnTriggerExit(Collider other) {
-        if(other.CompareTag("Store"))
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Store"))
         {
             isInsideStore = false;
+        }
+        else if(other.CompareTag("Enhance"))
+        {
+            isInsideEnhance = false;
         }
         else if(other.CompareTag("VillageHead"))
         {
