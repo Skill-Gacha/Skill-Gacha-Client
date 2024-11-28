@@ -26,11 +26,31 @@ public class UIEnhance : MonoBehaviour
     [SerializeField] private TMP_Text txtMyGold;
     [SerializeField] private TMP_Text txtMyStone;
 
-    private string[] rankNames = { "[노말]", "[레어]", "[에픽]", "[유니크]", "[레전더리]" };
-    private string[] costGoldList = { "1,000", "3,000", "5,000", "10,000" };
-    private string[] costStoneList = { "5", "20", "30", "50" };
+    private struct SkillRank
+    {
+        public string RankName;
+        public string CostGold;
+        public string CostStone;
+
+        public SkillRank(string rankName, string costGold, string costStone)
+        {
+            RankName = rankName;
+            CostGold = costGold;
+            CostStone = costStone;
+        }
+    }
+
+    private SkillRank[] skillRanks =
+    {
+        new SkillRank("[노말]", "1,000","5"),
+        new SkillRank("[레어]", "3,000","20"),
+        new SkillRank("[에픽]", "5,000","30"),
+        new SkillRank("[유니크]", "10,000","50"),
+        new SkillRank("[래전더리]", "-","-"),
+    };
+
     private List<int> skillCodeList = new List<int>();
-    private int ChoosenSkill = -1;
+    private int choosenSkill = -1;
 
     private bool alreadyHaveSkill = false;
 
@@ -39,83 +59,79 @@ public class UIEnhance : MonoBehaviour
         for (int i = 0; i < btns.Length; i++)
         {
             int idx = i + 1;
-            btns[i].onClick.AddListener(() =>
-            {
-                SkillChoice(idx);
-            });
+            btns[i].onClick.AddListener(() => SkillChoice(idx));
         }
+    }
+
+    private void ResetEnhanceUI()
+    {
+        for(int i = 0; i < btns.Length; i++)
+        {
+            btns[i].gameObject.SetActive(false);
+        }
+        skillCodeList.Clear();
+        txtCostGold.text = "0";
+        txtCostStone.text = "0";
+        txtNotice.text = "강화할 스킬을 선택해 주세요.";
+        txtNotice.color = new Color32(255, 255, 255, 255);
+        txtEnhance.gameObject.SetActive(false);
     }
 
     public void ShowEnhanceUi(S_EnhanceUiResponse openEnhance)
     {
-        skillCodeList.Clear();
-        // 강화 비용 초기화
-        txtCostGold.text = "0";
-        txtCostStone.text = "0";
-        // 강화 안내 문구
-        txtNotice.text = "강화할 스킬을 선택해 주세요.";
-        txtNotice.color = new Color32(255, 255, 255, 255);
-        // 보유 재화
+        ResetEnhanceUI();
         txtMyGold.text = openEnhance.Gold.ToString("N0");
         txtMyStone.text = openEnhance.Stone.ToString("N0");
-        //보유 스킬
+
         var skillCodes = openEnhance.SkillCode.ToArray();
+
         for (int i = 0; i < skillCodes.Length; i++)
         {
+            btns[i].gameObject.SetActive(true);
             int skillCode = skillCodes[i];
             skillCodeList.Add(skillCode);
-            var skillData = SkillDataManager.GetSkillById(skillCode);
-            string skillName = skillData.skillName;
-            int skillRank = skillData.rank;
-            txtSkills[i].text = skillName + "\n" + rankNames[skillRank - 100];
+            SetSkillInfo(i, skillCode);
         }
-        //for (int i = 0; i < skillCodeList.Count; i++) Debug.Log(skillCodeList[i]);
+    }
+
+    private void SetSkillInfo(int index, int skillCode)
+    {
+        var skillData = SkillDataManager.GetSkillById(skillCode);
+        txtSkills[index].text = $"{skillData.skillName}\n{skillRanks[skillData.rank - 100].RankName}";
     }
 
     private void SkillChoice(int idx)
     {
-        ChoosenSkill = skillCodeList[idx - 1];
-        // 상위 스킬을 보유하고 있는지 확인
-        int nextSkill = ChoosenSkill + 5;
-        if (skillCodeList.Contains(nextSkill))
-        {
-            alreadyHaveSkill = true;
-        }
-        else
-        {
-            alreadyHaveSkill = false;
-        }
+        choosenSkill = skillCodeList[idx - 1];
+        alreadyHaveSkill = skillCodeList.Contains(choosenSkill + 5);
 
-        int targetSkillRank = SkillDataManager.GetSkillById(ChoosenSkill).rank;
-        // 강화 가능 여부 및 비용 표시
-        if (targetSkillRank < 104 && alreadyHaveSkill == false)
+        int targetSkillRank = SkillDataManager.GetSkillById(choosenSkill).rank;
+        if(targetSkillRank < 104 && !alreadyHaveSkill)
         {
-            txtEnhance.text = "강화가 가능한 스킬입니다.";
-            txtEnhance.color = new Color32(255, 255, 255, 255);
-            txtCostGold.text = costGoldList[targetSkillRank - 100];
-            txtCostStone.text = costStoneList[targetSkillRank - 100];
-            
+            SetEnhanceStatus("강화가 가능한 스킬입니다", new Color32(255, 255, 255, 255), skillRanks[targetSkillRank - 100]);
         }
-        else if (targetSkillRank == 104)
+        else if(targetSkillRank == 104)
         {
-            txtEnhance.text = "강화가 불가능한 스킬입니다.";
-            txtEnhance.color = new Color32(255, 122, 119, 255);
-            txtCostGold.text = "-";
-            txtCostStone.text = "-";
+            SetEnhanceStatus("강화가 불가능한 스킬입니다.", new Color32(255, 122, 119, 255));
         }
-        else if(alreadyHaveSkill == true)
+        else if(alreadyHaveSkill)
         {
-            txtEnhance.text = "이미 상위 스킬을 보유 중입니다.";
-            txtEnhance.color = new Color32(255, 122, 119, 255);
-            txtCostGold.text = "-";
-            txtCostStone.text = "-";
+            SetEnhanceStatus("이미 상위 스킬을 보유 중입니다.", new Color32(255, 122, 119, 255));
         }
+    }
+
+    private void SetEnhanceStatus(string message, Color32 color, SkillRank? rank = null)
+    {
+        txtEnhance.text = message;
+        txtEnhance.color = color;
+        txtCostGold.text = rank?.CostGold ?? "-";
+        txtCostStone.text = rank?.CostStone ?? "-";
     }
 
     public void WantEnhance()
     {
         if (alreadyHaveSkill) return;
-        C_EnhanceRequest targetSkill = new C_EnhanceRequest { SkillCode = ChoosenSkill };
+        C_EnhanceRequest targetSkill = new C_EnhanceRequest { SkillCode = choosenSkill };
         GameManager.Network.Send(targetSkill);
     }
 
@@ -125,6 +141,5 @@ public class UIEnhance : MonoBehaviour
         txtEnhance.gameObject.SetActive(true);
         txtEnhance.text = enhanceSuccess.Success ? "<강화 성공>" : "<강화 실패>";
         txtEnhance.color = enhanceSuccess.Success ? new Color32(162, 234, 255, 255) : new Color32(255, 122, 119, 255);
-        if (!enhanceSuccess.Success) return;
     }
 }
