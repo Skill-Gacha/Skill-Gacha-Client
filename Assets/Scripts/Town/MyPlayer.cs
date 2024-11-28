@@ -54,23 +54,23 @@ public class MyPlayer : MonoBehaviour
                 agent.SetDestination(rayHit.point);
             }
         }
-        if(Input.GetKeyDown(KeyCode.I) && !TownManager.Instance.UIStore.gameObject.activeSelf && !TownManager.Instance.UIRank.gameObject.activeSelf)
+        if(Input.GetKeyDown(KeyCode.I) && !TownManager.Instance.UIStore.gameObject.activeSelf && !TownManager.Instance.UIRank.gameObject.activeSelf && !TownManager.Instance.UIEnhance.gameObject.activeSelf)
         {
             bool check = TownManager.Instance.UIInventory.gameObject.activeSelf;
             InventoryUI(!check);
             TownManager.Instance.UIInventory.gameObject.SetActive(!check);
             return;
         }
-        if(Input.GetKeyDown(KeyCode.F) && isInsideStore && !TownManager.Instance.UIInventory.gameObject.activeSelf && !TownManager.Instance.UIRank.gameObject.activeSelf)
+        if(Input.GetKeyDown(KeyCode.F) && isInsideStore && !TownManager.Instance.UIInventory.gameObject.activeSelf)
         {
             ToggleStoreUI();
             return;
         }
-        if (Input.GetKeyDown(KeyCode.F) && isInsideEnhance)
+        if (Input.GetKeyDown(KeyCode.F) && isInsideEnhance && !TownManager.Instance.UIInventory.gameObject.activeSelf)
         {
             ToggleEnhanceUI();
         }
-        else if(Input.GetKeyDown(KeyCode.F) && isVillageHead && !TownManager.Instance.UIStore.gameObject.activeSelf && !TownManager.Instance.UIInventory.gameObject.activeSelf)
+        else if(Input.GetKeyDown(KeyCode.F) && isVillageHead && !TownManager.Instance.UIInventory.gameObject.activeSelf)
         {
             ToggleRank();
             return;

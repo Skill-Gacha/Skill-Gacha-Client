@@ -46,7 +46,7 @@ public class UIEnhance : MonoBehaviour
         new SkillRank("[레어]", "3,000","20"),
         new SkillRank("[에픽]", "5,000","30"),
         new SkillRank("[유니크]", "10,000","50"),
-        new SkillRank("[래전더리]", "-","-"),
+        new SkillRank("[레전더리]", "-","-"),
     };
 
     private List<int> skillCodeList = new List<int>();
@@ -122,6 +122,7 @@ public class UIEnhance : MonoBehaviour
 
     private void SetEnhanceStatus(string message, Color32 color, SkillRank? rank = null)
     {
+        txtEnhance.gameObject.SetActive(true);
         txtEnhance.text = message;
         txtEnhance.color = color;
         txtCostGold.text = rank?.CostGold ?? "-";
