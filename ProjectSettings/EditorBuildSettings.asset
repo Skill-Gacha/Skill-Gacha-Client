@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Pvp.unity
     guid: 15de6ea180739434d94866e20eeff180
+  - enabled: 1
+    path: Assets/Scenes/Raid.unity
+    guid: 08585c084ffa66b4dac1d872f31c56c6
   m_configObjects: {}

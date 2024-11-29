@@ -70,8 +70,8 @@ class PacketManager
         _onRecv.Add((ushort)MsgId.SUserTurn, MakePacket<S_UserTurn>);
         _handler.Add((ushort)MsgId.SUserTurn, PacketHandler.S_UserTurnHandler);
 
-        _onRecv.Add((ushort)MsgId.SSetEnemyHp, MakePacket<S_SetPvpEnemyHp>);
-        _handler.Add((ushort)MsgId.SSetEnemyHp, PacketHandler.S_SetEnemyHpHandler);
+        _onRecv.Add((ushort)MsgId.SSetPvpEnemyHp, MakePacket<S_SetPvpEnemyHp>);
+        _handler.Add((ushort)MsgId.SSetPvpEnemyHp, PacketHandler.S_SetEnemyHpHandler);
 
 		_onRecv.Add((ushort)MsgId.SPvpBattleLog, MakePacket<S_PvpBattleLog>);
         _handler.Add((ushort)MsgId.SPvpBattleLog, PacketHandler.S_PvpBattleLogHandler);
