@@ -142,7 +142,7 @@ public class MyPlayer : MonoBehaviour
 
     public void BossMatching(bool check)
     {
-        if (!check) return;
+        // if (!check) return;
         C_BossMatch packet = new C_BossMatch{ IsIn = check };
         GameManager.Network.Send(packet);
     }
