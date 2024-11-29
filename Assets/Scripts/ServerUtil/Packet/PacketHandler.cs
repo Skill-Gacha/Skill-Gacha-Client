@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+//using System.Runtime.Remoting.Messaging;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -414,10 +415,41 @@ class PacketHandler
 		opponentInfo.SetCurHP(enemyHp.Hp);
 	}
 
-	#endregion
+    #endregion
 
-	#region Store
-	public static void S_OpenStoreResponseHandler(Session session, IMessage packet)
+    #region Boss
+
+    public static void S_AcceptRequestHandler(PacketSession session, IMessage packet)
+    {
+        S_AcceptRequest acceptPacket = packet as S_AcceptRequest;
+        if (acceptPacket == null)
+            return;
+        TownManager.Instance.UIBossMatching.ShowBossMatchingUi();
+    }
+
+    public static void S_BossMatchNotificationHandler(PacketSession session, IMessage packet)
+    {
+        S_BossMatchNotification matchPacket = packet as S_BossMatchNotification;
+        //if (matchPacket.success = false)
+        //    return;
+        Scene scene = SceneManager.GetActiveScene();
+
+        TownManager.Instance.UIBossMatching.StopMatch();
+        //if (scene.name == GameManager.BossScene)
+        //{
+        //    BossBattleManager.Instance.Set(matchPacket);
+        //}
+        //else
+        //{
+        //    GameManager.Instance.Boss = matchPacket;
+        //    SceneManager.LoadScene(GameManager.BossScene);
+        //}
+    }
+
+    #endregion
+
+    #region Store
+    public static void S_OpenStoreResponseHandler(Session session, IMessage packet)
 	{
 		S_OpenStoreResponse openStore = packet as S_OpenStoreResponse;
 		TownManager.Instance.UIStore.ShowStoreUi(openStore);
@@ -458,7 +490,7 @@ class PacketHandler
 
     #endregion
 
-	#region
+	#region Rank
 
 	public static void S_ViewRankPointHandler(Session session, IMessage packet)
 	{
@@ -466,6 +498,6 @@ class PacketHandler
 		TownManager.Instance.UIRank.ViewRankUi(viewPoint);
 	}
 
-	#endregion
+    #endregion
 }
 

@@ -70,8 +70,8 @@ class PacketManager
         _onRecv.Add((ushort)MsgId.SUserTurn, MakePacket<S_UserTurn>);
         _handler.Add((ushort)MsgId.SUserTurn, PacketHandler.S_UserTurnHandler);
 
-        _onRecv.Add((ushort)MsgId.SSetEnemyHp, MakePacket<S_SetPvpEnemyHp>);
-        _handler.Add((ushort)MsgId.SSetEnemyHp, PacketHandler.S_SetEnemyHpHandler);
+        _onRecv.Add((ushort)MsgId.SSetPvpEnemyHp, MakePacket<S_SetPvpEnemyHp>);
+        _handler.Add((ushort)MsgId.SSetPvpEnemyHp, PacketHandler.S_SetEnemyHpHandler);
 
 		_onRecv.Add((ushort)MsgId.SPvpBattleLog, MakePacket<S_PvpBattleLog>);
         _handler.Add((ushort)MsgId.SPvpBattleLog, PacketHandler.S_PvpBattleLogHandler);
@@ -105,6 +105,13 @@ class PacketManager
 
         _onRecv.Add((ushort)MsgId.SViewRankPoint, MakePacket<S_ViewRankPoint>);
         _handler.Add((ushort)MsgId.SViewRankPoint, PacketHandler.S_ViewRankPointHandler);
+
+        _onRecv.Add((ushort)MsgId.SAcceptRequest, MakePacket<S_AcceptRequest>);
+        _handler.Add((ushort)MsgId.SAcceptRequest, PacketHandler.S_AcceptRequestHandler);
+
+        _onRecv.Add((ushort)MsgId.SBossMatchNotification, MakePacket<S_BossMatchNotification>);
+        _handler.Add((ushort)MsgId.SBossMatchNotification, PacketHandler.S_BossMatchNotificationHandler);
+
     }
 
     public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
