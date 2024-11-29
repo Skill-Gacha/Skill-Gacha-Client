@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Google.Protobuf.Collections;
 using Google.Protobuf.Protocol;
+using SRF;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RaidManager : MonoBehaviour
 {
     private static RaidManager _instance = null;
     public static RaidManager Instance => _instance;
-    
+
     [SerializeField] private RaidUIScreen uiScreen;
     [SerializeField] private RaidBattleLog uiBattleLog;
     [SerializeField] private RaidUIPlayerInformation myInformation;
@@ -17,15 +20,11 @@ public class RaidManager : MonoBehaviour
     public RaidBattleLog UiBattleLog => uiBattleLog;
     public RaidUIPlayerInformation MyInformation => myInformation;
 
-    [SerializeField] private Maps map;
+    private int[] playersIds;
 
-    [SerializeField] private Transform[] myPlayerTrans;
+    [SerializeField] private Transform[] playerTrans;
 
-    [SerializeField] private Transform[] myTeamLeft;
-
-    [SerializeField] private Transform[] myTeamRight;
-
-    private Animator playerAnimator;
+    private Animator[] playersAnimator;
 
     private Dictionary<int, string> monsterDb = new Dictionary<int, string>();
 
@@ -44,8 +43,8 @@ public class RaidManager : MonoBehaviour
         Constants.PlayerBattleHit
     };
 
-    
-    
+
+
     private void Awake()
     {
         _instance = this;
@@ -63,33 +62,37 @@ public class RaidManager : MonoBehaviour
 
     public void Set(S_BossMatchNotification Raid)
     {
-        SetMap(Raid.DungeonCode);
+        // Raid에 참여한 playerId 가져오기
+        playersIds= Raid.PlayerIds.ToArray();
 
-        if (Raid.Player != null)
+        // 파티에 참여한 모든 유저의 능력치 정보
+        PlayerStatus[] playerStatus = Raid.PartyList.ToArray();
+
+        for(int i = 0; i < playerStatus.Length; i++)
         {
-            MyInformation.Set(Raid.Player);
-            SetPlayer(Raid.Player.PlayerClass);
+            // 직업 Index 가져오기
+            int classIdx = playerStatus[i].PlayerClass - Constants.PlayerCodeFactor;
+            SetPlayer(classIdx, i);
+
+            // 하단 체력, 마나, 본인 속성 띄워주는 창
+            if(playersIds[i] == GameManager.Instance.PlayerId)
+                MyInformation.Set(playerStatus[i]);
         }
 
-        if(Raid.Member != null)
-        {
-            //
-        }
-
-        // if()
-        // if (Raid.BattleLog != null)
-        //     uiBattleLog.Set(Raid.BattleLog);
+        if(Raid.BattleLog != null)
+            uiBattleLog.Set(Raid.BattleLog);
     }
 
-    private void SetPlayer(int classCode)
+    private void SetPlayer(int classIdx, int index)
     {
-        int idx = classCode - Constants.PlayerCodeFactor;
-        for (int i = 0; i < myPlayerTrans.Length; i++)
+        for(int i = 0; i < playerTrans[index].childCount; i++)
         {
-            bool select = i == idx;
-            myPlayerTrans[i].gameObject.SetActive(select);
-            if (select)
-                playerAnimator = myPlayerTrans[i].GetComponent<Animator>();
+            bool select = classIdx == i;
+            GameObject character = playerTrans[index].GetChild(i).gameObject;
+            character.SetActive(select);
+
+            if(select)
+                playersAnimator[index] = character.GetComponent<Animator>();
         }
     }
 
@@ -143,10 +146,10 @@ public class RaidManager : MonoBehaviour
         return null;
     }
 
-    // public List<Monster> GetMonster(int[] monsterIndex)
-    // {
-    //     return monsterIndex.Where(index => index >= 0 && index < monsterObjs.Count).Select(index => monsterObjs[index]).ToList();
-    // }
+    public List<Monster> GetMonster(int[] monsterIndex)
+    {
+        return monsterIndex.Where(index => index >= 0 && index < monsterObjs.Count).Select(index => monsterObjs[index]).ToList();
+    }
 
     public void PlayerHit()
     {
@@ -155,10 +158,10 @@ public class RaidManager : MonoBehaviour
 
     void TriggerAnim(int code)
     {
-        playerAnimator.transform.localEulerAngles = Vector3.zero;
-        playerAnimator.transform.localPosition = Vector3.zero;
-        playerAnimator.applyRootMotion = code == Constants.PlayerBattleDie;
-        playerAnimator.SetTrigger(code);
+        //playerAnimator.transform.localEulerAngles = Vector3.zero;
+        //playerAnimator.transform.localPosition = Vector3.zero;
+        //playerAnimator.applyRootMotion = code == Constants.PlayerBattleDie;
+        //playerAnimator.SetTrigger(code);
     }
 
     public void PlayerAnim(int idx)
@@ -168,10 +171,5 @@ public class RaidManager : MonoBehaviour
 
         var animCode = animCodeList[idx];
         TriggerAnim(animCode);
-    }
-
-    public void SetMap(int id)
-    {
-        map.SetMap(id);
     }
 }

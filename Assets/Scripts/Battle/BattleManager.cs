@@ -9,7 +9,7 @@ public class BattleManager : MonoBehaviour
 {
     private static BattleManager _instance = null;
     public static BattleManager Instance => _instance;
-    
+
     [SerializeField] private UIScreen uiScreen;
     [SerializeField] private UIBattleLog uiBattleLog;
     [SerializeField] private UIPlayerInformation uiPlayerInformation;
@@ -17,21 +17,21 @@ public class BattleManager : MonoBehaviour
     public UIScreen UiScreen => uiScreen;
     public UIBattleLog UiBattleLog => uiBattleLog;
     public UIPlayerInformation UiPlayerInformation => uiPlayerInformation;
-    
+
     [SerializeField] private Maps map;
-    
+
     [SerializeField] private Transform[] players;
     private Animator playerAnimator;
-    
+
     private Dictionary<int, string> monsterDb = new Dictionary<int, string>();
-    
+
     [SerializeField] private Transform[] monsterSpawnPos;
     [SerializeField] private List<Monster> monsterObjs = new List<Monster>();
-    
+
     private List<UIMonsterInformation> monsterUis = new List<UIMonsterInformation>();
-    
+
     private string baseMonsterPath = "Monster/Monster1";
-    
+
 
     private int[] animCodeList = new[]
     {
@@ -40,8 +40,6 @@ public class BattleManager : MonoBehaviour
         Constants.PlayerBattleHit
     };
 
-    
-    
     private void Awake()
     {
         _instance = this;
@@ -82,7 +80,7 @@ public class BattleManager : MonoBehaviour
         {
             bool select = i == idx;
             players[i].gameObject.SetActive(select);
-            
+
             if (select)
                 playerAnimator = players[i].GetComponent<Animator>();
         }
