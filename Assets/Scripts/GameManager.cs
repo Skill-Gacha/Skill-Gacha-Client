@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
 
     public const string TownScene = "Town";
 
+    public const string BossScene = "Boss";
+
     public S_EnterDungeon Pkt;
 
     public S_PlayerMatchNotification Pvp;

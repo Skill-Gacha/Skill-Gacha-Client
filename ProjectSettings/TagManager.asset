@@ -9,6 +9,7 @@ TagManager:
   - Store
   - VillageHead
   - Enhance
+  - Boss
   layers:
   - Default
   - TransparentFX
