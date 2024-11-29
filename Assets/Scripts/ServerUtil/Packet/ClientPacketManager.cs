@@ -105,6 +105,13 @@ class PacketManager
 
         _onRecv.Add((ushort)MsgId.SViewRankPoint, MakePacket<S_ViewRankPoint>);
         _handler.Add((ushort)MsgId.SViewRankPoint, PacketHandler.S_ViewRankPointHandler);
+
+        _onRecv.Add((ushort)MsgId.SAcceptRequest, MakePacket<S_AcceptRequest>);
+        _handler.Add((ushort)MsgId.SAcceptRequest, PacketHandler.S_AcceptRequestHandler);
+
+        _onRecv.Add((ushort)MsgId.SBossMatchNotification, MakePacket<S_BossMatchNotification>);
+        _handler.Add((ushort)MsgId.SBossMatchNotification, PacketHandler.S_BossMatchNotificationHandler);
+
     }
 
     public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

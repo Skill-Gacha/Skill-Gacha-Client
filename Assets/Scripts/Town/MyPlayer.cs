@@ -140,6 +140,13 @@ public class MyPlayer : MonoBehaviour
         GameManager.Network.Send(packet);
     }
 
+    public void BossMatching(bool check)
+    {
+        // if (!check) return;
+        C_BossMatch packet = new C_BossMatch{ IsIn = check };
+        GameManager.Network.Send(packet);
+    }
+
     private void ToggleStoreUI()
     {
         bool isActive = TownManager.Instance.UIStore.gameObject.activeSelf;
@@ -165,6 +172,13 @@ public class MyPlayer : MonoBehaviour
         TownManager.Instance.UIEnhance.gameObject.SetActive(!isActive);
     }
 
+    private void BossMatchingUI()
+    {
+        bool isActive = TownManager.Instance.UIBossMatching.gameObject.activeSelf;
+
+        TownManager.Instance.UIBossMatching.gameObject.SetActive(!isActive);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Store"))
@@ -178,6 +192,10 @@ public class MyPlayer : MonoBehaviour
         else if(other.CompareTag("VillageHead"))
         {
             isVillageHead = true;
+        }
+        else if(other.CompareTag("Boss"))
+        {
+            BossMatching(true);
         }
     }
 
@@ -194,6 +212,10 @@ public class MyPlayer : MonoBehaviour
         else if(other.CompareTag("VillageHead"))
         {
             isVillageHead = false;
+        }
+        else if (other.CompareTag("Boss"))
+        {
+            BossMatching(false);
         }
     }
 }

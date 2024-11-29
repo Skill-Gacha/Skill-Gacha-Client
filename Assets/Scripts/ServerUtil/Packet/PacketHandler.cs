@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+//using System.Runtime.Remoting.Messaging;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -413,10 +414,42 @@ class PacketHandler
 		opponentInfo.SetCurHP(enemyHp.Hp);
 	}
 
-	#endregion
+    #endregion
 
-	#region Store
-	public static void S_OpenStoreResponseHandler(Session session, IMessage packet)
+    #region Boss
+
+    public static void S_AcceptRequestHandler(PacketSession session, IMessage packet)
+    {
+        S_AcceptRequest acceptPacket = packet as S_AcceptRequest;
+        if (acceptPacket == null)
+            return;
+        TownManager.Instance.UIBossMatching.ShowBossMatchingUi();
+    }
+
+    public static void S_BossMatchNotificationHandler(Session session, IMessage packet)
+	{
+		S_BossMatchNotification Raid = packet as S_BossMatchNotification;
+
+		//TODO: Success가 false일 때 모든 유저가 포탈 위치가 아닌 위치로 이동시키기
+		if(!Raid.Success) return;
+
+		Scene scene = SceneManager.GetActiveScene();
+
+		if(scene.name == GameManager.RaidScene)
+		{
+			RaidManager.Instance.Set(Raid);
+		}
+		else
+		{
+			GameManager.Instance.Raid = Raid;
+			SceneManager.LoadScene(GameManager.RaidScene);
+		}
+	}
+
+    #endregion
+
+    #region Store
+    public static void S_OpenStoreResponseHandler(Session session, IMessage packet)
 	{
 		S_OpenStoreResponse openStore = packet as S_OpenStoreResponse;
 		TownManager.Instance.UIStore.ShowStoreUi(openStore);
@@ -463,30 +496,6 @@ class PacketHandler
 	{
 		S_ViewRankPoint viewPoint = packet as S_ViewRankPoint;
 		TownManager.Instance.UIRank.ViewRankUi(viewPoint);
-	}
-
-	#endregion
-
-	#region Raid
-
-	public static void S_BossMatchNotificationHandler(Session session, IMessage packet)
-	{
-		S_BossMatchNotification Raid = packet as S_BossMatchNotification;
-
-		//TODO: Success가 false일 때 모든 유저가 포탈 위치가 아닌 위치로 이동시키기
-		if(!Raid.Success) return;
-
-		Scene scene = SceneManager.GetActiveScene();
-
-		if(scene.name == GameManager.RaidScene)
-		{
-			RaidManager.Instance.Set(Raid);
-		}
-		else
-		{
-			GameManager.Instance.Raid = Raid;
-			SceneManager.LoadScene(GameManager.RaidScene);
-		}
 	}
 
 	#endregion

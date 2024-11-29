@@ -30,8 +30,10 @@ public class TownManager : MonoBehaviour
     [SerializeField] private UIEnhance uiEnhance;
 
     [SerializeField] private UIMatching uIMatching;
+    [SerializeField] private UIBossMatching uIBossMatching;
 
     public UIMatching UIMatching => uIMatching;
+    public UIBossMatching UIBossMatching => uIBossMatching;
 
     public UIStore UIStore => uiStore;
     public UIEnhance UIEnhance => uiEnhance;
@@ -210,6 +212,20 @@ public class TownManager : MonoBehaviour
     {
         //매칭 요청
         C_PlayerMatch response = new C_PlayerMatch() { };
+        GameManager.Network.Send(response);
+    }
+
+    public void BossMatch()
+    {
+        //매칭 요청
+        C_BossMatch response = new C_BossMatch() { };
+        GameManager.Network.Send(response);
+    }
+
+    public void BossMatchAccept()
+    {
+        //매칭 요청
+        C_AcceptResponse response = new C_AcceptResponse() { };
         GameManager.Network.Send(response);
     }
 
