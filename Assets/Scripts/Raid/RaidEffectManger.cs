@@ -24,7 +24,7 @@ public class RaidEffectManger : MonoBehaviour
 
     public void SetEffectToPlayer(int code)
     {
-        SetEffect(playerPos, code);
+        SetEffect(myPlayerPos, code);
     }
 
     public void SetEffectToMonster(int[] monsterIdx, int code)
