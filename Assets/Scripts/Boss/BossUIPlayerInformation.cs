@@ -23,16 +23,16 @@ public class BossUIPlayerInformation : MonoBehaviour
     [SerializeField] public Sprite[] elements;
 
     // private Image elementIcon;
-    
+
     private float fullHP;
     private float curHP;
 
     private float fullMP;
     private float curMP;
-    
+
     private float fillWidth = 634;
     private float fillHeight = 40;
-    
+
     private string[] elementList = {"전기 속성", "땅 속성", "풀 속성", "불 속성", "물 속성"};
 
     SpriteRenderer spriteRenderer;

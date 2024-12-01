@@ -6,25 +6,37 @@ using Google.Protobuf.Protocol;
 using SRF;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BossManager : MonoBehaviour
 {
     private static BossManager _instance = null;
     public static BossManager Instance => _instance;
 
+    // pve 기준 검은 화면 출력 및 글자
     [SerializeField] private BossUIScreen uiScreen;
+
+    // 배틀 로그 및 버튼(활성화/비활성화 포함) 정보 스크립트
     [SerializeField] private BossBattleLog uiBattleLog;
+
+    // 내 UI 정보(속성, 이름, HP, MP) 스크립트
     [SerializeField] private BossUIPlayerInformation myInformation;
 
     public BossUIScreen UiScreen => uiScreen;
     public BossBattleLog UiBattleLog => uiBattleLog;
     public BossUIPlayerInformation MyInformation => myInformation;
 
+    // 게임에 참여한 playerId 모음
     private int[] playersIds;
 
+    // 게임에 참여한 유저 위치 모음
     [SerializeField] private Transform[] playerTrans;
 
+    // 게임에 참여한 유저 애니메이터 모음
     private Animator[] playersAnimator = new Animator[3];
+
+    // 게임에 참여한 팀원 HP, MP 창 모음
+    [SerializeField] private BossUITeamInformation[] teamInformation;
 
     private Dictionary<int, string> monsterDb = new Dictionary<int, string>();
 
@@ -35,6 +47,8 @@ public class BossManager : MonoBehaviour
 
     private string baseMonsterPath = "Monster/Monster1";
 
+    // 해당 유저의 버튼 위치
+    [SerializeField] private Transform buttons;
 
     private int[] animCodeList = new[]
     {
@@ -75,6 +89,9 @@ public class BossManager : MonoBehaviour
             // 하단 체력, 마나, 본인 속성 띄워주는 창
             if(playersIds[i] == GameManager.Instance.PlayerId)
                 MyInformation.Set(playerStatus[i]);
+
+            // 팀 정보창에 정보 추가하기
+            teamInformation[i].Set(playerStatus[i]);
         }
 
         if(Raid.BattleLog != null)
@@ -149,6 +166,16 @@ public class BossManager : MonoBehaviour
         return null;
     }
 
+    public void CheckUserTurn(int playerId)
+    {
+        int numChildren = buttons.transform.childCount;
+        for(int i = 0; i < numChildren; i++)
+        {
+            Button button = buttons.GetChild(i).GetComponent<Button>();
+            button.interactable = GameManager.Instance.PlayerId == playerId;
+        }
+    }
+
     public List<Monster> GetMonster(int[] monsterIndex)
     {
         return monsterIndex.Where(index => index >= 0 && index < monsterObjs.Count).Select(index => monsterObjs[index]).ToList();
@@ -159,7 +186,7 @@ public class BossManager : MonoBehaviour
         TriggerAnim(Constants.PlayerBattleHit);
     }
 
-    void TriggerAnim(int code)
+    private void TriggerAnim(int code)
     {
         //playerAnimator.transform.localEulerAngles = Vector3.zero;
         //playerAnimator.transform.localPosition = Vector3.zero;

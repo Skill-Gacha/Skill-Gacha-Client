@@ -446,6 +446,33 @@ class PacketHandler
 		}
 	}
 
+	public static void S_BossBattleLogHandler(Session session, IMessage packet)
+	{
+		S_BossBattleLog battleLog = packet as S_BossBattleLog;
+		Debug.Log("battle : "+battleLog);
+		Debug.Log("battleLog : "+battleLog.BattleLog);
+
+		if(battleLog == null)
+			return;
+
+		if(battleLog.BattleLog != null)
+		{
+			var uiBattleLog = BossManager.Instance.UiBattleLog;
+			uiBattleLog.Set(battleLog.BattleLog);
+		}
+	}
+
+	public static void S_BossPlayerStatusNotificationHandler(Session session, IMessage packet)
+	{
+		S_BossPlayerStatusNotification playerStatus = packet as S_BossPlayerStatusNotification;
+
+	}
+
+	public static void S_BossSetMonsterHpHandler(Session session, IMessage packet)
+	{
+		S_BossSetMonsterHp bossMonsterHp = packet as S_BossSetMonsterHp;
+	}
+
 	public static void S_BossPlayerActionNotificationHandler(Session session, IMessage packet)
 	{
 		S_BossPlayerActionNotification playerAction = packet as S_BossPlayerActionNotification;
@@ -453,6 +480,26 @@ class PacketHandler
 		if(playerAction == null) return;
 
 		//RaidManager.Instance.TriggerAnim(playerAction);
+	}
+
+	public static void S_BossMonsterActionHandler(Session session, IMessage packet)
+	{
+		S_BossMonsterAction bossMonsterAction = packet as S_BossMonsterAction;
+	}
+
+	public static void S_BossPhaseHandler(Session session, IMessage packet)
+	{
+		S_BossPhase bossPhase = packet as S_BossPhase;
+	}
+
+	public static void S_BossPlayerUserTurnHandler(Session session, IMessage packet)
+	{
+		S_BossUserTurn userTurn = packet as S_BossUserTurn;
+
+		if(userTurn == null)
+			return;
+
+		BossManager.Instance.CheckUserTurn(userTurn.PlayerId);
 	}
 
     #endregion
