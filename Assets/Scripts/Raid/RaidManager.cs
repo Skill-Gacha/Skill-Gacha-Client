@@ -24,7 +24,7 @@ public class RaidManager : MonoBehaviour
 
     [SerializeField] private Transform[] playerTrans;
 
-    private Animator[] playersAnimator;
+    private Animator[] playersAnimator = new Animator[3];
 
     private Dictionary<int, string> monsterDb = new Dictionary<int, string>();
 
@@ -64,10 +64,8 @@ public class RaidManager : MonoBehaviour
     {
         // Raid에 참여한 playerId 가져오기
         playersIds= Raid.PlayerIds.ToArray();
-
         // 파티에 참여한 모든 유저의 능력치 정보
         PlayerStatus[] playerStatus = Raid.PartyList.ToArray();
-
         for(int i = 0; i < playerStatus.Length; i++)
         {
             // 직업 Index 가져오기
@@ -80,18 +78,23 @@ public class RaidManager : MonoBehaviour
         }
 
         if(Raid.BattleLog != null)
+            // 본인의 배틀로그 적용
             uiBattleLog.Set(Raid.BattleLog);
     }
 
+    // 나와 동료 직업에 따른 모델링과 애니메이션 가져오기
     private void SetPlayer(int classIdx, int index)
     {
         for(int i = 0; i < playerTrans[index].childCount; i++)
         {
+            // 직업 index와 직업 모델링 index가 일치한다면
             bool select = classIdx == i;
+            // 해당 직업 모델링 활성화 시키기
             GameObject character = playerTrans[index].GetChild(i).gameObject;
             character.SetActive(select);
 
             if(select)
+                // 해당 유저 player의 애니메이터 가져오기
                 playersAnimator[index] = character.GetComponent<Animator>();
         }
     }

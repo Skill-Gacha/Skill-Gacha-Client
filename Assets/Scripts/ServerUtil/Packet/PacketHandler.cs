@@ -446,6 +446,15 @@ class PacketHandler
 		}
 	}
 
+	public static void S_BossPlayerActionNotificationHandler(Session session, IMessage packet)
+	{
+		S_BossPlayerActionNotification playerAction = packet as S_BossPlayerActionNotification;
+
+		if(playerAction == null) return;
+
+		//RaidManager.Instance.TriggerAnim(playerAction);
+	}
+
     #endregion
 
     #region Store

@@ -20,7 +20,7 @@ public class RaidBattleLog : MonoBehaviour
     private BtnInfo[] btnInfos = null;
     private bool done = false;
     private string msg;
-    
+
     private void Start()
     {
         for (int i = 0; i < btns.Length; i++)
@@ -44,9 +44,9 @@ public class RaidBattleLog : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
         {
-            if(BattleManager.Instance.UiScreen.gameObject.activeSelf)
+            if(RaidManager.Instance.UiScreen.gameObject.activeSelf)
                 return;
-            
+
             if (done == false)
             {
                 DOTween.KillAll();
@@ -60,7 +60,7 @@ public class RaidBattleLog : MonoBehaviour
             }
         }
     }
-    
+
     public void LogDone()
     {
         done = true;
@@ -70,18 +70,18 @@ public class RaidBattleLog : MonoBehaviour
         else
             SetBtn(btnInfos);
     }
-    
+
     public void SetLog(string log,  bool typing = true)
     {
         done = false;
-        
+
         DOTween.KillAll();
         txtLog.text = String.Empty;
         imgContinue.color = new Color(imgContinue.color.r, imgContinue.color.g, imgContinue.color.b , 0);
-        
-        
+
+
         msg = log;
-        
+
         if(typing)
             txtLog.DOText(msg, msg.Length/20).SetEase(Ease.Linear).OnComplete(LogDone);
         else
@@ -100,7 +100,7 @@ public class RaidBattleLog : MonoBehaviour
         {
             var btnInfo = btnInfos[i];
             btns[i].gameObject.SetActive(true);
-            btns[i].interactable = btnInfo.Enable; 
+            btns[i].interactable = btnInfo.Enable;
             btnTexts[i].text = btnInfo.Msg;
         }
     }
@@ -112,7 +112,7 @@ public class RaidBattleLog : MonoBehaviour
 
     void Response(int idx)
     {
-        C_PlayerResponse response = new C_PlayerResponse() { ResponseCode = idx };
+        C_BossPlayerResponse response = new C_BossPlayerResponse() { ResponseCode = idx };
         GameManager.Network.Send(response);
     }
 }

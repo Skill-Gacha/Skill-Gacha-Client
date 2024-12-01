@@ -50,8 +50,8 @@ public class RaidUIPlayerInformation : MonoBehaviour
 
     public void Set(PlayerStatus playerStatus)
     {
+
         SetName(playerStatus.PlayerName);
-        // SetLevel(playerStatus.PlayerClass);
         SetFullHP(playerStatus.PlayerFullHp);
         SetFullMP(playerStatus.PlayerFullMp);
         SetCurHP(playerStatus.PlayerCurHp);
