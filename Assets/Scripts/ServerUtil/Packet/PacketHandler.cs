@@ -428,21 +428,21 @@ class PacketHandler
 
     public static void S_BossMatchNotificationHandler(Session session, IMessage packet)
 	{
-		S_BossMatchNotification Raid = packet as S_BossMatchNotification;
+		S_BossMatchNotification Boss = packet as S_BossMatchNotification;
 
 		//TODO: Success가 false일 때 모든 유저가 포탈 위치가 아닌 위치로 이동시키기
-		if(!Raid.Success) return;
+		if(!Boss.Success) return;
 
 		Scene scene = SceneManager.GetActiveScene();
 
-		if(scene.name == GameManager.RaidScene)
+		if(scene.name == GameManager.BossScene)
 		{
-			RaidManager.Instance.Set(Raid);
+			BossManager.Instance.Set(Boss);
 		}
 		else
 		{
-			GameManager.Instance.Raid = Raid;
-			SceneManager.LoadScene(GameManager.RaidScene);
+			GameManager.Instance.Boss = Boss;
+			SceneManager.LoadScene(GameManager.BossScene);
 		}
 	}
 

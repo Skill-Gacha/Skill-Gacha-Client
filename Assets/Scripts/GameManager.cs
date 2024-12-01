@@ -19,13 +19,13 @@ public class GameManager : MonoBehaviour
 
     public const string TownScene = "Town";
 
-    public const string RaidScene = "Raid";
+    public const string BossScene = "Boss";
 
     public S_EnterDungeon Pkt;
 
     public S_PlayerMatchNotification Pvp;
 
-    public S_BossMatchNotification Raid;
+    public S_BossMatchNotification Boss;
     
     public string UserName;
     public int ClassIdx;
