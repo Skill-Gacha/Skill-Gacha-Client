@@ -112,7 +112,7 @@ class PacketManager
         _onRecv.Add((ushort)MsgId.SBossMatchNotification, MakePacket<S_BossMatchNotification>);
         _handler.Add((ushort)MsgId.SBossMatchNotification, PacketHandler.S_BossMatchNotificationHandler);
 
-        _onRecv.Add((ushort)MsgId.SBossBattleLog, MakePacket<S_BossMatchNotification>);
+        _onRecv.Add((ushort)MsgId.SBossBattleLog, MakePacket<S_BossBattleLog>);
         _handler.Add((ushort)MsgId.SBossBattleLog, PacketHandler.S_BossBattleLogHandler);
 
         _onRecv.Add((ushort)MsgId.SBossPlayerStatusNotification, MakePacket<S_BossPlayerStatusNotification>);
