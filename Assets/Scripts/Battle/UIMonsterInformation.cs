@@ -20,22 +20,12 @@ public class UIMonsterInformation : MonoBehaviour
     private float fullHP;
     private float curHP;
     
-    private float fillWidth = 180;
-    private float fillHeight = 30;
+    public float fillWidth = 180;
+    public float fillHeight = 30;
 
     private void Start()
     {
         camTr = Camera.main.transform;
-    }
-
-    public void SetFillHpWidth(int fillWidth)
-    {
-        this.fillWidth = fillWidth;
-    }
-
-    public void SetFillHpHeigth(int fillHeight)
-    {
-        this.fillHeight = fillHeight;
     }
 
     public void SetName(string nickname)
