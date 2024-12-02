@@ -34,7 +34,7 @@ public class BossUITeamInformation : MonoBehaviour
     private float fullMP;
     private float curMP;
     
-    private float fillWidth = 634;
+    private float fillWidth = 290;
     private float fillHeight = 40;
 
     public void Set(PlayerStatus playerStatus)

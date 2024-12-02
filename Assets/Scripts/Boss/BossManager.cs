@@ -25,6 +25,7 @@ public class BossManager : MonoBehaviour
     public BossUIScreen UiScreen => uiScreen;
     public BossBattleLog UiBattleLog => uiBattleLog;
     public BossUIPlayerInformation MyInformation => myInformation;
+    //public BossUITeamInformation TeamInformation => teamInformation;
 
     // 게임에 참여한 playerId 모음
     private int[] playersIds;
@@ -251,5 +252,23 @@ public class BossManager : MonoBehaviour
 
         var animCode = animCodeList[idx];
         TriggerAnim(playerId,animCode);
+    }
+
+    public void SetPartyStatus(int playerId, int Hp, int Mp)
+    {
+        int playerIdx = GetPlayerIndexById(playerId);
+
+        float playerCurHp = Hp;
+        float playerCurMp = Mp;
+
+        teamInformation[playerIdx].SetCurHP(playerCurHp);
+        teamInformation[playerIdx].SetCurMp(playerCurMp);
+
+        // 본인 Status 창 업데이트
+        if (playerId == GameManager.Instance.PlayerId)
+        {
+            MyInformation.SetCurHP(playerCurHp);
+            MyInformation.SetCurMp(playerCurMp);
+        }
     }
 }
