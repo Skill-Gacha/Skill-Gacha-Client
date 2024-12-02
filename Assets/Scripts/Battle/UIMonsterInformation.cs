@@ -41,7 +41,6 @@ public class UIMonsterInformation : MonoBehaviour
     public void SetName(string nickname)
     {
         txtName.text = nickname;
-        imgNameBg.rectTransform.sizeDelta = new Vector2(txtName.preferredWidth + 50, 50);
     }
 
     public void SetFullHP(float hp, bool recover = true)
