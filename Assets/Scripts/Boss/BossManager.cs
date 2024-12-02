@@ -117,7 +117,7 @@ public class BossManager : MonoBehaviour
         dragon.UiMonsterInfo.SetFillHpWidth(1660);
 
         //보스 체력바  세로 크기 설정
-        dragon.UiMonsterInfo.SetFillHpHeigth(100);
+        dragon.UiMonsterInfo.SetFillHpHeigth(70);
 
         dragon.UiMonsterInfo.SetName(monster.MonsterName);
         dragon.UiMonsterInfo.SetFullHP(monster.MonsterHp);

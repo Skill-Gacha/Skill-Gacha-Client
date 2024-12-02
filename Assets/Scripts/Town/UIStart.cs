@@ -21,9 +21,9 @@ public class UIStart : MonoBehaviour
 
     private int classIdx = 0;
 
-    private string serverUrl;
+    private string serverUrl = "127.0.0.1";
     private string nickname;
-    private string port;
+    private string port = "5555";
     
     void Start()
     {
@@ -102,8 +102,8 @@ public class UIStart : MonoBehaviour
         //     return;
         // }
 
-        serverUrl = inputNickname.text;
-        port = inputPort.text;
+        //serverUrl = inputNickname.text;
+        //port = inputPort.text;
         SetNicknameUI();
     }
     

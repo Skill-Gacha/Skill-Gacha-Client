@@ -24,20 +24,14 @@ public class BossEffectManager : MonoBehaviour
     // 플레이어들이 단체 버프 쓸 경우 처리 함수
     public void SetEffectToPlayer(int code)
     {
-        for(int i = 0; i < playerPos.Count(); i++)
-        {
-            SetEffect(playerPos[i], code);
-        }
+        SetEffect(code);
     }
 
     // 보스가 특정 대상에게 디버프 걸 경우
-    public void SetEffectToPlayer(int[] playerIds,int code)
+    public void SetEffectToPlayer(int playerId,int code)
     {
-        for(int i = 0; i < playerIds.Count(); i++)
-        {
-            int index = BossManager.Instance.GetPlayerIndexById(playerIds[i]);
-            SetEffect(playerPos[index], code);
-        }
+        int index = BossManager.Instance.GetPlayerIndexById(playerId);
+        SetEffect(playerPos[index], code);
     }
 
     public void SetEffectToMonster(int[] monsterIdx, int code)
@@ -59,6 +53,17 @@ public class BossEffectManager : MonoBehaviour
             var pos = new Vector3(tr.position.x, effects[calcId].transform.position.y, tr.position.z);
             effects[calcId].transform.position = pos;
         }
+        effects[calcId].gameObject.SetActive(false);
+        effects[calcId].gameObject.SetActive(true);
+    }
+
+    void SetEffect(int code)
+    {
+        var calcId = code - Constants.EffectCodeFactor;
+        Debug.Log("code : "+code);
+        Debug.Log("calcId : "+calcId);
+        if(calcId < 0 || calcId >= effects.Length)
+            return;
 
         effects[calcId].gameObject.SetActive(false);
         effects[calcId].gameObject.SetActive(true);
