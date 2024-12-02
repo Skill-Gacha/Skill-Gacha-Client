@@ -533,23 +533,6 @@ class PacketHandler
 		else BossEffectManager.Instance.SetEffectToPlayer(bossMonsterAction.ActionSet.EffectCode, true);
 	}
 
-	/*
-
-	public static void S_MonsterActionHandler(PacketSession session, IMessage packet)
-	{
-		S_MonsterAction pkt = packet as S_MonsterAction;
-		if (pkt == null)
-			return;
-
-		Monster monster = BattleManager.Instance.GetMonster(pkt.ActionMonsterIdx);
-		if(monster)monster.SetAnim(pkt.ActionSet.AnimCode);
-
-		if(pkt.ActionSet.AnimCode != 4) BattleManager.Instance.PlayerHit();
-		EffectManager.Instance.SetEffectToPlayer(pkt.ActionSet.EffectCode);
-	}
-
-	*/
-
 	public static void S_BossPhaseHandler(Session session, IMessage packet)
 	{
 		S_BossPhase bossPhase = packet as S_BossPhase;
