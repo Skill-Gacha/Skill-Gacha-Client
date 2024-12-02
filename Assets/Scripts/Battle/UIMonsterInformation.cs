@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,10 +28,19 @@ public class UIMonsterInformation : MonoBehaviour
         camTr = Camera.main.transform;
     }
 
+    public void SetFillHpWidth(int fillWidth)
+    {
+        this.fillWidth = fillWidth;
+    }
+
+    public void SetFillHpHeigth(int fillHeight)
+    {
+        this.fillHeight = fillHeight;
+    }
+
     public void SetName(string nickname)
     {
         txtName.text = nickname;
-        imgNameBg.rectTransform.sizeDelta = new Vector2(txtName.preferredWidth + 50, 50);
     }
 
     public void SetFullHP(float hp, bool recover = true)

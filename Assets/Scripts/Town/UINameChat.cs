@@ -59,9 +59,7 @@ public class UINameChat : MonoBehaviour
     public void SetName(string userName)
     {
         this.userName = userName;
-        
         txtNickname.text = userName;
-        
         originBgSize = txtNickname.GetPreferredValues() + new Vector2(70, 35);
         txtNickname.rectTransform.sizeDelta = originBgSize;
         txtChat.rectTransform.sizeDelta = new Vector2(originBgSize.x, 0);

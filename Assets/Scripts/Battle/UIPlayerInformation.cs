@@ -31,7 +31,7 @@ public class UIPlayerInformation : MonoBehaviour
     private float curMP;
     
     private float fillWidth = 634;
-    private float fillHeight = 40; 
+    private float fillHeight = 40;
     
     private string[] elementList = {"전기 속성", "땅 속성", "풀 속성", "불 속성", "물 속성"};
 
@@ -71,22 +71,19 @@ public class UIPlayerInformation : MonoBehaviour
 
         if (recover)
             SetCurHP(hp);
-            
         txtHp.rectTransform.sizeDelta = new Vector2(txtHp.preferredWidth + 50, 40);
     }
-    
+
     public void SetCurHP(float hp)
     {
         curHP = Mathf.Min(hp, fullHP);
         txtHp.text = hp.ToString("0");
-        
         float per = curHP/fullHP;
         imgHpFill.rectTransform.sizeDelta = new Vector2(fillWidth * per, fillHeight);
 
         txtHp.rectTransform.sizeDelta = new Vector2(txtHp.preferredWidth + 50, 40);
     }
-    
-    
+
     public void SetFullMP(float mp, bool recover = true)
     {
         fullMP = mp;
