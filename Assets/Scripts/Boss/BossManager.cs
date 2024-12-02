@@ -181,25 +181,42 @@ public class BossManager : MonoBehaviour
         return monsterIndex.Where(index => index >= 0 && index < monsterObjs.Count).Select(index => monsterObjs[index]).ToList();
     }
 
-    public void PlayerHit()
+    public void PlayerHit(int playerId)
     {
-        TriggerAnim(Constants.PlayerBattleHit);
+        TriggerAnim(playerId,Constants.PlayerBattleHit);
     }
 
-    private void TriggerAnim(int code)
+    private void TriggerAnim(int playerId,int code)
     {
-        //playerAnimator.transform.localEulerAngles = Vector3.zero;
-        //playerAnimator.transform.localPosition = Vector3.zero;
-        //playerAnimator.applyRootMotion = code == Constants.PlayerBattleDie;
-        //playerAnimator.SetTrigger(code);
+        for(int i = 0; i < playersIds.Count();i++)
+        {
+            if(playersIds[i] == playerId)
+            {
+                playersAnimator[i].transform.localEulerAngles = Vector3.zero;
+                playersAnimator[i].transform.localPosition = Vector3.zero;
+                playersAnimator[i].applyRootMotion = code == Constants.PlayerBattleDie;
+                playersAnimator[i].SetTrigger(code);
+            }
+        }
     }
 
-    public void PlayerAnim(int idx)
+    // playerId에 해당하는 index를 반환하는 함수
+    public int GetPlayerIdIndex(int playerId)
+    {
+        for(int i = 0; i < playersIds.Count();i++)
+        {
+            if(playersIds[i] == playerId) return i;
+        }
+        // 해당 id가 없을 경우
+        return -1;
+    }
+
+    public void PlayerAnim(int playerId,int idx)
     {
         if(idx < 0 || idx >= animCodeList.Length)
             return;
 
         var animCode = animCodeList[idx];
-        TriggerAnim(animCode);
+        TriggerAnim(playerId,animCode);
     }
 }

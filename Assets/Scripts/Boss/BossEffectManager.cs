@@ -8,10 +8,8 @@ public class BossEffectManager : MonoBehaviour
     public static BossEffectManager Instance => _instance;
 
     [SerializeField] private GameObject[] effects;
-    [SerializeField] private Transform myPlayerPos;
 
-    //TODO: 몬스터가 때리는 유저에 맞게 유저가 맞을 수 있도록 변경하기
-    [HideInInspector] private Transform[] playerPos;
+    [SerializeField] private Transform[] playerPos;
 
     private int singleSkillIndex = 21;
 
@@ -22,9 +20,10 @@ public class BossEffectManager : MonoBehaviour
         _instance = this;
     }
 
-    public void SetEffectToPlayer(int code)
+    public void SetEffectToPlayer(int playerId,int code)
     {
-        SetEffect(myPlayerPos, code);
+        int index = BossManager.Instance.GetPlayerIdIndex(playerId);
+        SetEffect(playerPos[index], code);
     }
 
     public void SetEffectToMonster(int[] monsterIdx, int code)

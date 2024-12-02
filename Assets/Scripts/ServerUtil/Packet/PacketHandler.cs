@@ -466,6 +466,9 @@ class PacketHandler
 	{
 		S_BossPlayerStatusNotification playerStatus = packet as S_BossPlayerStatusNotification;
 
+		if(playerStatus == null) return;
+
+
 	}
 
 	public static void S_BossSetMonsterHpHandler(Session session, IMessage packet)
@@ -476,11 +479,37 @@ class PacketHandler
 	public static void S_BossPlayerActionNotificationHandler(Session session, IMessage packet)
 	{
 		S_BossPlayerActionNotification playerAction = packet as S_BossPlayerActionNotification;
-
+		Debug.Log("패킷 오니? : "+playerAction);
 		if(playerAction == null) return;
 
-		//RaidManager.Instance.TriggerAnim(playerAction);
+		int[] monsterIndex = playerAction.TargetMonsterIdx.ToArray();
+		if(monsterIndex.Length != 0) BossManager.Instance.GetMonster(monsterIndex).ForEach(monster=> monster.Hit());
+
+		BossManager.Instance.PlayerAnim(playerAction.PlayerId,playerAction.ActionSet.AnimCode);
+
+		Debug.Log("패키지 EffectCode : "+playerAction.ActionSet.EffectCode);
+		if(monsterIndex.Length == 0) BossEffectManager.Instance.SetEffectToPlayer(playerAction.PlayerId,playerAction.ActionSet.EffectCode);
+		else BossEffectManager.Instance.SetEffectToMonster(monsterIndex,playerAction.ActionSet.EffectCode);
 	}
+
+	/*
+
+	public static void S_PlayerActionHandler(PacketSession session, IMessage packet)
+	{
+		S_PlayerAction pkt = packet as S_PlayerAction;
+		if (pkt == null)
+			return;
+		int[] monsterIndex = pkt.TargetMonsterIdx.ToArray();
+		if(monsterIndex.Length != 0) BattleManager.Instance.GetMonster(monsterIndex).ForEach(monster => monster.Hit());
+
+		BattleManager.Instance.PlayerAnim(pkt.ActionSet.AnimCode);
+
+		Debug.Log("패키지 EffectCode : "+pkt.ActionSet.EffectCode);
+		if(monsterIndex.Length == 0) EffectManager.Instance.SetEffectToPlayer(pkt.ActionSet.EffectCode);
+		else EffectManager.Instance.SetEffectToMonster(monsterIndex, pkt.ActionSet.EffectCode);
+	}
+
+	*/
 
 	public static void S_BossMonsterActionHandler(Session session, IMessage packet)
 	{
