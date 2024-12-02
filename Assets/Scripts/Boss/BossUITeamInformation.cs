@@ -34,17 +34,17 @@ public class BossUITeamInformation : MonoBehaviour
     private float fullMP;
     private float curMP;
     
-    private float fillWidth = 634;
+    private float fillWidth = 290;
     private float fillHeight = 40;
 
     public void Set(PlayerStatus playerStatus)
     {
 
         SetName(playerStatus.PlayerName);
-        SetFullHP(playerStatus.PlayerFullHp);
-        SetFullMP(playerStatus.PlayerFullMp);
-        SetCurHP(playerStatus.PlayerCurHp);
-        SetCurMP(playerStatus.PlayerCurMp);
+        SetFullHp(playerStatus.PlayerFullHp);
+        SetFullMp(playerStatus.PlayerFullMp);
+        SetCurHp(playerStatus.PlayerCurHp);
+        SetCurMp(playerStatus.PlayerCurMp);
     }
 
     public void SetName(string nickname)
@@ -52,17 +52,17 @@ public class BossUITeamInformation : MonoBehaviour
         txtName.text = nickname;
     }
 
-    public void SetFullHP(float hp, bool recover = true)
+    public void SetFullHp(float hp, bool recover = true)
     {
         fullHP = hp;
         txtHp.text = hp.ToString("0");
 
         if (recover)
-            SetCurHP(hp);
+            SetCurHp(hp);
         txtHp.rectTransform.sizeDelta = new Vector2(txtHp.preferredWidth + 50, 40);
     }
 
-    public void SetCurHP(float hp)
+    public void SetCurHp(float hp)
     {
         curHP = Mathf.Min(hp, fullHP);
         txtHp.text = hp.ToString("0");
@@ -72,18 +72,18 @@ public class BossUITeamInformation : MonoBehaviour
         txtHp.rectTransform.sizeDelta = new Vector2(txtHp.preferredWidth + 50, 40);
     }
 
-    public void SetFullMP(float mp, bool recover = true)
+    public void SetFullMp(float mp, bool recover = true)
     {
         fullMP = mp;
         txtMp.text = mp.ToString("0");
 
         if (recover)
-            SetCurMP(mp);
+            SetCurMp(mp);
 
         txtMp.rectTransform.sizeDelta = new Vector2(txtMp.preferredWidth + 50, 40);
     }
 
-    public void SetCurMP(float mp)
+    public void SetCurMp(float mp)
     {
         curMP = Mathf.Min(mp, fullHP);
         txtMp.text = mp.ToString("0");

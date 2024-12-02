@@ -197,6 +197,13 @@ class PacketHandler
 			return;
 		}
 
+		else if(BossManager.Instance != null)
+		{
+			var BossUiScreen= BossManager.Instance.BossUiScreen;
+			BossUiScreen.Set(pkt.ScreenText);
+			return;
+		}
+
 		if (pkt.ScreenText != null)
 		{
 			var uiScreen = BattleManager.Instance.UiScreen;
@@ -501,7 +508,7 @@ class PacketHandler
 
 		BossManager.Instance.PlayerAnim(playerAction.PlayerId,playerAction.ActionSet.AnimCode);
 
-		if(monsterIndex.Length == 0) BossEffectManager.Instance.SetEffectToPlayer(playerAction.ActionSet.EffectCode);
+		if(monsterIndex.Length == 0) BossEffectManager.Instance.SetEffectToPlayer(playerAction.ActionSet.EffectCode, false);
 		else BossEffectManager.Instance.SetEffectToMonster(monsterIndex,playerAction.ActionSet.EffectCode);
 	}
 
@@ -523,7 +530,7 @@ class PacketHandler
 		int[] playerIds = bossMonsterAction.PlayerIds.ToArray();
 		if(bossMonsterAction.ActionSet.AnimCode != 4) BossManager.Instance.PlayerHit(playerIds);
 		if(playerIds.Count() == 1) BossEffectManager.Instance.SetEffectToPlayer(playerIds[0], bossMonsterAction.ActionSet.EffectCode);
-		else BossEffectManager.Instance.SetEffectToPlayer(bossMonsterAction.ActionSet.EffectCode);
+		else BossEffectManager.Instance.SetEffectToPlayer(bossMonsterAction.ActionSet.EffectCode, true);
 	}
 
 	/*

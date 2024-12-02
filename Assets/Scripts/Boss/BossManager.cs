@@ -14,7 +14,7 @@ public class BossManager : MonoBehaviour
     public static BossManager Instance => _instance;
 
     // pve 기준 검은 화면 출력 및 글자
-    [SerializeField] private BossUIScreen uiScreen;
+    [SerializeField] private BossUIScreen bossUiScreen;
 
     // 배틀 로그 및 버튼(활성화/비활성화 포함) 정보 스크립트
     [SerializeField] private BossBattleLog uiBattleLog;
@@ -22,7 +22,7 @@ public class BossManager : MonoBehaviour
     // 내 UI 정보(속성, 이름, HP, MP) 스크립트
     [SerializeField] private BossUIPlayerInformation myInformation;
 
-    public BossUIScreen UiScreen => uiScreen;
+    public BossUIScreen BossUiScreen => bossUiScreen;
     public BossBattleLog UiBattleLog => uiBattleLog;
     public BossUIPlayerInformation MyInformation => myInformation;
 
@@ -111,12 +111,6 @@ public class BossManager : MonoBehaviour
 
         monsterObjs.Add(dragon);
         monsterUis.Add(dragon.UiMonsterInfo);
-
-        //보스 체력바 가로 크기 설정
-        dragon.UiMonsterInfo.SetFillHpWidth(1660);
-
-        //보스 체력바  세로 크기 설정
-        dragon.UiMonsterInfo.SetFillHpHeigth(70);
 
         dragon.UiMonsterInfo.SetName(monster.MonsterName);
         dragon.UiMonsterInfo.SetFullHP(monster.MonsterHp);
@@ -262,8 +256,8 @@ public class BossManager : MonoBehaviour
         for(int i = 0; i < playerIds.Count(); i++)
         {
             int playerIdx = GetPlayerIndexById(playerIds[i]);
-            teamInformation[playerIdx].SetCurHP(hp[playerIdx]);
-            teamInformation[playerIdx].SetCurMP(mp[playerIdx]);
+            teamInformation[playerIdx].SetCurHp(hp[playerIdx]);
+            teamInformation[playerIdx].SetCurMp(mp[playerIdx]);
 
             if(playerIds[playerIdx] == GameManager.Instance.PlayerId)
                 myInformation.SetCurHP(hp[playerIdx]);
