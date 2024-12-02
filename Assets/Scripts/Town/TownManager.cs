@@ -99,6 +99,7 @@ public class TownManager : MonoBehaviour
 
     public void Spawn(PlayerInfo playerInfo)
     {
+		GameManager.Instance.SetPlayerId(playerInfo.PlayerId);
         var tr = playerInfo.Transform;
         var spawnPos = spawnArea.position;
         spawnPos.x += tr.PosX;

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,8 +20,8 @@ public class UIMonsterInformation : MonoBehaviour
     private float fullHP;
     private float curHP;
     
-    private float fillWidth = 180;
-    private float fillHeight = 30;
+    public float fillWidth = 180;
+    public float fillHeight = 30;
 
     private void Start()
     {
@@ -30,7 +31,6 @@ public class UIMonsterInformation : MonoBehaviour
     public void SetName(string nickname)
     {
         txtName.text = nickname;
-        imgNameBg.rectTransform.sizeDelta = new Vector2(txtName.preferredWidth + 50, 50);
     }
 
     public void SetFullHP(float hp, bool recover = true)
