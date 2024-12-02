@@ -262,13 +262,13 @@ public class BossManager : MonoBehaviour
         float playerCurMp = Mp;
 
         teamInformation[playerIdx].SetCurHP(playerCurHp);
-        teamInformation[playerIdx].SetCurMp(playerCurMp);
+        teamInformation[playerIdx].SetCurMP(playerCurMp);
 
         // 본인 Status 창 업데이트
         if (playerId == GameManager.Instance.PlayerId)
         {
             MyInformation.SetCurHP(playerCurHp);
-            MyInformation.SetCurMp(playerCurMp);
+            MyInformation.SetCurMP(playerCurMp);
         }
     }
 }
