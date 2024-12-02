@@ -44,7 +44,7 @@ public class BattleManager : MonoBehaviour
     {
         _instance = this;
 
-        for (int i = 1; i < 30; i++)
+        for (int i = 1; i <= 30; i++)
         {
             var monsterCode = Constants.MonsterCodeFactor + i;
             var monsterPath = $"Monster/Monster{i}";

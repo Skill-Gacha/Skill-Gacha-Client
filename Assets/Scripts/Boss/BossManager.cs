@@ -57,13 +57,11 @@ public class BossManager : MonoBehaviour
         Constants.PlayerBattleHit
     };
 
-
-
     private void Awake()
     {
         _instance = this;
 
-        for (int i = 1; i < 30; i++)
+        for (int i = 1; i <= 30; i++)
         {
             var monsterCode = Constants.MonsterCodeFactor + i;
             var monsterPath = $"Monster/Monster{i}";
@@ -74,12 +72,14 @@ public class BossManager : MonoBehaviour
         GameManager.Instance.Boss = null;
     }
 
-    public void Set(S_BossMatchNotification Raid)
+    public void Set(S_BossMatchNotification Boss)
     {
+        SetMonster(Boss.MonsterStatus);
+
         // Raid에 참여한 playerId 가져오기
-        playersIds= Raid.PlayerIds.ToArray();
+        playersIds= Boss.PlayerIds.ToArray();
         // 파티에 참여한 모든 유저의 능력치 정보
-        PlayerStatus[] playerStatus = Raid.PartyList.ToArray();
+        PlayerStatus[] playerStatus = Boss.PartyList.ToArray();
         for(int i = 0; i < playerStatus.Length; i++)
         {
             // 직업 Index 가져오기
@@ -94,9 +94,32 @@ public class BossManager : MonoBehaviour
             teamInformation[i].Set(playerStatus[i]);
         }
 
-        if(Raid.BattleLog != null)
+        if(Boss.BattleLog != null)
             // 본인의 배틀로그 적용
-            uiBattleLog.Set(Raid.BattleLog);
+            uiBattleLog.Set(Boss.BattleLog);
+    }
+
+    public void SetMonster(MonsterStatus monster)
+    {
+        ResetMonster();
+
+        var monsterCode = monster.MonsterModel;
+        var monsterPath =  monsterDb.GetValueOrDefault(monsterCode, baseMonsterPath);
+        var monsterRes = Resources.Load<Monster>(monsterPath);
+
+        var dragon = Instantiate(monsterRes, monsterSpawnPos[0]);
+
+        monsterObjs.Add(dragon);
+        monsterUis.Add(dragon.UiMonsterInfo);
+
+        //보스 체력바 가로 크기 설정
+        dragon.UiMonsterInfo.SetFillWidth(1700);
+
+        //보스 체력바  세로 크기 설정
+        dragon.UiMonsterInfo.SetFillHeigth(155);
+
+        dragon.UiMonsterInfo.SetName(monster.MonsterName);
+        dragon.UiMonsterInfo.SetFullHP(monster.MonsterHp);
     }
 
     // 나와 동료 직업에 따른 모델링과 애니메이션 가져오기

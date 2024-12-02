@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,6 +26,16 @@ public class UIMonsterInformation : MonoBehaviour
     private void Start()
     {
         camTr = Camera.main.transform;
+    }
+
+    public void SetFillWidth(int fillWidth)
+    {
+        this.fillWidth = fillWidth;
+    }
+
+    public void SetFillHeigth(int fillHeight)
+    {
+        this.fillHeight = fillHeight;
     }
 
     public void SetName(string nickname)
