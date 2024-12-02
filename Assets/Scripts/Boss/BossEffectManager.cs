@@ -24,7 +24,10 @@ public class BossEffectManager : MonoBehaviour
     // 플레이어들이 단체 버프 쓸 경우 처리 함수
     public void SetEffectToPlayer(int code)
     {
-        SetEffect(code);
+        for(int i = 0; i < playerPos.Count();i++)
+        {
+            SetEffect(playerPos[i], code);
+        }
     }
 
     // 보스가 특정 대상에게 디버프 걸 경우
