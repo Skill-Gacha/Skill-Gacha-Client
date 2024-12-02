@@ -28,12 +28,12 @@ public class UIMonsterInformation : MonoBehaviour
         camTr = Camera.main.transform;
     }
 
-    public void SetFillWidth(int fillWidth)
+    public void SetFillHpWidth(int fillWidth)
     {
         this.fillWidth = fillWidth;
     }
 
-    public void SetFillHeigth(int fillHeight)
+    public void SetFillHpHeigth(int fillHeight)
     {
         this.fillHeight = fillHeight;
     }

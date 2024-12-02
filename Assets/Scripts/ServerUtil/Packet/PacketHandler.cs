@@ -418,6 +418,7 @@ class PacketHandler
 
     #region Boss
 
+	// 포탈에 3명이 존재할 경우 레이드에 참여 여부 물어보기
     public static void S_AcceptRequestHandler(PacketSession session, IMessage packet)
     {
         S_AcceptRequest acceptPacket = packet as S_AcceptRequest;
@@ -426,6 +427,7 @@ class PacketHandler
         TownManager.Instance.UIBossMatching.ShowBossMatchingUi();
     }
 
+	// Boss Raid 매칭 성공할 경우 씬 이동 및 보스 배치 함수
     public static void S_BossMatchNotificationHandler(Session session, IMessage packet)
 	{
 		S_BossMatchNotification Boss = packet as S_BossMatchNotification;
@@ -446,6 +448,7 @@ class PacketHandler
 		}
 	}
 
+	// 배틀로그(버튼과 텍스트 메시지가 포함 돼 온다)
 	public static void S_BossBattleLogHandler(Session session, IMessage packet)
 	{
 		S_BossBattleLog battleLog = packet as S_BossBattleLog;
@@ -462,6 +465,8 @@ class PacketHandler
 		}
 	}
 
+	// 모든 유저의 HP와 MP 상태
+	// TODO : 향후 내 HP, MP 사이트와 팀 HP, MP 파티 창에 반영
 	public static void S_BossPlayerStatusNotificationHandler(Session session, IMessage packet)
 	{
 		S_BossPlayerStatusNotification playerStatus = packet as S_BossPlayerStatusNotification;
@@ -471,70 +476,73 @@ class PacketHandler
 
 	}
 
+	// 보스 몹의 HP(서버로 부터 오는 수신 구간)
 	public static void S_BossSetMonsterHpHandler(Session session, IMessage packet)
 	{
+		// 보스 몹이나 쫄 체력 변경될 경우
 		S_BossSetMonsterHp bossMonsterHp = packet as S_BossSetMonsterHp;
+
+		if(bossMonsterHp == null)
+			return;
+		BossManager.Instance.SetMonsterHp(bossMonsterHp.MonsterIdx, bossMonsterHp.Hp);
 	}
 
+	// 유저의 행동(버프, 광역기, 단일기 물약 마시기 등등 존재)
 	public static void S_BossPlayerActionNotificationHandler(Session session, IMessage packet)
 	{
 		S_BossPlayerActionNotification playerAction = packet as S_BossPlayerActionNotification;
-		Debug.Log("패킷 오니? : "+playerAction);
 		if(playerAction == null) return;
 
 		int[] monsterIndex = playerAction.TargetMonsterIdx.ToArray();
-		
-		for(int i = 0; i < monsterIndex.Count();i++)
-		{
-			Debug.Log("타겟 몬스터 index : "+monsterIndex[i]);
-		}
+
 
 		if(monsterIndex.Length != 0) BossManager.Instance.GetMonster(monsterIndex).ForEach(monster=> monster.Hit());
 
 		BossManager.Instance.PlayerAnim(playerAction.PlayerId,playerAction.ActionSet.AnimCode);
 
-		Debug.Log("패키지 EffectCode : "+playerAction.ActionSet.EffectCode);
-		if(monsterIndex.Length == 0) BossEffectManager.Instance.SetEffectToPlayer(playerAction.PlayerId,playerAction.ActionSet.EffectCode);
+		if(monsterIndex.Length == 0) BossEffectManager.Instance.SetEffectToPlayer(playerAction.ActionSet.EffectCode);
 		else BossEffectManager.Instance.SetEffectToMonster(monsterIndex,playerAction.ActionSet.EffectCode);
+	}
+
+	// Boss 몬스터의 행동
+	public static void S_BossMonsterActionHandler(Session session, IMessage packet)
+	{
+		S_BossMonsterAction bossMonsterAction = packet as S_BossMonsterAction;
+		if(bossMonsterAction == null) return;
+
+		// 일반 광역기(서버에서 3번 쏴준다)
+		// 서버에서 1번 쏴준다
+		// 전체 디버프
+		// 단일기 HP, MP 바꾸기
+		// 단일기 일반공격
+
+		Monster monster = BossManager.Instance.GetMonster(bossMonsterAction.ActionMonsterIdx);
+		if(monster) monster.SetAnim(bossMonsterAction.ActionSet.AnimCode);
+
+		if(bossMonsterAction.ActionSet.AnimCode != 4) BossManager.Instance.PlayerHit(bossMonsterAction.PlayerIds.ToArray());
+		BossEffectManager.Instance.SetEffectToPlayer(bossMonsterAction.PlayerIds.ToArray(),bossMonsterAction.ActionSet.EffectCode);
 	}
 
 	/*
 
-	public static void S_PlayerActionHandler(PacketSession session, IMessage packet)
+	public static void S_MonsterActionHandler(PacketSession session, IMessage packet)
 	{
-		S_PlayerAction pkt = packet as S_PlayerAction;
+		S_MonsterAction pkt = packet as S_MonsterAction;
 		if (pkt == null)
 			return;
-		int[] monsterIndex = pkt.TargetMonsterIdx.ToArray();
-		if(monsterIndex.Length != 0) BattleManager.Instance.GetMonster(monsterIndex).ForEach(monster => monster.Hit());
 
-		BattleManager.Instance.PlayerAnim(pkt.ActionSet.AnimCode);
+		Monster monster = BattleManager.Instance.GetMonster(pkt.ActionMonsterIdx);
+		if(monster)monster.SetAnim(pkt.ActionSet.AnimCode);
 
-		Debug.Log("패키지 EffectCode : "+pkt.ActionSet.EffectCode);
-		if(monsterIndex.Length == 0) EffectManager.Instance.SetEffectToPlayer(pkt.ActionSet.EffectCode);
-		else EffectManager.Instance.SetEffectToMonster(monsterIndex, pkt.ActionSet.EffectCode);
+		if(pkt.ActionSet.AnimCode != 4) BattleManager.Instance.PlayerHit();
+		EffectManager.Instance.SetEffectToPlayer(pkt.ActionSet.EffectCode);
 	}
 
 	*/
 
-	public static void S_BossMonsterActionHandler(Session session, IMessage packet)
-	{
-		S_BossMonsterAction bossMonsterAction = packet as S_BossMonsterAction;
-	}
-
 	public static void S_BossPhaseHandler(Session session, IMessage packet)
 	{
 		S_BossPhase bossPhase = packet as S_BossPhase;
-	}
-
-	public static void S_BossPlayerUserTurnHandler(Session session, IMessage packet)
-	{
-		S_BossUserTurn userTurn = packet as S_BossUserTurn;
-
-		if(userTurn == null)
-			return;
-
-		BossManager.Instance.CheckUserTurn(userTurn.PlayerId);
 	}
 
     #endregion

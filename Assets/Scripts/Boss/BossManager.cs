@@ -113,10 +113,10 @@ public class BossManager : MonoBehaviour
         monsterUis.Add(dragon.UiMonsterInfo);
 
         //보스 체력바 가로 크기 설정
-        dragon.UiMonsterInfo.SetFillWidth(1700);
+        dragon.UiMonsterInfo.SetFillHpWidth(1660);
 
         //보스 체력바  세로 크기 설정
-        dragon.UiMonsterInfo.SetFillHeigth(155);
+        dragon.UiMonsterInfo.SetFillHpHeigth(100);
 
         dragon.UiMonsterInfo.SetName(monster.MonsterName);
         dragon.UiMonsterInfo.SetFullHP(monster.MonsterHp);
@@ -191,11 +191,13 @@ public class BossManager : MonoBehaviour
 
     public void CheckUserTurn(int playerId)
     {
+        Debug.Log("함수 내부 확인 :"+playerId);
         int numChildren = buttons.transform.childCount;
         for(int i = 0; i < numChildren; i++)
         {
             Button button = buttons.GetChild(i).GetComponent<Button>();
             button.interactable = GameManager.Instance.PlayerId == playerId;
+            Debug.Log("버튼 활성화 여부 : "+button.interactable);
         }
     }
 
@@ -204,9 +206,12 @@ public class BossManager : MonoBehaviour
         return monsterIndex.Where(index => index >= 0 && index < monsterObjs.Count).Select(index => monsterObjs[index]).ToList();
     }
 
-    public void PlayerHit(int playerId)
+    public void PlayerHit(int[] playerId)
     {
-        TriggerAnim(playerId,Constants.PlayerBattleHit);
+        for(int i = 0; i < playerId.Count(); i++)
+        {
+            TriggerAnim(playerId[i],Constants.PlayerBattleHit);
+        }
     }
 
     private void TriggerAnim(int playerId,int code)
@@ -224,7 +229,7 @@ public class BossManager : MonoBehaviour
     }
 
     // playerId에 해당하는 index를 반환하는 함수
-    public int GetPlayerIdIndex(int playerId)
+    public int GetPlayerIndexById(int playerId)
     {
         for(int i = 0; i < playersIds.Count();i++)
         {
@@ -232,6 +237,11 @@ public class BossManager : MonoBehaviour
         }
         // 해당 id가 없을 경우
         return -1;
+    }
+
+    public int[] GetPlayersIndex()
+    {
+        return playersIds;
     }
 
     public void PlayerAnim(int playerId,int idx)

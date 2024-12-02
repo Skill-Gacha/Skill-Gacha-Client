@@ -129,9 +129,6 @@ class PacketManager
 
         _onRecv.Add((ushort)MsgId.SBossPhase, MakePacket<S_BossPhase>);
         _handler.Add((ushort)MsgId.SBossPhase, PacketHandler.S_BossPhaseHandler);
-
-        _onRecv.Add((ushort)MsgId.SBossUserTurn , MakePacket<S_BossUserTurn>);
-        _handler.Add((ushort)MsgId.SBossUserTurn, PacketHandler.S_BossPlayerUserTurnHandler);
     }
 
     public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

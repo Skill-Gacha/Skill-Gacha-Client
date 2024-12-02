@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BossEffectManager : MonoBehaviour
@@ -20,10 +21,23 @@ public class BossEffectManager : MonoBehaviour
         _instance = this;
     }
 
-    public void SetEffectToPlayer(int playerId,int code)
+    // 플레이어들이 단체 버프 쓸 경우 처리 함수
+    public void SetEffectToPlayer(int code)
     {
-        int index = BossManager.Instance.GetPlayerIdIndex(playerId);
-        SetEffect(playerPos[index], code);
+        for(int i = 0; i < playerPos.Count(); i++)
+        {
+            SetEffect(playerPos[i], code);
+        }
+    }
+
+    // 보스가 특정 대상에게 디버프 걸 경우
+    public void SetEffectToPlayer(int[] playerIds,int code)
+    {
+        for(int i = 0; i < playerIds.Count(); i++)
+        {
+            int index = BossManager.Instance.GetPlayerIndexById(playerIds[i]);
+            SetEffect(playerPos[index], code);
+        }
     }
 
     public void SetEffectToMonster(int[] monsterIdx, int code)
