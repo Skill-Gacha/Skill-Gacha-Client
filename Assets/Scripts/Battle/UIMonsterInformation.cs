@@ -9,9 +9,7 @@ using UnityEngine.UI;
 public class UIMonsterInformation : MonoBehaviour
 {
     private Transform camTr;
-    
-    [SerializeField] private GameObject checkArrow;
-    
+
     [SerializeField] private TMP_Text txtName;
     [SerializeField] private TMP_Text txtHp;
     [SerializeField] private Image imgNameBg;
@@ -26,21 +24,23 @@ public class UIMonsterInformation : MonoBehaviour
     private void Start()
     {
         camTr = Camera.main.transform;
-    }    public void SetName(string nickname)
+    }
+
+    public void SetName(string nickname)
     {
         txtName.text = nickname;
     }
 
-    public void SetFullHP(float hp, bool recover = true)
+    public void SetFullHp(float hp, bool recover = true)
     {
         fullHP = hp;
         txtHp.text = hp.ToString("0");
 
         if (recover)
-            SetCurHP(hp);
+            SetCurHp(hp);
     }
 
-    public void SetCurHP(float hp)
+    public void SetCurHp(float hp)
     {
         curHP = Mathf.Min(hp, fullHP);
         txtHp.text = hp.ToString("0");

@@ -113,7 +113,7 @@ public class BossManager : MonoBehaviour
         monsterUis.Add(dragon.UiMonsterInfo);
 
         dragon.UiMonsterInfo.SetName(monster.MonsterName);
-        dragon.UiMonsterInfo.SetFullHP(monster.MonsterHp);
+        dragon.UiMonsterInfo.SetFullHp(monster.MonsterHp);
     }
 
     // 나와 동료 직업에 따른 모델링과 애니메이션 가져오기
@@ -160,7 +160,7 @@ public class BossManager : MonoBehaviour
             monsterUis.Add(monster.UiMonsterInfo);
 
             monster.UiMonsterInfo.SetName(monsterInfo.MonsterName);
-            monster.UiMonsterInfo.SetFullHP(monsterInfo.MonsterHp);
+            monster.UiMonsterInfo.SetFullHp(monsterInfo.MonsterHp);
         }
     }
 
@@ -168,7 +168,7 @@ public class BossManager : MonoBehaviour
     {
         if(idx < 0 || idx >= monsterUis.Count)
             return;
-        monsterUis[idx].SetCurHP(hp);
+        monsterUis[idx].SetCurHp(hp);
     }
 
 
@@ -181,18 +181,6 @@ public class BossManager : MonoBehaviour
         }
 
         return null;
-    }
-
-    public void CheckUserTurn(int playerId)
-    {
-        Debug.Log("함수 내부 확인 :"+playerId);
-        int numChildren = buttons.transform.childCount;
-        for(int i = 0; i < numChildren; i++)
-        {
-            Button button = buttons.GetChild(i).GetComponent<Button>();
-            button.interactable = GameManager.Instance.PlayerId == playerId;
-            Debug.Log("버튼 활성화 여부 : "+button.interactable);
-        }
     }
 
     public List<Monster> GetMonster(int[] monsterIndex)
@@ -247,21 +235,30 @@ public class BossManager : MonoBehaviour
         TriggerAnim(playerId,animCode);
     }
 
-    public void SetPartyHpMP(S_BossPlayerStatusNotification playerStatus)
+    public void SetPartyStatus(int playerId, int Hp, int Mp)
     {
-        int[] playerIds = playerStatus.PlayerId.ToArray();
-        int[] hp = playerStatus.Hp.ToArray();
-        int[] mp = playerStatus.Mp.ToArray();
+        int playerIdx = GetPlayerIndexById(playerId);
 
-        for(int i = 0; i < playerIds.Count(); i++)
+        float playerCurHp = Hp;
+        float playerCurMp = Mp;
+
+        teamInformation[playerIdx].SetCurHp(playerCurHp);
+        teamInformation[playerIdx].SetCurMp(playerCurMp);
+
+        // 본인 Status 창 업데이트
+        if (playerId == GameManager.Instance.PlayerId)
         {
-            int playerIdx = GetPlayerIndexById(playerIds[i]);
-            teamInformation[playerIdx].SetCurHp(hp[playerIdx]);
-            teamInformation[playerIdx].SetCurMp(mp[playerIdx]);
-
-            if(playerIds[playerIdx] == GameManager.Instance.PlayerId)
-                myInformation.SetCurHP(hp[playerIdx]);
-                myInformation.SetCurMP(mp[playerIdx]);
+            MyInformation.SetCurHp(playerCurHp);
+            MyInformation.SetCurMp(playerCurMp);
         }
+    }
+
+    public void BossTwoPhase(int randomElement)
+    {
+        //1 : 전기
+        //2 : 땅
+        //3 : 풀
+        //4 : 물
+        //5 : 불
     }
 }

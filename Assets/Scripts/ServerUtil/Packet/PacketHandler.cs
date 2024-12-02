@@ -479,10 +479,15 @@ class PacketHandler
 		S_BossPlayerStatusNotification playerStatus = packet as S_BossPlayerStatusNotification;
 
 		if(playerStatus == null) return;
+		int[] PlayerIds = playerStatus.PlayerId.ToArray();
+		int[] Hps = playerStatus.Hp.ToArray();
+		int[] Mps = playerStatus.Mp.ToArray();
 
-		BossManager.Instance.SetPartyHpMP(playerStatus);
-
-	}
+        for (int i = 0; i < PlayerIds.Length; i++)
+		{
+			BossManager.Instance.SetPartyStatus(PlayerIds[i], Hps[i], Mps[i]);
+        }
+    }
 
 	// 보스 몹의 HP(서버로 부터 오는 수신 구간)
 	public static void S_BossSetMonsterHpHandler(Session session, IMessage packet)

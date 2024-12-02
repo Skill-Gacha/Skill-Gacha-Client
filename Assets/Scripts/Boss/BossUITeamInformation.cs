@@ -28,12 +28,12 @@ public class BossUITeamInformation : MonoBehaviour
     [SerializeField]
     private Image imgMpBack;
 
-    private float fullHP;
-    private float curHP;
+    private float fullHp;
+    private float curHp;
 
-    private float fullMP;
-    private float curMP;
-    
+    private float fullMp;
+    private float curMp;
+
     private float fillWidth = 290;
     private float fillHeight = 40;
 
@@ -54,7 +54,7 @@ public class BossUITeamInformation : MonoBehaviour
 
     public void SetFullHp(float hp, bool recover = true)
     {
-        fullHP = hp;
+        fullHp = hp;
         txtHp.text = hp.ToString("0");
 
         if (recover)
@@ -64,9 +64,9 @@ public class BossUITeamInformation : MonoBehaviour
 
     public void SetCurHp(float hp)
     {
-        curHP = Mathf.Min(hp, fullHP);
+        curHp = Mathf.Min(hp, fullHp);
         txtHp.text = hp.ToString("0");
-        float per = curHP/fullHP;
+        float per = curHp/fullHp;
         imgHpFill.rectTransform.sizeDelta = new Vector2(fillWidth * per, fillHeight);
 
         txtHp.rectTransform.sizeDelta = new Vector2(txtHp.preferredWidth + 50, 40);
@@ -74,7 +74,7 @@ public class BossUITeamInformation : MonoBehaviour
 
     public void SetFullMp(float mp, bool recover = true)
     {
-        fullMP = mp;
+        fullMp = mp;
         txtMp.text = mp.ToString("0");
 
         if (recover)
@@ -85,10 +85,10 @@ public class BossUITeamInformation : MonoBehaviour
 
     public void SetCurMp(float mp)
     {
-        curMP = Mathf.Min(mp, fullHP);
+        curMp = Mathf.Min(mp, fullHp);
         txtMp.text = mp.ToString("0");
 
-        float per = curMP/fullMP;
+        float per = curMp/fullMp;
         imgMpFill.rectTransform.sizeDelta = new Vector2(fillWidth * per, fillHeight);
 
         txtMp.rectTransform.sizeDelta = new Vector2(txtMp.preferredWidth + 50, 40);
