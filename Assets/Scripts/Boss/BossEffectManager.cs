@@ -28,7 +28,7 @@ public class BossEffectManager : MonoBehaviour
 
     public void SetEffectToMonster(int[] monsterIdx, int code)
     {
-        var monster = BattleManager.Instance.GetMonster(monsterIdx);
+        var monster = BossManager.Instance.GetMonster(monsterIdx);
         SetEffect(monster[0].transform, code);
     }
 

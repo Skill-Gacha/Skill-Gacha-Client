@@ -483,6 +483,12 @@ class PacketHandler
 		if(playerAction == null) return;
 
 		int[] monsterIndex = playerAction.TargetMonsterIdx.ToArray();
+		
+		for(int i = 0; i < monsterIndex.Count();i++)
+		{
+			Debug.Log("타겟 몬스터 index : "+monsterIndex[i]);
+		}
+
 		if(monsterIndex.Length != 0) BossManager.Instance.GetMonster(monsterIndex).ForEach(monster=> monster.Hit());
 
 		BossManager.Instance.PlayerAnim(playerAction.PlayerId,playerAction.ActionSet.AnimCode);
