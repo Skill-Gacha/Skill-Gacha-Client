@@ -28,11 +28,11 @@ public class BossUITeamInformation : MonoBehaviour
     [SerializeField]
     private Image imgMpBack;
 
-    private float fullHP;
-    private float curHP;
+    private float fullHp;
+    private float curHp;
 
-    private float fullMP;
-    private float curMP;
+    private float fullMp;
+    private float curMp;
     
     private float fillWidth = 290;
     private float fillHeight = 40;
@@ -41,10 +41,10 @@ public class BossUITeamInformation : MonoBehaviour
     {
 
         SetName(playerStatus.PlayerName);
-        SetFullHP(playerStatus.PlayerFullHp);
-        SetFullMP(playerStatus.PlayerFullMp);
-        SetCurHP(playerStatus.PlayerCurHp);
-        SetCurMP(playerStatus.PlayerCurMp);
+        SetFullHp(playerStatus.PlayerFullHp);
+        SetFullMp(playerStatus.PlayerFullMp);
+        SetCurHp(playerStatus.PlayerCurHp);
+        SetCurMp(playerStatus.PlayerCurMp);
     }
 
     public void SetName(string nickname)
@@ -52,43 +52,43 @@ public class BossUITeamInformation : MonoBehaviour
         txtName.text = nickname;
     }
 
-    public void SetFullHP(float hp, bool recover = true)
+    public void SetFullHp(float hp, bool recover = true)
     {
-        fullHP = hp;
+        fullHp = hp;
         txtHp.text = hp.ToString("0");
 
         if (recover)
-            SetCurHP(hp);
+            SetCurHp(hp);
         txtHp.rectTransform.sizeDelta = new Vector2(txtHp.preferredWidth + 50, 40);
     }
 
-    public void SetCurHP(float hp)
+    public void SetCurHp(float hp)
     {
-        curHP = Mathf.Min(hp, fullHP);
+        curHp = Mathf.Min(hp, fullHp);
         txtHp.text = hp.ToString("0");
-        float per = curHP/fullHP;
+        float per = curHp/fullHp;
         imgHpFill.rectTransform.sizeDelta = new Vector2(fillWidth * per, fillHeight);
 
         txtHp.rectTransform.sizeDelta = new Vector2(txtHp.preferredWidth + 50, 40);
     }
 
-    public void SetFullMP(float mp, bool recover = true)
+    public void SetFullMp(float mp, bool recover = true)
     {
-        fullMP = mp;
+        fullMp = mp;
         txtMp.text = mp.ToString("0");
 
         if (recover)
-            SetCurMP(mp);
+            SetCurMp(mp);
 
         txtMp.rectTransform.sizeDelta = new Vector2(txtMp.preferredWidth + 50, 40);
     }
 
-    public void SetCurMP(float mp)
+    public void SetCurMp(float mp)
     {
-        curMP = Mathf.Min(mp, fullHP);
+        curMp = Mathf.Min(mp, fullHp);
         txtMp.text = mp.ToString("0");
 
-        float per = curMP/fullMP;
+        float per = curMp/fullMp;
         imgMpFill.rectTransform.sizeDelta = new Vector2(fillWidth * per, fillHeight);
 
         txtMp.rectTransform.sizeDelta = new Vector2(txtMp.preferredWidth + 50, 40);
