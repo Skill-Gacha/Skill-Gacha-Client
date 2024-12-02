@@ -116,7 +116,7 @@ public class BossManager : MonoBehaviour
         dragon.UiMonsterInfo.SetFillHpWidth(1660);
 
         //보스 체력바  세로 크기 설정
-        dragon.UiMonsterInfo.SetFillHpHeigth(100);
+        dragon.UiMonsterInfo.SetFillHpHeigth(70);
 
         dragon.UiMonsterInfo.SetName(monster.MonsterName);
         dragon.UiMonsterInfo.SetFullHP(monster.MonsterHp);
@@ -251,5 +251,23 @@ public class BossManager : MonoBehaviour
 
         var animCode = animCodeList[idx];
         TriggerAnim(playerId,animCode);
+    }
+
+    public void SetPartyHpMP(S_BossPlayerStatusNotification playerStatus)
+    {
+        int[] playerIds = playerStatus.PlayerId.ToArray();
+        int[] hp = playerStatus.Hp.ToArray();
+        int[] mp = playerStatus.Mp.ToArray();
+
+        for(int i = 0; i < playerIds.Count(); i++)
+        {
+            int playerIdx = GetPlayerIndexById(playerIds[i]);
+            teamInformation[playerIdx].SetCurHP(hp[playerIdx]);
+            teamInformation[playerIdx].SetCurMP(mp[playerIdx]);
+
+            if(playerIds[playerIdx] == GameManager.Instance.PlayerId)
+                myInformation.SetCurHP(hp[playerIdx]);
+                myInformation.SetCurMP(mp[playerIdx]);
+        }
     }
 }

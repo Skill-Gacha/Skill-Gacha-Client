@@ -53,7 +53,6 @@ public class BossEffectManager : MonoBehaviour
             var pos = new Vector3(tr.position.x, effects[calcId].transform.position.y, tr.position.z);
             effects[calcId].transform.position = pos;
         }
-
         effects[calcId].gameObject.SetActive(false);
         effects[calcId].gameObject.SetActive(true);
     }
