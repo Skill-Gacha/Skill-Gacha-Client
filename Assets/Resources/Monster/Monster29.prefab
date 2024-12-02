@@ -20274,8 +20274,8 @@ MonoBehaviour:
   txtHp: {fileID: 5718455677868747725}
   imgNameBg: {fileID: 0}
   imgHpFill: {fileID: 5812600669798496086}
-  fillWidth: 100
-  fillHeight: 30
+  fillWidth: 1600
+  fillHeight: 80
 --- !u!1 &8847275634738101120
 GameObject:
   m_ObjectHideFlags: 0
