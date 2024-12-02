@@ -45,7 +45,7 @@ public class BossBattleLog : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
         {
-            if(BossManager.Instance.UiScreen.gameObject.activeSelf)
+            if(BossManager.Instance.BossUiScreen.gameObject.activeSelf)
                 return;
 
             if (done == false)
