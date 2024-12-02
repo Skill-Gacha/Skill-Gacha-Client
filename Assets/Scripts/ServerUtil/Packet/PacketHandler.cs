@@ -519,8 +519,10 @@ class PacketHandler
 		Monster monster = BossManager.Instance.GetMonster(bossMonsterAction.ActionMonsterIdx);
 		if(monster) monster.SetAnim(bossMonsterAction.ActionSet.AnimCode);
 
-		if(bossMonsterAction.ActionSet.AnimCode != 4) BossManager.Instance.PlayerHit(bossMonsterAction.PlayerIds.ToArray());
-		BossEffectManager.Instance.SetEffectToPlayer(bossMonsterAction.PlayerIds.ToArray(),bossMonsterAction.ActionSet.EffectCode);
+		var playerIds = bossMonsterAction.PlayerIds.ToArray();
+		if(bossMonsterAction.ActionSet.AnimCode != 4) BossManager.Instance.PlayerHit(playerIds);
+		if(playerIds.Count() == 1) BossEffectManager.Instance.SetEffectToPlayer(playerIds[0], bossMonsterAction.ActionSet.EffectCode);
+		else BossEffectManager.Instance.SetEffectToPlayer(bossMonsterAction.ActionSet.EffectCode);
 	}
 
 	/*
