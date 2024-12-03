@@ -532,7 +532,7 @@ class PacketHandler
 
 		// 3페이지
 		// 단일기 HP, MP 바꾸기
-
+		Debug.Log("bossMonsterAction : "+bossMonsterAction.ActionSet.AnimCode);
 		Monster monster = BossManager.Instance.GetMonster(bossMonsterAction.ActionMonsterIdx);
 		if(monster) monster.SetAnim(bossMonsterAction.ActionSet.AnimCode);
 
