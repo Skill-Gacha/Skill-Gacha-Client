@@ -49,7 +49,8 @@ public class BossEffectManager : MonoBehaviour
     void SetEffect(Transform tr, int code)
     {
         var calcId = code - Constants.EffectCodeFactor;
-
+        Debug.Log("code : "+code);
+        Debug.Log("calcId : "+calcId);
         if(calcId < 0 || calcId >= effects.Length)
             return;
         if(calcId >= 31)

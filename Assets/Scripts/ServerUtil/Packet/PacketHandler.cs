@@ -502,6 +502,9 @@ class PacketHandler
 	public static void S_BossPlayerActionNotificationHandler(Session session, IMessage packet)
 	{
 		S_BossPlayerActionNotification playerAction = packet as S_BossPlayerActionNotification;
+		
+		Debug.Log("패킷 확인 : "+playerAction);
+		
 		if(playerAction == null) return;
 
 		int[] monsterIndex = playerAction.TargetMonsterIdx.ToArray();
