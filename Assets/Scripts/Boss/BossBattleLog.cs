@@ -32,7 +32,6 @@ public class BossBattleLog : MonoBehaviour
 
     public void Set(BattleLog battleLog)
     {
-        Debug.Log("배틀로그 : "+battleLog);
         if (battleLog.Btns is { Count: > 0 })
             btnInfos = battleLog.Btns?.ToArray();
         else

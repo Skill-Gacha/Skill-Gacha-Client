@@ -460,8 +460,6 @@ class PacketHandler
 	public static void S_BossBattleLogHandler(Session session, IMessage packet)
 	{
 		S_BossBattleLog battleLog = packet as S_BossBattleLog;
-		Debug.Log("battle : "+battleLog);
-		Debug.Log("battleLog : "+battleLog.BattleLog);
 
 		if(battleLog == null)
 			return;

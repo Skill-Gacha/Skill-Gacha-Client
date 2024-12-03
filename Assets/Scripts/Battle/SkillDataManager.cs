@@ -18,7 +18,6 @@ public static class SkillDataManager
 
         // JSON 파싱
         SkillData = JsonUtility.FromJson<SkillClass>(textAsset.text);
-        Debug.Log("Skill data 로드 완료!");
     }
 
     // 특정 스킬 ID로 스킬 데이터를 찾는 메서드
