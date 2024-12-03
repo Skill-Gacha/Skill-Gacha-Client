@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BossScript : MonoBehaviour
 {
-    // Start is called before the first frame update
     [SerializeField]
     private Material[] limbosMaterials;
     [SerializeField]
@@ -13,10 +13,19 @@ public class BossScript : MonoBehaviour
     [SerializeField]
     private GameObject dragon;
 
+
+    [SerializeField]
+    private Image imgElement;
+    [SerializeField]
+    private Sprite[] elements;
+
     public void SetMaterial(int elementIndex)
     {
         Renderer renderer = dragon.GetComponent<Renderer>();
-        
+
+        if(!imgElement.gameObject.activeSelf) imgElement.gameObject.SetActive(!imgElement.gameObject.activeSelf);
+        imgElement.sprite = elements[elementIndex];
+
         // 현재 오브젝트에 있는 모든 Material을 가져옵니다.
         Material[] materials = renderer.materials;
 

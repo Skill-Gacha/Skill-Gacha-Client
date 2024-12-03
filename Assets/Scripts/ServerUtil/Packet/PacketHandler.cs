@@ -499,7 +499,7 @@ class PacketHandler
 			return;
 		BossManager.Instance.SetMonsterHp(bossMonsterHp.MonsterIdx, bossMonsterHp.Hp);
 	}
-
+	static int count = 5;
 	// 유저의 행동(버프, 광역기, 단일기 물약 마시기 등등 존재)
 	public static void S_BossPlayerActionNotificationHandler(Session session, IMessage packet)
 	{
@@ -515,6 +515,7 @@ class PacketHandler
 
 		if(monsterIndex.Length == 0) BossEffectManager.Instance.SetEffectToPlayer(playerAction.ActionSet.EffectCode, false);
 		else BossEffectManager.Instance.SetEffectToMonster(monsterIndex,playerAction.ActionSet.EffectCode);
+		BossManager.Instance.BossBarrierBreak(--count);
 	}
 
 	// Boss 몬스터의 행동
@@ -523,24 +524,46 @@ class PacketHandler
 		S_BossMonsterAction bossMonsterAction = packet as S_BossMonsterAction;
 		if(bossMonsterAction == null) return;
 
-		// 일반 광역기(서버에서 3번 쏴준다)
-		// 서버에서 1번 쏴준다
+		// 1페이지
+		// 일반 광역기
+
+		// 2페이지
 		// 전체 디버프
+
+		// 3페이지
 		// 단일기 HP, MP 바꾸기
-		// 단일기 일반공격
 
 		Monster monster = BossManager.Instance.GetMonster(bossMonsterAction.ActionMonsterIdx);
 		if(monster) monster.SetAnim(bossMonsterAction.ActionSet.AnimCode);
 
 		int[] playerIds = bossMonsterAction.PlayerIds.ToArray();
+		// 보스가 죽을 때는 유저를 공격할 필요가 없다.
 		if(bossMonsterAction.ActionSet.AnimCode != 4) BossManager.Instance.PlayerHit(playerIds);
+
+		// 3페이지
+		// 단일기 HP, MP 바꾸기
 		if(playerIds.Count() == 1) BossEffectManager.Instance.SetEffectToPlayer(playerIds[0], bossMonsterAction.ActionSet.EffectCode);
+		// 1페이지, 2페이지 일반 광역기, 전체 디버프
 		else BossEffectManager.Instance.SetEffectToPlayer(bossMonsterAction.ActionSet.EffectCode, true);
 	}
 
 	public static void S_BossPhaseHandler(Session session, IMessage packet)
 	{
 		S_BossPhase bossPhase = packet as S_BossPhase;
+		//bossPhase
+		if(bossPhase == null) return;
+
+		// 2페이지 시작할 경우 속성 바꾸기
+		if(bossPhase.Phase == 2)
+		{
+			BossManager.Instance.BossMaterialChange(bossPhase.RandomElement);
+		}
+		// 3페이지 시작할 경우 속성 바꾸기 및 보호막
+		else if(bossPhase.Phase == 3)
+		{
+			BossManager.Instance.BossMaterialChange(bossPhase.RandomElement);
+			BossManager.Instance.BossBarrierEnable();
+		}
 	}
 
     #endregion

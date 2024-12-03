@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -12,8 +13,8 @@ public class UIMonsterInformation : MonoBehaviour
 
     [SerializeField] private TMP_Text txtName;
     [SerializeField] private TMP_Text txtHp;
-    [SerializeField] private Image imgNameBg;
     [SerializeField] private Image imgHpFill;
+    [SerializeField] private GameObject[] barrier;
 
     private float fullHP;
     private float curHP;
@@ -46,5 +47,18 @@ public class UIMonsterInformation : MonoBehaviour
         txtHp.text = hp.ToString("0");
         float per = curHP/fullHP;
         imgHpFill.rectTransform.sizeDelta = new Vector2(fillWidth * per, fillHeight);
+    }
+
+    public void EnableBarrierImage()
+    {
+        for(int i = 0; i < barrier.Count();i++)
+        {
+            barrier[i].SetActive(true);
+        }
+    }
+
+    public void BreakBarrierImage(int count)
+    {
+        barrier[count - 1].SetActive(false);
     }
 }

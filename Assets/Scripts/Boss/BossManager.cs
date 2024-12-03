@@ -114,6 +114,10 @@ public class BossManager : MonoBehaviour
 
         dragon.UiMonsterInfo.SetName(monster.MonsterName);
         dragon.UiMonsterInfo.SetFullHp(monster.MonsterHp);
+
+
+        BossMaterialChange(Random.Range(1001,1005));
+        BossBarrierEnable();
     }
 
     // 나와 동료 직업에 따른 모델링과 애니메이션 가져오기
@@ -253,21 +257,31 @@ public class BossManager : MonoBehaviour
         }
     }
 
-    public void BossTwoPhase(int randomElement)
+    public void BossMaterialChange(int randomElement)
     {
         int elementIndex = randomElement - Constants.PlayerCodeFactor;
-        BossMaterialChange(elementIndex);
-        //1001 : 전기
-        //1002 : 땅
-        //1003 : 풀
-        //1004 : 물
-        //1005 : 불
-
-    }
-
-    public void BossMaterialChange(int elementIndex)
-    {
+        //1001 : 전기 => 0
+        //1002 : 땅 => 1
+        //1003 : 풀 => 2
+        //1004 : 물 => 3
+        //1005 : 불 => 4
+        Debug.Log("randomElement : "+randomElement);
+        Debug.Log("elementIndex : "+elementIndex);
         BossScript bossScript = monsterSpawnPos[0].GetChild(0).GetComponent<BossScript>();
         bossScript.SetMaterial(elementIndex);
+    }
+
+    public void BossBarrierEnable()
+    {
+        UIMonsterInformation monsterInfo = monsterSpawnPos[0].GetComponentInChildren<UIMonsterInformation>();
+        Debug.Log("monsterInfo : "+monsterInfo);
+        monsterInfo.EnableBarrierImage();
+    }
+
+    public void BossBarrierBreak(int count)
+    {
+        UIMonsterInformation monsterInfo = monsterSpawnPos[0].GetComponentInChildren<UIMonsterInformation>();
+        Debug.Log("monsterInfo : "+monsterInfo);
+        monsterInfo.BreakBarrierImage(count);
     }
 }

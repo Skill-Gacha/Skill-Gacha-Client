@@ -24,9 +24,17 @@ public class BossEffectManager : MonoBehaviour
     // 플레이어들이 단체 버프 쓸 경우 처리 함수
     public void SetEffectToPlayer(int code, bool isMonsterAttack)
     {
-        for(int i = 0; i < playerPos.Count();i++)
+        // 3페이지 전체 디버프인 경우
+        if(isMonsterAttack)
         {
-            SetEffect(playerPos[i], code);
+            for(int i = 0; i < playerPos.Count();i++)
+            {
+                SetEffect(playerPos[i], code);
+            }
+        }
+        else
+        {
+            SetEffect(code);
         }
     }
 
