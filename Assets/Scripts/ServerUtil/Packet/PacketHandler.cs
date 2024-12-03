@@ -512,7 +512,7 @@ class PacketHandler
 
 		BossManager.Instance.PlayerAnim(playerAction.PlayerId,playerAction.ActionSet.AnimCode);
 
-		if(monsterIndex.Length == 0) BossEffectManager.Instance.SetEffectToPlayer(playerAction.ActionSet.EffectCode, false);
+		if(monsterIndex.Length == 0) BossEffectManager.Instance.SetEffectToPlayer(playerAction.ActionSet.EffectCode);
 		else BossEffectManager.Instance.SetEffectToMonster(monsterIndex,playerAction.ActionSet.EffectCode);
 	}
 
@@ -542,7 +542,7 @@ class PacketHandler
 		// 단일기 HP, MP 바꾸기
 		if(playerIds.Count() == 1) BossEffectManager.Instance.SetEffectToPlayer(playerIds[0], bossMonsterAction.ActionSet.EffectCode);
 		// 1페이지, 2페이지 일반 광역기, 전체 디버프
-		else BossEffectManager.Instance.SetEffectToPlayer(bossMonsterAction.ActionSet.EffectCode, true);
+		else BossEffectManager.Instance.SetEffectToPlayer(bossMonsterAction.ActionSet.EffectCode);
 	}
 
 	public static void S_BossPhaseHandler(Session session, IMessage packet)
@@ -570,6 +570,7 @@ class PacketHandler
 
 		if(barrierCount == null) return;
 		int remainCount = barrierCount.BarrierCount;
+		Debug.Log("remainCount : "+remainCount);
 		BossManager.Instance.BossBarrierBreak(remainCount);
 	}
 
