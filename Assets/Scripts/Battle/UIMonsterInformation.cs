@@ -57,8 +57,8 @@ public class UIMonsterInformation : MonoBehaviour
         }
     }
 
-    public void BreakBarrierImage(int count)
+    public void BreakBarrierImage(int index)
     {
-        barrier[count - 1].SetActive(false);
+        barrier[index].SetActive(false);
     }
 }

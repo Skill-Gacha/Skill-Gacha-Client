@@ -967,7 +967,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1955449681998024111
 RectTransform:
   m_ObjectHideFlags: 0
@@ -20891,14 +20891,14 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 03488db9854fc4d40b4bf4bf05d13990, type: 2}
   - {fileID: 2100000, guid: 6399cfd035f184498956c3eac0640cc4, type: 2}
   - {fileID: 2100000, guid: fba79c9dec09940cda07130f8ce742cd, type: 2}
-  - {fileID: 2100000, guid: 2a9f5fd983aab40d4a3a8323420d08a6, type: 2}
   - {fileID: 2100000, guid: e251152e5292c495495ee770b76507bf, type: 2}
+  - {fileID: 2100000, guid: 2a9f5fd983aab40d4a3a8323420d08a6, type: 2}
   spineMaterials:
   - {fileID: 2100000, guid: c0ade492eef1b41cab596ccdd236cf80, type: 2}
   - {fileID: 2100000, guid: aebb9b1c40aa44908b5f999e479ae9be, type: 2}
   - {fileID: 2100000, guid: c4bb19969a5a84c958117bbf3e2fa17e, type: 2}
-  - {fileID: 2100000, guid: 55a37d87c58474bb68223515dd4969ec, type: 2}
   - {fileID: 2100000, guid: 954c64297d67e47febd366132cc616fc, type: 2}
+  - {fileID: 2100000, guid: 55a37d87c58474bb68223515dd4969ec, type: 2}
   dragon: {fileID: 5685871411285262648}
   imgElement: {fileID: 2205458749410337413}
   elements:
