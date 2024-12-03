@@ -500,8 +500,7 @@ class PacketHandler
 			return;
 		BossManager.Instance.SetMonsterHp(bossMonsterHp.MonsterIdx, bossMonsterHp.Hp);
 	}
-	// 유저의 행동(버프, 광역기, 단일기 물약 마시기 등등 존재)
-	public static int remainCount = 5;
+
 	public static void S_BossPlayerActionNotificationHandler(Session session, IMessage packet)
 	{
 		S_BossPlayerActionNotification playerAction = packet as S_BossPlayerActionNotification;
@@ -516,8 +515,6 @@ class PacketHandler
 
 		if(monsterIndex.Length == 0) BossEffectManager.Instance.SetEffectToPlayer(playerAction.ActionSet.EffectCode);
 		else BossEffectManager.Instance.SetEffectToMonster(monsterIndex,playerAction.ActionSet.EffectCode);
-		Debug.Log("개수 확인 : "+remainCount);
-		BossManager.Instance.BossBarrierBreak(--remainCount);
 	}
 
 	// Boss 몬스터의 행동
@@ -574,7 +571,6 @@ class PacketHandler
 
 		if(barrierCount == null) return;
 		int remainCount = barrierCount.BarrierCount;
-		Debug.Log("remainCount : "+remainCount);
 		BossManager.Instance.BossBarrierBreak(remainCount);
 	}
 
