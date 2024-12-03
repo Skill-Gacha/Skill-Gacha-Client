@@ -255,10 +255,19 @@ public class BossManager : MonoBehaviour
 
     public void BossTwoPhase(int randomElement)
     {
-        //1 : 전기
-        //2 : 땅
-        //3 : 풀
-        //4 : 물
-        //5 : 불
+        int elementIndex = randomElement - Constants.PlayerCodeFactor;
+        BossMaterialChange(elementIndex);
+        //1001 : 전기
+        //1002 : 땅
+        //1003 : 풀
+        //1004 : 물
+        //1005 : 불
+
+    }
+
+    public void BossMaterialChange(int elementIndex)
+    {
+        BossScript bossScript = monsterSpawnPos[0].GetChild(0).GetComponent<BossScript>();
+        bossScript.SetMaterial(elementIndex);
     }
 }

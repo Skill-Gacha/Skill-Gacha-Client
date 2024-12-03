@@ -6862,7 +6862,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 5c16b5dc4fe474e5094633f76512f7ce, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -14031,7 +14030,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: f780c4b037b4944cda2c6b278bcf83d3, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -19377,7 +19375,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 45f44922fe8174cfc96dca8e149019d6, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -20023,6 +20020,7 @@ GameObject:
   - component: {fileID: 2692932476022037656}
   - component: {fileID: 2302644606250201934}
   - component: {fileID: 4995575829216156990}
+  - component: {fileID: 6989497942987007021}
   m_Layer: 0
   m_Name: Monster29
   m_TagString: Untagged
@@ -20082,6 +20080,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiMonsterInfo: {fileID: 7458761182094586765}
+--- !u!114 &6989497942987007021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8073625627725124765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be4dc8e424134574282f76545db26b99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  limbosMaterials:
+  - {fileID: 2100000, guid: 03488db9854fc4d40b4bf4bf05d13990, type: 2}
+  - {fileID: 2100000, guid: 6399cfd035f184498956c3eac0640cc4, type: 2}
+  - {fileID: 2100000, guid: fba79c9dec09940cda07130f8ce742cd, type: 2}
+  - {fileID: 2100000, guid: 2a9f5fd983aab40d4a3a8323420d08a6, type: 2}
+  - {fileID: 2100000, guid: e251152e5292c495495ee770b76507bf, type: 2}
+  spineMaterials:
+  - {fileID: 2100000, guid: c0ade492eef1b41cab596ccdd236cf80, type: 2}
+  - {fileID: 2100000, guid: aebb9b1c40aa44908b5f999e479ae9be, type: 2}
+  - {fileID: 2100000, guid: c4bb19969a5a84c958117bbf3e2fa17e, type: 2}
+  - {fileID: 2100000, guid: 55a37d87c58474bb68223515dd4969ec, type: 2}
+  - {fileID: 2100000, guid: 954c64297d67e47febd366132cc616fc, type: 2}
+  dragon: {fileID: 5685871411285262648}
 --- !u!1 &8161103332142906251
 GameObject:
   m_ObjectHideFlags: 0

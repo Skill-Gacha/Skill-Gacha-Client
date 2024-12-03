@@ -21,23 +21,12 @@ public class BossEffectManager : MonoBehaviour
         _instance = this;
     }
 
-    public void SetEffectToPlayer()
-    {
-    }
-
     // 플레이어들이 단체 버프 쓸 경우 처리 함수
     public void SetEffectToPlayer(int code, bool isMonsterAttack)
     {
-        if(isMonsterAttack)
+        for(int i = 0; i < playerPos.Count();i++)
         {
-            SetEffect(code);
-        }
-        else
-        {
-            for(int i = 0; i < playerPos.Count();i++)
-            {
-                SetEffect(playerPos[i], code);
-            }
+            SetEffect(playerPos[i], code);
         }
     }
 
