@@ -26,11 +26,7 @@ public class BossEffectManager : MonoBehaviour
 
     public void SetEffectToPlayer(int code)
     {
-        // 3페이지 전체 디버프인 경우
-        for(int i = 0; i < playerPos.Count();i++)
-        {
-            SetEffect(playerPos[i], code);
-        }
+        SetEffect(code);
     }
 
     // 보스가 특정 대상에게 디버프 걸 경우
@@ -53,27 +49,25 @@ public class BossEffectManager : MonoBehaviour
         Debug.Log("calcId : "+calcId);
         if(calcId < 0 || calcId >= effects.Length)
             return;
-        if(calcId >= 31)
-        {
-            BossEffect(calcId);
-            return;
-        }
-        // 3022(index : 21) 아래 스킬들은 단일기, 3029(index : 28) ~ 3031(index : 30) 버프, 3032(index : 31)은 드래곤의 단일 Hp, Mp 역전 공격
-        else if(calcId < singleSkillIndex || calcId > bufSkillIndex && calcId < 32)
-        {
-            var pos = new Vector3(tr.position.x, effects[calcId].transform.position.y, tr.position.z);
-            effects[calcId].transform.position = pos;
-        }
 
-        // 3033(index : 32) ~ 3034(index : 33) 드래곤 광역기 공격 및 광역 디버프
-        // 3023(index : 22) ~ 3028(index : 27) 유저들의 광역기
+        var pos = new Vector3(tr.position.x, effects[calcId].transform.position.y, tr.position.z);
+        effects[calcId].transform.position = pos;
+
         effects[calcId].gameObject.SetActive(false);
         effects[calcId].gameObject.SetActive(true);
     }
 
-    void BossEffect(int index)
+
+    // 유저 버프 같이 광역기 처리하는 함수
+    void SetEffect(int code)
     {
-        effects[index].gameObject.SetActive(false);
-        effects[index].gameObject.SetActive(true);
+        var calcId = code - Constants.EffectCodeFactor;
+        Debug.Log("code : "+code);
+        Debug.Log("calcId : "+calcId);
+        if(calcId < 0 || calcId >= effects.Length)
+            return;
+
+        effects[calcId].gameObject.SetActive(false);
+        effects[calcId].gameObject.SetActive(true);
     }
 }
