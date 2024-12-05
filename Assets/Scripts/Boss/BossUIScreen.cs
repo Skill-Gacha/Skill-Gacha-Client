@@ -48,7 +48,7 @@ public class BossUIScreen : MonoBehaviour
             }
             else
             {
-                C_PlayerResponse response = new C_PlayerResponse() { ResponseCode = 0 };
+                C_BossPlayerResponse response = new C_BossPlayerResponse() { ResponseCode = 0 };
                 GameManager.Network.Send(response);
             }
         }

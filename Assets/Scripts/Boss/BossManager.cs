@@ -14,7 +14,7 @@ public class BossManager : MonoBehaviour
     public static BossManager Instance => _instance;
 
     // pve 기준 검은 화면 출력 및 글자
-    [SerializeField] private BossUIScreen uiScreen;
+    [SerializeField] private BossUIScreen bossUiScreen;
 
     // 배틀 로그 및 버튼(활성화/비활성화 포함) 정보 스크립트
     [SerializeField] private BossBattleLog uiBattleLog;
@@ -22,10 +22,9 @@ public class BossManager : MonoBehaviour
     // 내 UI 정보(속성, 이름, HP, MP) 스크립트
     [SerializeField] private BossUIPlayerInformation myInformation;
 
-    public BossUIScreen UiScreen => uiScreen;
+    public BossUIScreen BossUiScreen => bossUiScreen;
     public BossBattleLog UiBattleLog => uiBattleLog;
     public BossUIPlayerInformation MyInformation => myInformation;
-    //public BossUITeamInformation TeamInformation => teamInformation;
 
     // 게임에 참여한 playerId 모음
     private int[] playersIds;
@@ -114,7 +113,7 @@ public class BossManager : MonoBehaviour
         monsterUis.Add(dragon.UiMonsterInfo);
 
         dragon.UiMonsterInfo.SetName(monster.MonsterName);
-        dragon.UiMonsterInfo.SetFullHP(monster.MonsterHp);
+        dragon.UiMonsterInfo.SetFullHp(monster.MonsterHp);
     }
 
     // 나와 동료 직업에 따른 모델링과 애니메이션 가져오기
@@ -161,7 +160,7 @@ public class BossManager : MonoBehaviour
             monsterUis.Add(monster.UiMonsterInfo);
 
             monster.UiMonsterInfo.SetName(monsterInfo.MonsterName);
-            monster.UiMonsterInfo.SetFullHP(monsterInfo.MonsterHp);
+            monster.UiMonsterInfo.SetFullHp(monsterInfo.MonsterHp);
         }
     }
 
@@ -169,7 +168,7 @@ public class BossManager : MonoBehaviour
     {
         if(idx < 0 || idx >= monsterUis.Count)
             return;
-        monsterUis[idx].SetCurHP(hp);
+        monsterUis[idx].SetCurHp(hp);
     }
 
 
@@ -182,18 +181,6 @@ public class BossManager : MonoBehaviour
         }
 
         return null;
-    }
-
-    public void CheckUserTurn(int playerId)
-    {
-        Debug.Log("함수 내부 확인 :"+playerId);
-        int numChildren = buttons.transform.childCount;
-        for(int i = 0; i < numChildren; i++)
-        {
-            Button button = buttons.GetChild(i).GetComponent<Button>();
-            button.interactable = GameManager.Instance.PlayerId == playerId;
-            Debug.Log("버튼 활성화 여부 : "+button.interactable);
-        }
     }
 
     public List<Monster> GetMonster(int[] monsterIndex)
@@ -264,5 +251,33 @@ public class BossManager : MonoBehaviour
             MyInformation.SetCurHp(playerCurHp);
             MyInformation.SetCurMp(playerCurMp);
         }
+    }
+
+    public void BossMaterialChange(int randomElement)
+    {
+        int elementIndex = randomElement - Constants.PlayerCodeFactor;
+        //1001 : 전기 => 0
+        //1002 : 땅 => 1
+        //1003 : 풀 => 2
+        //1004 : 불 => 3
+        //1005 : 물 => 4
+        Debug.Log("randomElement : "+randomElement);
+        Debug.Log("elementIndex : "+elementIndex);
+        BossScript bossScript = monsterSpawnPos[0].GetChild(0).GetComponent<BossScript>();
+        bossScript.SetMaterial(elementIndex);
+    }
+
+    public void BossBarrierEnable()
+    {
+        UIMonsterInformation monsterInfo = monsterSpawnPos[0].GetComponentInChildren<UIMonsterInformation>();
+        Debug.Log("monsterInfo : "+monsterInfo);
+        monsterInfo.EnableBarrierImage();
+    }
+
+    public void BossBarrierBreak(int count)
+    {
+        UIMonsterInformation monsterInfo = monsterSpawnPos[0].GetComponentInChildren<UIMonsterInformation>();
+        Debug.Log("monsterInfo : "+monsterInfo);
+        monsterInfo.BreakBarrierImage(count);
     }
 }

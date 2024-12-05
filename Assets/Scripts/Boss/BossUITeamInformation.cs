@@ -33,7 +33,7 @@ public class BossUITeamInformation : MonoBehaviour
 
     private float fullMp;
     private float curMp;
-    
+
     private float fillWidth = 290;
     private float fillHeight = 40;
 

@@ -7,6 +7,7 @@ public class BossEffectManager : MonoBehaviour
 {
     private static BossEffectManager _instance = null;
     public static BossEffectManager Instance => _instance;
+    //private static Boss
 
     [SerializeField] private GameObject[] effects;
 
@@ -22,12 +23,10 @@ public class BossEffectManager : MonoBehaviour
     }
 
     // 플레이어들이 단체 버프 쓸 경우 처리 함수
+
     public void SetEffectToPlayer(int code)
     {
-        for(int i = 0; i < playerPos.Count();i++)
-        {
-            SetEffect(playerPos[i], code);
-        }
+        SetEffect(code);
     }
 
     // 보스가 특정 대상에게 디버프 걸 경우
@@ -50,16 +49,16 @@ public class BossEffectManager : MonoBehaviour
         Debug.Log("calcId : "+calcId);
         if(calcId < 0 || calcId >= effects.Length)
             return;
-        // 3022(index : 21) 아래 스킬들은 단일기, 3028(index : 27) 아래는 전체기 + 디버프
-        if(calcId < singleSkillIndex || calcId > bufSkillIndex)
-        {
-            var pos = new Vector3(tr.position.x, effects[calcId].transform.position.y, tr.position.z);
-            effects[calcId].transform.position = pos;
-        }
+
+        var pos = new Vector3(tr.position.x, effects[calcId].transform.position.y, tr.position.z);
+        effects[calcId].transform.position = pos;
+
         effects[calcId].gameObject.SetActive(false);
         effects[calcId].gameObject.SetActive(true);
     }
 
+
+    // 유저 버프 같이 광역기 처리하는 함수
     void SetEffect(int code)
     {
         var calcId = code - Constants.EffectCodeFactor;

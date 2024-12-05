@@ -119,7 +119,7 @@ public class BattleManager : MonoBehaviour
             monsterUis.Add(monster.UiMonsterInfo);
 
             monster.UiMonsterInfo.SetName(monsterInfo.MonsterName);
-            monster.UiMonsterInfo.SetFullHP(monsterInfo.MonsterHp);
+            monster.UiMonsterInfo.SetFullHp(monsterInfo.MonsterHp);
         }
     }
 
@@ -127,7 +127,7 @@ public class BattleManager : MonoBehaviour
     {
         if(idx < 0 || idx >= monsterUis.Count)
             return;
-        monsterUis[idx].SetCurHP(hp);
+        monsterUis[idx].SetCurHp(hp);
     }
 
 

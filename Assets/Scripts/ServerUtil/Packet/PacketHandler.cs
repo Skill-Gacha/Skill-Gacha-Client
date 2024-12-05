@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using ServerCore;
+using SRDebugger.UI.Controls.Data;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -194,6 +195,13 @@ class PacketHandler
 		{
 			var pvpUiScreen = PvpBattleManager.Instance.PvpUiScreen;
 			pvpUiScreen.Set(pkt.ScreenText);
+			return;
+		}
+
+		else if(BossManager.Instance != null)
+		{
+			var BossUiScreen= BossManager.Instance.BossUiScreen;
+			BossUiScreen.Set(pkt.ScreenText);
 			return;
 		}
 
@@ -433,7 +441,12 @@ class PacketHandler
 		S_BossMatchNotification Boss = packet as S_BossMatchNotification;
 
 		//TODO: Success가 false일 때 모든 유저가 포탈 위치가 아닌 위치로 이동시키기
-		if(!Boss.Success) return;
+		if(!Boss.Success)
+		{
+            TownManager.Instance.UIBossMatching.StopMatch();
+            TownManager.Instance.UIBossMatchingFail.ShowBossMatchingFailUi();
+			return;
+        }
 
 		Scene scene = SceneManager.GetActiveScene();
 
@@ -452,8 +465,6 @@ class PacketHandler
 	public static void S_BossBattleLogHandler(Session session, IMessage packet)
 	{
 		S_BossBattleLog battleLog = packet as S_BossBattleLog;
-		Debug.Log("battle : "+battleLog);
-		Debug.Log("battleLog : "+battleLog.BattleLog);
 
 		if(battleLog == null)
 			return;
@@ -493,10 +504,12 @@ class PacketHandler
 		BossManager.Instance.SetMonsterHp(bossMonsterHp.MonsterIdx, bossMonsterHp.Hp);
 	}
 
-	// 유저의 행동(버프, 광역기, 단일기 물약 마시기 등등 존재)
 	public static void S_BossPlayerActionNotificationHandler(Session session, IMessage packet)
 	{
 		S_BossPlayerActionNotification playerAction = packet as S_BossPlayerActionNotification;
+		
+		Debug.Log("패킷 확인 : "+playerAction);
+		
 		if(playerAction == null) return;
 
 		int[] monsterIndex = playerAction.TargetMonsterIdx.ToArray();
@@ -516,41 +529,57 @@ class PacketHandler
 		S_BossMonsterAction bossMonsterAction = packet as S_BossMonsterAction;
 		if(bossMonsterAction == null) return;
 
-		// 일반 광역기(서버에서 3번 쏴준다)
-		// 서버에서 1번 쏴준다
-		// 전체 디버프
-		// 단일기 HP, MP 바꾸기
-		// 단일기 일반공격
+		// 해야할 일
+		// 1페이지
+		// 일반 광역기
 
+		// 2페이지
+		// 전체 디버프
+
+		// 3페이지
+		// 단일기 HP, MP 바꾸기
+
+		Debug.Log("bossMonsterAction : "+bossMonsterAction.ActionSet.AnimCode);
 		Monster monster = BossManager.Instance.GetMonster(bossMonsterAction.ActionMonsterIdx);
 		if(monster) monster.SetAnim(bossMonsterAction.ActionSet.AnimCode);
 
 		int[] playerIds = bossMonsterAction.PlayerIds.ToArray();
+		// 보스가 죽을 때는 유저를 공격할 필요가 없다.
 		if(bossMonsterAction.ActionSet.AnimCode != 4) BossManager.Instance.PlayerHit(playerIds);
+
+		// 3페이지
+		// 단일기 HP, MP 바꾸기
 		if(playerIds.Count() == 1) BossEffectManager.Instance.SetEffectToPlayer(playerIds[0], bossMonsterAction.ActionSet.EffectCode);
+		// 1페이지, 2페이지 일반 광역기, 전체 디버프
 		else BossEffectManager.Instance.SetEffectToPlayer(bossMonsterAction.ActionSet.EffectCode);
 	}
-
-	/*
-
-	public static void S_MonsterActionHandler(PacketSession session, IMessage packet)
-	{
-		S_MonsterAction pkt = packet as S_MonsterAction;
-		if (pkt == null)
-			return;
-
-		Monster monster = BattleManager.Instance.GetMonster(pkt.ActionMonsterIdx);
-		if(monster)monster.SetAnim(pkt.ActionSet.AnimCode);
-
-		if(pkt.ActionSet.AnimCode != 4) BattleManager.Instance.PlayerHit();
-		EffectManager.Instance.SetEffectToPlayer(pkt.ActionSet.EffectCode);
-	}
-
-	*/
 
 	public static void S_BossPhaseHandler(Session session, IMessage packet)
 	{
 		S_BossPhase bossPhase = packet as S_BossPhase;
+		//bossPhase
+		if(bossPhase == null) return;
+
+		// 2페이지 시작할 경우 속성 바꾸기
+		if(bossPhase.Phase == 2)
+		{
+			BossManager.Instance.BossMaterialChange(bossPhase.RandomElement);
+		}
+		// 3페이지 시작할 경우 속성 바꾸기 및 보호막
+		else if(bossPhase.Phase == 3)
+		{
+			BossManager.Instance.BossMaterialChange(bossPhase.RandomElement);
+			BossManager.Instance.BossBarrierEnable();
+		}
+	}
+
+	public static void S_BossBarrierCountHandler(Session session, IMessage packet)
+	{
+		S_BossBarrierCount barrierCount = packet as S_BossBarrierCount;
+
+		if(barrierCount == null) return;
+		int remainCount = barrierCount.BarrierCount;
+		BossManager.Instance.BossBarrierBreak(remainCount);
 	}
 
     #endregion

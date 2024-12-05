@@ -31,9 +31,11 @@ public class TownManager : MonoBehaviour
 
     [SerializeField] private UIMatching uIMatching;
     [SerializeField] private UIBossMatching uIBossMatching;
+    [SerializeField] private UIBossMatchingFail uIBossMatchingFail;
 
     public UIMatching UIMatching => uIMatching;
     public UIBossMatching UIBossMatching => uIBossMatching;
+    public UIBossMatchingFail UIBossMatchingFail => uIBossMatchingFail;
 
     public UIStore UIStore => uiStore;
     public UIEnhance UIEnhance => uiEnhance;

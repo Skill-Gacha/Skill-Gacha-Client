@@ -32,13 +32,16 @@ public class Monster : MonoBehaviour
     {
         if(idx < 0 || idx >= animCodeList.Length)
             return;
-        
+        Debug.Log("idx"+idx);
         var animCode = animCodeList[idx];
+        Debug.Log("animCodeList"+animCodeList[idx]);
+        Debug.Log("idx"+idx);
         animator.SetTrigger(animCode);
     }
 
     public void Hit()
     {
+        Debug.Log("Hit 했습니다");
         animator.SetTrigger(Constants.MonsterHit);
     }
 }

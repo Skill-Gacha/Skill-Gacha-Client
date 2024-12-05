@@ -32,7 +32,6 @@ public class BossBattleLog : MonoBehaviour
 
     public void Set(BattleLog battleLog)
     {
-        Debug.Log("배틀로그 : "+battleLog);
         if (battleLog.Btns is { Count: > 0 })
             btnInfos = battleLog.Btns?.ToArray();
         else
@@ -45,7 +44,7 @@ public class BossBattleLog : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
         {
-            if(BossManager.Instance.UiScreen.gameObject.activeSelf)
+            if(BossManager.Instance.BossUiScreen.gameObject.activeSelf)
                 return;
 
             if (done == false)
