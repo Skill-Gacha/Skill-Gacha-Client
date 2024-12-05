@@ -441,7 +441,12 @@ class PacketHandler
 		S_BossMatchNotification Boss = packet as S_BossMatchNotification;
 
 		//TODO: Success가 false일 때 모든 유저가 포탈 위치가 아닌 위치로 이동시키기
-		if(!Boss.Success) return;
+		if(!Boss.Success)
+		{
+            TownManager.Instance.UIBossMatching.StopMatch();
+            TownManager.Instance.UIBossMatchingFail.ShowBossMatchingFailUi();
+			return;
+        }
 
 		Scene scene = SceneManager.GetActiveScene();
 
