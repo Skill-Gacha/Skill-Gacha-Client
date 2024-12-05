@@ -41,6 +41,7 @@ public class Monster : MonoBehaviour
 
     public void Hit()
     {
+        Debug.Log("Hit 했습니다");
         animator.SetTrigger(Constants.MonsterHit);
     }
 }
