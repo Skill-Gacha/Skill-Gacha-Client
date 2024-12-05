@@ -15,6 +15,7 @@ public class UIMonsterInformation : MonoBehaviour
     [SerializeField] private TMP_Text txtHp;
     [SerializeField] private Image imgHpFill;
     [SerializeField] private GameObject[] barrier;
+    [SerializeField] private GameObject[] barrierObject;
 
     private float fullHP;
     private float curHP;
@@ -54,11 +55,13 @@ public class UIMonsterInformation : MonoBehaviour
         for(int i = 0; i < barrier.Count();i++)
         {
             barrier[i].SetActive(true);
+            barrierObject[i].SetActive(true);
         }
     }
 
     public void BreakBarrierImage(int index)
     {
         barrier[index].SetActive(false);
+        barrierObject[index].SetActive(false);
     }
 }

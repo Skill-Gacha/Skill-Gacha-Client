@@ -13,7 +13,6 @@ public class BossScript : MonoBehaviour
     [SerializeField]
     private GameObject dragon;
 
-
     [SerializeField]
     private Image imgElement;
     [SerializeField]
