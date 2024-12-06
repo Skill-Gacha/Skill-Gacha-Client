@@ -102,8 +102,8 @@ public class UIStart : MonoBehaviour
         //     return;
         // }
 
-        //serverUrl = inputNickname.text;
-        //port = inputPort.text;
+        serverUrl = string.IsNullOrWhiteSpace(inputNickname.text) ? "127.0.0.1" : inputNickname.text;
+        port = string.IsNullOrWhiteSpace(inputPort.text) ? "5555" : inputPort.text;
         SetNicknameUI();
     }
     
