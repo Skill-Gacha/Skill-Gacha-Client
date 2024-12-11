@@ -1,13 +1,7 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using ServerCore;
-using SRDebugger.UI.Controls.Data;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-//using System.Runtime.Remoting.Messaging;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -274,7 +268,6 @@ class PacketHandler
 
 		BattleManager.Instance.PlayerAnim(pkt.ActionSet.AnimCode);
 
-		Debug.Log("패키지 EffectCode : "+pkt.ActionSet.EffectCode);
 		if(monsterIndex.Length == 0) EffectManager.Instance.SetEffectToPlayer(pkt.ActionSet.EffectCode);
 		else EffectManager.Instance.SetEffectToMonster(monsterIndex, pkt.ActionSet.EffectCode);
 	}
@@ -347,12 +340,14 @@ class PacketHandler
 	public static void S_PvpPlayerActionHandler(PacketSession session, IMessage packet)
 	{
 		// 내 행동은 true를 HandlePvpAction에 전달
+		Debug.Log("나 : "+packet);
 		HandlePvpAction(packet, true);
 	}
 
 	public static void S_PvpEnemyActionHandler(PacketSession session, IMessage packet)
 	{
 		// 상대방 행동은 false를 HandlePvpAction에 전달
+		Debug.Log("너 : "+packet);
 		HandlePvpAction(packet, false);
 	}
 
@@ -377,18 +372,18 @@ class PacketHandler
 	private static void ProcessPvpAction(ActionSet actionSet, bool isMyAction)
 	{
 		var animCode = actionSet.AnimCode;
-		int? effectCode = actionSet.EffectCode;
+		int effectCode = actionSet.EffectCode;
 
 		// 때리는 사람 처리(나 : true, 상대방 : false)
 		PvpBattleManager.Instance.PlayerAnim(animCode, isMyAction);
 
-		if(effectCode is not null && effectCode <= 3028)
+		if(effectCode != 0 && effectCode <= 3028)
 		{
 			// 맞는 이펙트 처리(상대방 : true, 나 : false)
 			PvpEffectManager.Instance.SetEffectToPlayer(effectCode, isMyAction);
 			PvpBattleManager.Instance.PlayerHit(!isMyAction);
 		}
-		else if(effectCode is not null && effectCode > 3028)
+		else if(effectCode != 0 && effectCode > 3028)
 		{
 			PvpEffectManager.Instance.SetEffectToPlayer(effectCode, !isMyAction);
 		}
@@ -465,7 +460,6 @@ class PacketHandler
 	public static void S_BossBattleLogHandler(Session session, IMessage packet)
 	{
 		S_BossBattleLog battleLog = packet as S_BossBattleLog;
-
 		if(battleLog == null)
 			return;
 
@@ -507,9 +501,7 @@ class PacketHandler
 	public static void S_BossPlayerActionNotificationHandler(Session session, IMessage packet)
 	{
 		S_BossPlayerActionNotification playerAction = packet as S_BossPlayerActionNotification;
-		
-		Debug.Log("패킷 확인 : "+playerAction);
-		
+
 		if(playerAction == null) return;
 
 		int[] monsterIndex = playerAction.TargetMonsterIdx.ToArray();
@@ -538,8 +530,6 @@ class PacketHandler
 
 		// 3페이지
 		// 단일기 HP, MP 바꾸기
-
-		Debug.Log("bossMonsterAction : "+bossMonsterAction.ActionSet.AnimCode);
 		Monster monster = BossManager.Instance.GetMonster(bossMonsterAction.ActionMonsterIdx);
 		if(monster) monster.SetAnim(bossMonsterAction.ActionSet.AnimCode);
 

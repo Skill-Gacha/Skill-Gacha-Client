@@ -27,17 +27,17 @@ public class PvpEffectManager : MonoBehaviour
     }
 
 
-    public void SetEffectToPlayer(int? code, bool isMyPlayer)
+    public void SetEffectToPlayer(int code, bool isMyPlayer)
     {
         // code가 3028이하일 경우 상대방 공격 및 디버프 코드이고, 초과일 경우 본인 버프
         Transform trans = isMyPlayer ?  oppoentTrans : playerTrans;
         SetEffect(trans, code);
     }
 
-    void SetEffect(Transform tr, int? code)
+    void SetEffect(Transform tr, int code)
     {
         // 뒤의 ?? 두개는 앞의 값이 null일 경우 기본적으로 이 값으로 처리하겠다는 의미 입니다.
-        int calcId = code - Constants.EffectCodeFactor ?? Constants.EffectCodeFactor;
+        int calcId = code - Constants.EffectCodeFactor;
         // 효과 코드와 효과 코드 개수를 나타내는 상수와 빼
         // 배열의 효과 index를 가져온다.
         if(calcId < 0 || calcId >= effects.Length)
