@@ -13,9 +13,9 @@ public class UIStart : MonoBehaviour
     [SerializeField] private Button[] charBtns;
     
     [SerializeField] private Button btnConfirm;
-    [SerializeField] private Button btnBack;
+    //[SerializeField] private Button btnBack;
     [SerializeField] private TMP_InputField inputNickname;
-    [SerializeField] private TMP_InputField inputPort;
+    //[SerializeField] private TMP_InputField inputPort;
     [SerializeField] private TMP_Text txtMessage;
     private TMP_Text placeHolder;
 
@@ -24,14 +24,14 @@ public class UIStart : MonoBehaviour
     private string serverUrl = "127.0.0.1";
     private string nickname;
     private string port = "5555";
-    
+
     void Start()
     {
         placeHolder = inputNickname.placeholder.GetComponent<TMP_Text>();
-        btnBack.onClick.AddListener(SetServerUI);
-        
-        SetServerUI();
-        
+        //btnBack.onClick.AddListener(SetNicknameUI);
+
+        SetNicknameUI();
+
         for (int i = 0; i < charBtns.Length; i++)
         {
             int idx = i;
@@ -60,21 +60,21 @@ public class UIStart : MonoBehaviour
         charBtns[classIdx].transform.GetChild(0).gameObject.SetActive(true);
     }
 
-    void SetServerUI()
-    {
-        txtMessage.color = Color.white;
-        txtMessage.text = "Welcome!";
+    // void SetServerUI()
+    // {
+    //     txtMessage.color = Color.white;
+    //     txtMessage.text = "Welcome!";
 
-        inputNickname.text = string.Empty;
-        placeHolder.text = "서버주소를 입력해주세요!";
+    //     inputNickname.text = string.Empty;
+    //     placeHolder.text = "서버주소를 입력해주세요!";
         
-        charList.gameObject.SetActive(false);
-        btnBack.gameObject.SetActive(false);
-        inputPort.gameObject.SetActive(true);
+    //     charList.gameObject.SetActive(false);
+    //     btnBack.gameObject.SetActive(false);
+    //     inputPort.gameObject.SetActive(true);
         
-        btnConfirm.onClick.RemoveAllListeners();
-        btnConfirm.onClick.AddListener(ConfirmServer);
-    }
+    //     btnConfirm.onClick.RemoveAllListeners();
+    //     btnConfirm.onClick.AddListener(ConfirmServer);
+    // }
 
     void SetNicknameUI()
     {
@@ -85,8 +85,8 @@ public class UIStart : MonoBehaviour
         placeHolder.text = "닉네임을 입력해주세요 (2~10글자)";
         
         charList.gameObject.SetActive(true);
-        btnBack.gameObject.SetActive(true);
-        inputPort.gameObject.SetActive(false);
+        //btnBack.gameObject.SetActive(true);
+        //inputPort.gameObject.SetActive(false);
         
         btnConfirm.onClick.RemoveAllListeners();
         btnConfirm.onClick.AddListener(ConfirmNickname);
@@ -102,8 +102,8 @@ public class UIStart : MonoBehaviour
         //     return;
         // }
 
-        serverUrl = string.IsNullOrWhiteSpace(inputNickname.text) ? "127.0.0.1" : inputNickname.text;
-        port = string.IsNullOrWhiteSpace(inputPort.text) ? "5555" : inputPort.text;
+        //serverUrl = string.IsNullOrWhiteSpace(inputNickname.text) ? "127.0.0.1" : inputNickname.text;
+        //port = string.IsNullOrWhiteSpace(inputPort.text) ? "5555" : inputPort.text;
         SetNicknameUI();
     }
     
