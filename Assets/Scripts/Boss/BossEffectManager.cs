@@ -1,73 +1,92 @@
+// ----- G:\Camp\MainCamp\Final\Skill-Gacha-Client\Assets\Scripts\Boss\BossEffectManager.cs 리팩터링 -----
+
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class BossEffectManager : MonoBehaviour
 {
     private static BossEffectManager _instance = null;
     public static BossEffectManager Instance => _instance;
-    //private static Boss
 
     [SerializeField] private GameObject[] effects;
-
     [SerializeField] private Transform[] playerPos;
 
-    private int singleSkillIndex = 21;
+    private const int SingleSkillIndex = 21;
+    private const int BufSkillIndex = 27;
 
-    private int bufSkillIndex = 27;
-
-    void Awake()
+    private void Awake()
     {
         _instance = this;
     }
 
-    // 플레이어들이 단체 버프 쓸 경우 처리 함수
+    // 플레이어들에게 단일 또는 버프 효과를 적용
+    public void SetEffectToPlayer(int code, int playerId = -1, bool isSingleSkill = true)
+    {
+        if (isSingleSkill)
+        {
+            SetSingleEffect(code);
+        }
+        else
+        {
+            SetBuffEffect(code, playerId);
+        }
+    }
 
-    public void SetEffectToPlayer(int code)
+    // 단일 스킬 효과 적용
+    private void SetSingleEffect(int code)
     {
         SetEffect(code);
     }
 
-    // 보스가 특정 대상에게 디버프 걸 경우
-    public void SetEffectToPlayer(int playerId,int code)
+    // 버프 스킬 효과 적용
+    private void SetBuffEffect(int code, int playerId)
     {
         int index = BossManager.Instance.GetPlayerIndexById(playerId);
+        if (index == -1) return;
+
         SetEffect(playerPos[index], code);
     }
 
+    // 몬스터에게 효과 적용
     public void SetEffectToMonster(int[] monsterIdx, int code)
     {
-        var monster = BossManager.Instance.GetMonster(monsterIdx);
-        SetEffect(monster[0].transform, code);
+        var monsters = BossManager.Instance.GetMonster(monsterIdx);
+        foreach (var monster in monsters)
+        {
+            if (monster != null)
+                SetEffect(monster.transform, code);
+        }
     }
 
-    void SetEffect(Transform tr, int code)
+    private void SetEffect(Transform tr, int code)
     {
-        var calcId = code - Constants.EffectCodeFactor;
-        Debug.Log("code : "+code);
-        Debug.Log("calcId : "+calcId);
-        if(calcId < 0 || calcId >= effects.Length)
+        int calcId = code - Constants.EffectCodeFactor;
+        if (!IsValidEffectId(calcId))
             return;
 
-        var pos = new Vector3(tr.position.x, effects[calcId].transform.position.y, tr.position.z);
-        effects[calcId].transform.position = pos;
-
-        effects[calcId].gameObject.SetActive(false);
-        effects[calcId].gameObject.SetActive(true);
+        Vector3 pos = new Vector3(tr.position.x, effects[calcId].transform.position.y, tr.position.z);
+        PlayEffect(effects[calcId], pos);
     }
 
-
-    // 유저 버프 같이 광역기 처리하는 함수
-    void SetEffect(int code)
+    private void SetEffect(int code)
     {
-        var calcId = code - Constants.EffectCodeFactor;
-        Debug.Log("code : "+code);
-        Debug.Log("calcId : "+calcId);
-        if(calcId < 0 || calcId >= effects.Length)
+        int calcId = code - Constants.EffectCodeFactor;
+        if (!IsValidEffectId(calcId))
             return;
 
-        effects[calcId].gameObject.SetActive(false);
-        effects[calcId].gameObject.SetActive(true);
+        PlayEffect(effects[calcId], effects[calcId].transform.position);
+    }
+
+    private bool IsValidEffectId(int calcId)
+    {
+        return calcId >= 0 && calcId < effects.Length;
+    }
+
+    private void PlayEffect(GameObject effect, Vector3 position)
+    {
+        effect.transform.position = position;
+        effect.SetActive(false);
+        effect.SetActive(true);
     }
 }

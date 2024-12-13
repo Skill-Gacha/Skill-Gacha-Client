@@ -539,7 +539,7 @@ class PacketHandler
 
 		// 3페이지
 		// 단일기 HP, MP 바꾸기
-		if(playerIds.Count() == 1 && effectCode == 3032) BossEffectManager.Instance.SetEffectToPlayer(playerIds[0], effectCode);
+		if(playerIds.Count() == 1 && effectCode == 3032) BossEffectManager.Instance.SetEffectToPlayer(effectCode, playerIds[0]);
 		// 1페이지, 2페이지 일반 광역기, 전체 디버프
 		else BossEffectManager.Instance.SetEffectToPlayer(effectCode);
 	}
