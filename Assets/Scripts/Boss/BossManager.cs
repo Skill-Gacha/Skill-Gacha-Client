@@ -192,6 +192,7 @@ public class BossManager : MonoBehaviour
     {
         for(int i = 0; i < playerId.Count(); i++)
         {
+            if(playerId[i] == 0) continue;
             TriggerAnim(playerId[i],Constants.PlayerBattleHit);
         }
     }
