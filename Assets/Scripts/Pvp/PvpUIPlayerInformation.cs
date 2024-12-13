@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Google.Protobuf.Protocol;
 using TMPro;
 using UnityEngine;
@@ -10,41 +7,29 @@ public class PvpUIPlayerInformation : MonoBehaviour
 {
     [SerializeField] private TMP_Text txtElement;
     [SerializeField] private TMP_Text txtName;
-
     [SerializeField] private TMP_Text txtHp;
     [SerializeField] private Image imgHpFill;
     [SerializeField] private Image imgHpBack;
-
     [SerializeField] private TMP_Text txtMp;
-
     [SerializeField] private Image imgElement;
-
     [SerializeField] private Image imgMpFill;
     [SerializeField] private Image imgMpBack;
-
     [SerializeField] private Sprite[] elementSprite;
 
-    private string[] elementList = {"전기 속성", "땅 속성", "풀 속성", "불 속성", "물 속성"};
+    private readonly string[] elementList = { "전기 속성", "땅 속성", "풀 속성", "불 속성", "물 속성" };
 
     private float fullHP;
     private float curHP;
-
     private float fullMP;
     private float curMP;
 
-    private float fillWidth = 634;
-    private float fillHeight = 40;
-
-
-    public void SetElement(int element)
-    {
-        int elementIndex = element - 1001;
-        imgElement.sprite = elementSprite[elementIndex];
-        txtElement.text = $"{elementList[elementIndex]}";
-    }
+    private readonly float fillWidth = 634f;
+    private readonly float fillHeight = 40f;
 
     public void Set(PlayerStatus playerStatus)
     {
+        if (playerStatus == null) return;
+
         SetName(playerStatus.PlayerName);
         SetElement(playerStatus.PlayerClass);
         SetFullHP(playerStatus.PlayerFullHp);
@@ -53,9 +38,19 @@ public class PvpUIPlayerInformation : MonoBehaviour
         SetCurMP(playerStatus.PlayerCurMp);
     }
 
-    public void SetName(string nickname)
+    private void SetName(string nickname)
     {
         txtName.text = nickname;
+    }
+
+    public void SetElement(int element)
+    {
+        int elementIndex = element - 1001;
+        if (elementIndex >= 0 && elementIndex < elementSprite.Length && elementIndex < elementList.Length)
+        {
+            imgElement.sprite = elementSprite[elementIndex];
+            txtElement.text = elementList[elementIndex];
+        }
     }
 
     public void SetFullHP(float hp, bool recover = true)
@@ -66,17 +61,25 @@ public class PvpUIPlayerInformation : MonoBehaviour
         if (recover)
             SetCurHP(hp);
 
-        txtHp.rectTransform.sizeDelta = new Vector2(txtHp.preferredWidth + 50, 40);
+        UpdateHpTextSize();
     }
 
     public void SetCurHP(float hp)
     {
         curHP = Mathf.Min(hp, fullHP);
         txtHp.text = hp.ToString("0");
+        UpdateHpFill();
+        UpdateHpTextSize();
+    }
 
-        float per = curHP/fullHP;
+    private void UpdateHpFill()
+    {
+        float per = curHP / fullHP;
         imgHpFill.rectTransform.sizeDelta = new Vector2(fillWidth * per, fillHeight);
+    }
 
+    private void UpdateHpTextSize()
+    {
         txtHp.rectTransform.sizeDelta = new Vector2(txtHp.preferredWidth + 50, 40);
     }
 
@@ -88,17 +91,25 @@ public class PvpUIPlayerInformation : MonoBehaviour
         if (recover)
             SetCurMP(mp);
 
-        txtMp.rectTransform.sizeDelta = new Vector2(txtMp.preferredWidth + 50, 40);
+        UpdateMpTextSize();
     }
 
     public void SetCurMP(float mp)
     {
-        curMP = Mathf.Min(mp, fullHP);
+        curMP = Mathf.Min(mp, fullMP);
         txtMp.text = mp.ToString("0");
+        UpdateMpFill();
+        UpdateMpTextSize();
+    }
 
-        float per = curMP/fullMP;
+    private void UpdateMpFill()
+    {
+        float per = curMP / fullMP;
         imgMpFill.rectTransform.sizeDelta = new Vector2(fillWidth * per, fillHeight);
+    }
 
+    private void UpdateMpTextSize()
+    {
         txtMp.rectTransform.sizeDelta = new Vector2(txtMp.preferredWidth + 50, 40);
     }
 }
