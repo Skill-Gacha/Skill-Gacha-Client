@@ -21,22 +21,16 @@ public class BossEffectManager : MonoBehaviour
     }
 
     // 플레이어들에게 단일 또는 버프 효과를 적용
-    public void SetEffectToPlayer(int code, int playerId = -1, bool isSingleSkill = true)
+    public void SetEffectToPlayer(int code, int playerId = -1, bool isWideAreaSkill = true)
     {
-        if (isSingleSkill)
+        if (isWideAreaSkill)
         {
-            SetSingleEffect(code);
+            SetEffect(code);
         }
         else
         {
             SetBuffEffect(code, playerId);
         }
-    }
-
-    // 단일 스킬 효과 적용
-    private void SetSingleEffect(int code)
-    {
-        SetEffect(code);
     }
 
     // 버프 스킬 효과 적용
