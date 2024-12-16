@@ -9,8 +9,6 @@ public class Monster : MonoBehaviour
     
     private Animator animator;
 
-    
-
     private int[] animCodeList = new[]
     {
         Constants.MonsterAttack1,
