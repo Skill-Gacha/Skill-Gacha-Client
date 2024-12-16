@@ -221,6 +221,7 @@ class PacketHandler
 		S_BattleLog pkt = packet as S_BattleLog;
 		if (pkt == null)
 			return;
+		if(pkt.BattleLog == null) return;
 
 		if (pkt.BattleLog != null)
 		{
@@ -520,7 +521,7 @@ class PacketHandler
 	{
 		S_BossMonsterAction bossMonsterAction = packet as S_BossMonsterAction;
 		if(bossMonsterAction == null) return;
-
+		int effectCode = bossMonsterAction.ActionSet.EffectCode;
 		// 해야할 일
 		// 1페이지
 		// 일반 광역기
@@ -530,6 +531,7 @@ class PacketHandler
 
 		// 3페이지
 		// 단일기 HP, MP 바꾸기
+		Debug.Log("보스 공격 확인 : "+bossMonsterAction);
 		Monster monster = BossManager.Instance.GetMonster(bossMonsterAction.ActionMonsterIdx);
 		if(monster) monster.SetAnim(bossMonsterAction.ActionSet.AnimCode);
 
@@ -539,9 +541,9 @@ class PacketHandler
 
 		// 3페이지
 		// 단일기 HP, MP 바꾸기
-		if(playerIds.Count() == 1) BossEffectManager.Instance.SetEffectToPlayer(playerIds[0], bossMonsterAction.ActionSet.EffectCode);
+		if(playerIds.Count() == 1 && effectCode == 3032) BossEffectManager.Instance.SetEffectToPlayer(effectCode, playerIds[0],false);
 		// 1페이지, 2페이지 일반 광역기, 전체 디버프
-		else BossEffectManager.Instance.SetEffectToPlayer(bossMonsterAction.ActionSet.EffectCode);
+		else BossEffectManager.Instance.SetEffectToPlayer(effectCode);
 	}
 
 	public static void S_BossPhaseHandler(Session session, IMessage packet)

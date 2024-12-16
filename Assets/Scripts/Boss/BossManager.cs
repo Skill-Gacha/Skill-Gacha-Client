@@ -1,10 +1,10 @@
+// ----- G:\Camp\MainCamp\Final\Skill-Gacha-Client\Assets\Scripts\Boss\BossManager.cs 리팩터링 및 오류 수정 -----
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Google.Protobuf.Collections;
 using Google.Protobuf.Protocol;
-using SRF;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,41 +13,24 @@ public class BossManager : MonoBehaviour
     private static BossManager _instance = null;
     public static BossManager Instance => _instance;
 
-    // pve 기준 검은 화면 출력 및 글자
     [SerializeField] private BossUIScreen bossUiScreen;
-
-    // 배틀 로그 및 버튼(활성화/비활성화 포함) 정보 스크립트
     [SerializeField] private BossBattleLog uiBattleLog;
-
-    // 내 UI 정보(속성, 이름, HP, MP) 스크립트
     [SerializeField] private BossUIPlayerInformation myInformation;
+    [SerializeField] private Transform[] playerTrans;
+    [SerializeField] private BossUITeamInformation[] teamInformation;
+    [SerializeField] private Transform[] monsterSpawnPos;
 
     public BossUIScreen BossUiScreen => bossUiScreen;
     public BossBattleLog UiBattleLog => uiBattleLog;
     public BossUIPlayerInformation MyInformation => myInformation;
 
-    // 게임에 참여한 playerId 모음
     private int[] playersIds;
-
-    // 게임에 참여한 유저 위치 모음
-    [SerializeField] private Transform[] playerTrans;
-
-    // 게임에 참여한 유저 애니메이터 모음
     private Animator[] playersAnimator = new Animator[3];
-
-    // 게임에 참여한 팀원 HP, MP 창 모음
-    [SerializeField] private BossUITeamInformation[] teamInformation;
-
     private Dictionary<int, string> monsterDb = new Dictionary<int, string>();
-
-    [SerializeField] private Transform[] monsterSpawnPos;
-    [SerializeField] private List<Monster> monsterObjs = new List<Monster>();
-
+    private List<Monster> monsterObjs = new List<Monster>();
     private List<UIMonsterInformation> monsterUis = new List<UIMonsterInformation>();
-
     private string baseMonsterPath = "Monster/Monster1";
 
-    // 해당 유저의 버튼 위치
     [SerializeField] private Transform buttons;
 
     private int[] animCodeList = new[]
@@ -60,164 +43,180 @@ public class BossManager : MonoBehaviour
     private void Awake()
     {
         _instance = this;
+        InitializeMonsterDatabase();
+        InitializeBoss();
+    }
 
+    private void InitializeMonsterDatabase()
+    {
         for (int i = 1; i <= 30; i++)
         {
-            var monsterCode = Constants.MonsterCodeFactor + i;
-            var monsterPath = $"Monster/Monster{i}";
+            int monsterCode = Constants.MonsterCodeFactor + i;
+            string monsterPath = $"Monster/Monster{i}";
             monsterDb.Add(monsterCode, monsterPath);
         }
-
-        Set(GameManager.Instance.Boss);
-        GameManager.Instance.Boss = null;
     }
 
-    public void Set(S_BossMatchNotification Boss)
+    private void InitializeBoss()
     {
-        SetMonster(Boss.MonsterStatus);
-
-        // Raid에 참여한 playerId 가져오기
-        playersIds= Boss.PlayerIds.ToArray();
-        // 파티에 참여한 모든 유저의 능력치 정보
-        PlayerStatus[] playerStatus = Boss.PartyList.ToArray();
-        for(int i = 0; i < playerStatus.Length; i++)
+        if (GameManager.Instance.Boss != null)
         {
-            // 직업 Index 가져오기
-            int classIdx = playerStatus[i].PlayerClass - Constants.PlayerCodeFactor;
-            SetPlayer(classIdx, i);
-
-            // 하단 체력, 마나, 본인 속성 띄워주는 창
-            if(playersIds[i] == GameManager.Instance.PlayerId)
-                MyInformation.Set(playerStatus[i]);
-
-            // 팀 정보창에 정보 추가하기
-            teamInformation[i].Set(playerStatus[i]);
-        }
-
-        if(Boss.BattleLog != null)
-            // 본인의 배틀로그 적용
-            uiBattleLog.Set(Boss.BattleLog);
-    }
-
-    public void SetMonster(MonsterStatus monster)
-    {
-        ResetMonster();
-
-        var monsterCode = monster.MonsterModel;
-        var monsterPath =  monsterDb.GetValueOrDefault(monsterCode, baseMonsterPath);
-        var monsterRes = Resources.Load<Monster>(monsterPath);
-
-        var dragon = Instantiate(monsterRes, monsterSpawnPos[0]);
-
-        monsterObjs.Add(dragon);
-        monsterUis.Add(dragon.UiMonsterInfo);
-
-        dragon.UiMonsterInfo.SetName(monster.MonsterName);
-        dragon.UiMonsterInfo.SetFullHp(monster.MonsterHp);
-    }
-
-    // 나와 동료 직업에 따른 모델링과 애니메이션 가져오기
-    private void SetPlayer(int classIdx, int index)
-    {
-        for(int i = 0; i < playerTrans[index].childCount; i++)
-        {
-            // 직업 index와 직업 모델링 index가 일치한다면
-            bool select = classIdx == i;
-            // 해당 직업 모델링 활성화 시키기
-            GameObject character = playerTrans[index].GetChild(i).gameObject;
-            character.SetActive(select);
-
-            if(select)
-                // 해당 유저 player의 애니메이터 가져오기
-                playersAnimator[index] = character.GetComponent<Animator>();
+            Set(GameManager.Instance.Boss);
+            GameManager.Instance.Boss = null;
         }
     }
 
-    void ResetMonster()
+    public void Set(S_BossMatchNotification bossNotification)
     {
-        for (var i = monsterObjs.Count - 1; i >= 0; i--)
+        if (bossNotification == null) return;
+
+        // 단일 MonsterStatus인 경우
+        if (bossNotification.MonsterStatus != null)
         {
-            if(monsterObjs[i] != null)
-                Destroy(monsterObjs[i].gameObject);
+            SetMonsters(bossNotification.MonsterStatus);
         }
 
+        // 플레이어 ID는 RepeatedField<int>이므로 ToArray()를 사용하여 int[]로 변환
+        SetPlayers(bossNotification.PlayerIds.ToArray(), bossNotification.PartyList);
+        SetBattleLog(bossNotification.BattleLog);
+    }
+
+    // 단일 MonsterStatus를 처리하는 SetMonsters 메서드
+    private void SetMonsters(MonsterStatus singleMonster)
+    {
+        if (singleMonster == null) return;
+
+        ResetMonsters();
+        SpawnMonster(singleMonster);
+    }
+
+    private void SpawnMonster(MonsterStatus monsterStatus)
+    {
+        string monsterPath = monsterDb.GetValueOrDefault(monsterStatus.MonsterModel, baseMonsterPath);
+        Monster monsterPrefab = Resources.Load<Monster>(monsterPath);
+        if (monsterPrefab == null)
+        {
+            Debug.LogWarning($"Monster prefab not found at path: {monsterPath}");
+            return;
+        }
+
+        // 몬스터를 스폰할 위치 인덱스 계산
+        int spawnIndex = monsterObjs.Count < monsterSpawnPos.Length ? monsterObjs.Count : 0;
+        Transform spawnTransform = monsterSpawnPos[spawnIndex];
+        Monster monsterInstance = Instantiate(monsterPrefab, spawnTransform);
+
+        monsterObjs.Add(monsterInstance);
+        monsterUis.Add(monsterInstance.UiMonsterInfo);
+
+        monsterInstance.UiMonsterInfo.SetName(monsterStatus.MonsterName);
+        monsterInstance.UiMonsterInfo.SetFullHp(monsterStatus.MonsterHp);
+    }
+
+    private void ResetMonsters()
+    {
+        foreach (var monster in monsterObjs)
+        {
+            if (monster != null)
+                Destroy(monster.gameObject);
+        }
         monsterObjs.Clear();
         monsterUis.Clear();
     }
 
-    public void SetMonster(RepeatedField<MonsterStatus> monsters)
+    private void SetPlayers(int[] playerIds, RepeatedField<PlayerStatus> partyList)
     {
-        ResetMonster();
-        for (var i = 0; i < monsters.Count; i++)
+        playersIds = playerIds;
+        PlayerStatus[] playerStatuses = partyList.ToArray();
+
+        for (int i = 0; i < playerStatuses.Length; i++)
         {
-            var monsterInfo = monsters[i];
-            var monsterCode = monsterInfo.MonsterModel;
-            var monsterPath = monsterDb.GetValueOrDefault(monsterCode, baseMonsterPath);
-            var monsterRes = Resources.Load<Monster>(monsterPath);
-            var monster = Instantiate(monsterRes, monsterSpawnPos[i]);
-
-            monsterObjs.Add(monster);
-            monsterUis.Add(monster.UiMonsterInfo);
-
-            monster.UiMonsterInfo.SetName(monsterInfo.MonsterName);
-            monster.UiMonsterInfo.SetFullHp(monsterInfo.MonsterHp);
+            int classIdx = playerStatuses[i].PlayerClass - Constants.PlayerCodeFactor;
+            SetPlayerModel(classIdx, i);
+            SetPlayerInformation(playerStatuses[i], i);
         }
+    }
+
+    private void SetPlayerModel(int classIdx, int index)
+    {
+        for (int i = 0; i < playerTrans[index].childCount; i++)
+        {
+            bool isSelected = classIdx == i;
+            GameObject character = playerTrans[index].GetChild(i).gameObject;
+            character.SetActive(isSelected);
+
+            if (isSelected)
+                playersAnimator[index] = character.GetComponent<Animator>();
+        }
+    }
+
+    private void SetPlayerInformation(PlayerStatus playerStatus, int index)
+    {
+        if (playersIds[index] == GameManager.Instance.PlayerId)
+            MyInformation.Set(playerStatus);
+
+        teamInformation[index].Set(playerStatus);
+    }
+
+    private void SetBattleLog(BattleLog battleLog)
+    {
+        if (battleLog != null)
+            uiBattleLog.Set(battleLog);
     }
 
     public void SetMonsterHp(int idx, float hp)
     {
-        if(idx < 0 || idx >= monsterUis.Count)
-            return;
-        monsterUis[idx].SetCurHp(hp);
+        if (IsValidMonsterIndex(idx))
+            monsterUis[idx].SetCurHp(hp);
     }
 
+    private bool IsValidMonsterIndex(int idx)
+    {
+        return idx >= 0 && idx < monsterUis.Count;
+    }
 
     public Monster GetMonster(int idx)
     {
-        if (idx >= 0 || idx < monsterObjs.Count)
-        {
-            if(monsterObjs[idx] != null)
-                return monsterObjs[idx];
-        }
-
+        if (idx >= 0 && idx < monsterObjs.Count)
+            return monsterObjs[idx];
         return null;
     }
 
-    public List<Monster> GetMonster(int[] monsterIndex)
+    public List<Monster> GetMonster(int[] monsterIndices)
     {
-        return monsterIndex.Where(index => index >= 0 && index < monsterObjs.Count).Select(index => monsterObjs[index]).ToList();
+        return monsterIndices.Where(index => index >= 0 && index < monsterObjs.Count)
+                             .Select(index => monsterObjs[index])
+                             .ToList();
     }
 
-    public void PlayerHit(int[] playerId)
+    public void PlayerHit(int[] playerIds)
     {
-        for(int i = 0; i < playerId.Count(); i++)
+        foreach (var playerId in playerIds)
         {
-            TriggerAnim(playerId[i],Constants.PlayerBattleHit);
+            TriggerAnimation(playerId, Constants.PlayerBattleHit);
         }
     }
 
-    private void TriggerAnim(int playerId,int code)
+    private void TriggerAnimation(int playerId, int code)
     {
-        for(int i = 0; i < playersIds.Count();i++)
-        {
-            if(playersIds[i] == playerId)
-            {
-                playersAnimator[i].transform.localEulerAngles = Vector3.zero;
-                playersAnimator[i].transform.localPosition = Vector3.zero;
-                playersAnimator[i].applyRootMotion = code == Constants.PlayerBattleDie;
-                playersAnimator[i].SetTrigger(code);
-            }
-        }
+        int playerIndex = GetPlayerIndexById(playerId);
+        if (playerIndex == -1) return;
+
+        Animator animator = playersAnimator[playerIndex];
+        if (animator == null) return;
+
+        animator.transform.localEulerAngles = Vector3.zero;
+        animator.transform.localPosition = Vector3.zero;
+        animator.applyRootMotion = code == Constants.PlayerBattleDie;
+        animator.SetTrigger(code);
     }
 
-    // playerId에 해당하는 index를 반환하는 함수
     public int GetPlayerIndexById(int playerId)
     {
-        for(int i = 0; i < playersIds.Count();i++)
+        for (int i = 0; i < playersIds.Length; i++)
         {
-            if(playersIds[i] == playerId) return i;
+            if (playersIds[i] == playerId)
+                return i;
         }
-        // 해당 id가 없을 경우
         return -1;
     }
 
@@ -226,26 +225,31 @@ public class BossManager : MonoBehaviour
         return playersIds;
     }
 
-    public void PlayerAnim(int playerId,int idx)
+    public void PlayerAnim(int playerId, int idx)
     {
-        if(idx < 0 || idx >= animCodeList.Length)
+        if (!IsValidAnimIndex(idx))
             return;
 
-        var animCode = animCodeList[idx];
-        TriggerAnim(playerId,animCode);
+        int animCode = animCodeList[idx];
+        TriggerAnimation(playerId, animCode);
     }
 
-    public void SetPartyStatus(int playerId, int Hp, int Mp)
+    private bool IsValidAnimIndex(int idx)
+    {
+        return idx >= 0 && idx < animCodeList.Length;
+    }
+
+    public void SetPartyStatus(int playerId, int hp, int mp)
     {
         int playerIdx = GetPlayerIndexById(playerId);
+        if (playerIdx == -1) return;
 
-        float playerCurHp = Hp;
-        float playerCurMp = Mp;
+        float playerCurHp = hp;
+        float playerCurMp = mp;
 
         teamInformation[playerIdx].SetCurHp(playerCurHp);
         teamInformation[playerIdx].SetCurMp(playerCurMp);
 
-        // 본인 Status 창 업데이트
         if (playerId == GameManager.Instance.PlayerId)
         {
             MyInformation.SetCurHp(playerCurHp);
@@ -256,28 +260,22 @@ public class BossManager : MonoBehaviour
     public void BossMaterialChange(int randomElement)
     {
         int elementIndex = randomElement - Constants.PlayerCodeFactor;
-        //1001 : 전기 => 0
-        //1002 : 땅 => 1
-        //1003 : 풀 => 2
-        //1004 : 불 => 3
-        //1005 : 물 => 4
-        Debug.Log("randomElement : "+randomElement);
-        Debug.Log("elementIndex : "+elementIndex);
         BossScript bossScript = monsterSpawnPos[0].GetChild(0).GetComponent<BossScript>();
-        bossScript.SetMaterial(elementIndex);
+        if (bossScript != null)
+            bossScript.SetMaterial(elementIndex);
     }
 
     public void BossBarrierEnable()
     {
         UIMonsterInformation monsterInfo = monsterSpawnPos[0].GetComponentInChildren<UIMonsterInformation>();
-        Debug.Log("monsterInfo : "+monsterInfo);
-        monsterInfo.EnableBarrierImage();
+        if (monsterInfo != null)
+            monsterInfo.EnableBarrierImage();
     }
 
     public void BossBarrierBreak(int count)
     {
         UIMonsterInformation monsterInfo = monsterSpawnPos[0].GetComponentInChildren<UIMonsterInformation>();
-        Debug.Log("monsterInfo : "+monsterInfo);
-        monsterInfo.BreakBarrierImage(count);
+        if (monsterInfo != null)
+            monsterInfo.BreakBarrierImage(count);
     }
 }

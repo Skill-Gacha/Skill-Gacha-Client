@@ -16,7 +16,6 @@ public class UIMonsterInformation : MonoBehaviour
     [SerializeField] private Image imgHpFill;
     [SerializeField] private GameObject[] barrier;
     [SerializeField] private GameObject[] barrierObject;
-
     private float fullHP;
     private float curHP;
 
