@@ -124,9 +124,9 @@ public class UIStart : MonoBehaviour
             return;
         }
 
-        if (!Regex.IsMatch(inputNickname.text, @"^[a-zA-Z0-9]+$"))
+        if (!Regex.IsMatch(inputNickname.text, @"^[a-z0-9]+$"))
         {
-            txtMessage.text = "이름은 알파벳과 숫자만 입력 가능합니다!";
+            txtMessage.text = "이름은 소문자 알파벳과 숫자만 입력 가능합니다!";
             return;
         }
 
