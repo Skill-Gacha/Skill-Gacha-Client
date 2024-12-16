@@ -70,8 +70,8 @@ public class UIEnhance : MonoBehaviour
             btns[i].gameObject.SetActive(false);
         }
         skillCodeList.Clear();
-        txtCostGold.text = "0";
-        txtCostStone.text = "0";
+        txtCostGold.text = "-";
+        txtCostStone.text = "-";
         txtNotice.text = "강화할 스킬을 선택해 주세요.";
         txtNotice.color = new Color32(255, 255, 255, 255);
         txtEnhance.gameObject.SetActive(false);
@@ -132,7 +132,15 @@ public class UIEnhance : MonoBehaviour
     public void WantEnhance()
     {
         if (alreadyHaveSkill) return;
+        else if(choosenSkill == -1)
+        {
+            txtEnhance.text = "강화할 대상을 선택해주세요";
+            return;
+        }
         C_EnhanceRequest targetSkill = new C_EnhanceRequest { SkillCode = choosenSkill };
+        choosenSkill = -1;
+        txtCostGold.text = "-";
+        txtCostStone.text = "-";
         GameManager.Network.Send(targetSkill);
     }
 
