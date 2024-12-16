@@ -34,6 +34,7 @@ public class TownManager : MonoBehaviour
     [SerializeField] private UIBossMatchingFail uIBossMatchingFail;
 
     public UIMatching UIMatching => uIMatching;
+
     public UIBossMatching UIBossMatching => uIBossMatching;
     public UIBossMatchingFail UIBossMatchingFail => uIBossMatchingFail;
 
@@ -210,10 +211,10 @@ public class TownManager : MonoBehaviour
         uiAnimation.gameObject.SetActive(true);
     }
 
-    public void Pvp()
+    public void Pvp()// 나중에() 지우고 inspecter 창에서 매칭 잡을 때는 체크 아닐 때는,  체크 해제하기(bool PvpCheck)
     {
         //매칭 요청
-        C_PlayerMatch response = new C_PlayerMatch() { };
+        C_PlayerMatch response = new C_PlayerMatch(); // 나중에 () 지우고 {  PvpCheck };
         GameManager.Network.Send(response);
     }
 
