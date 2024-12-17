@@ -301,7 +301,7 @@ class PacketHandler
 	public static void S_PvpPlayerMatchCancelResponseHandler(PacketSession session, IMessage packet)
 	{
 		S_PvpPlayerMatchCancelResponse cancelPacket = packet as S_PvpPlayerMatchCancelResponse;
-		if(cancelPacket == null)
+		if(cancelPacket == null || !cancelPacket.Success)
 			return;
 
 		TownManager.Instance.UIMatching.StopMatch();
