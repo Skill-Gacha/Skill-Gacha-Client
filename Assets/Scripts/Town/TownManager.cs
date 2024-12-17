@@ -211,10 +211,17 @@ public class TownManager : MonoBehaviour
         uiAnimation.gameObject.SetActive(true);
     }
 
-    public void Pvp()// 나중에() 지우고 inspecter 창에서 매칭 잡을 때는 체크 아닐 때는,  체크 해제하기(bool PvpCheck)
+    public void RequestPvp()
     {
         //매칭 요청
-        C_PlayerMatch response = new C_PlayerMatch(); // 나중에 () 지우고 {  PvpCheck };
+        C_PlayerMatch response = new C_PlayerMatch();
+        GameManager.Network.Send(response);
+    }
+
+    public void CancelPvp()
+    {
+        //매칭 요청 취소
+        C_PvpPlayerMatchCancelRequest response = new C_PvpPlayerMatchCancelRequest();
         GameManager.Network.Send(response);
     }
 

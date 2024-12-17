@@ -298,6 +298,15 @@ class PacketHandler
 		TownManager.Instance.UIMatching.StartMatch();
 	}
 
+	public static void S_PvpPlayerMatchCancelResponseHandler(PacketSession session, IMessage packet)
+	{
+		S_PvpPlayerMatchCancelResponse cancelPacket = packet as S_PvpPlayerMatchCancelResponse;
+		if(cancelPacket == null)
+			return;
+
+		TownManager.Instance.UIMatching.StopMatch();
+	}
+
 	public static void S_PlayerMatchNotificationHandler(PacketSession session, IMessage packet)
 	{
 		S_PlayerMatchNotification matchPacket = packet as S_PlayerMatchNotification;

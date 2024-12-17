@@ -67,6 +67,9 @@ class PacketManager
         _onRecv.Add((ushort)MsgId.SPlayerMatchNotification, MakePacket<S_PlayerMatchNotification>);
         _handler.Add((ushort)MsgId.SPlayerMatchNotification, PacketHandler.S_PlayerMatchNotificationHandler);
 
+        _onRecv.Add((ushort)MsgId.SPvpPlayerMatchCancelResponse, MakePacket<S_PvpPlayerMatchCancelResponse>);
+        _handler.Add((ushort)MsgId.SPvpPlayerMatchCancelResponse, PacketHandler.S_PvpPlayerMatchCancelResponseHandler);
+
         _onRecv.Add((ushort)MsgId.SUserTurn, MakePacket<S_UserTurn>);
         _handler.Add((ushort)MsgId.SUserTurn, PacketHandler.S_UserTurnHandler);
 
