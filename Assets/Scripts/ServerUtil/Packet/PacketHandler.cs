@@ -293,7 +293,7 @@ class PacketHandler
 	public static void S_PlayerMatchHandler(PacketSession session, IMessage packet)
 	{
 		S_PlayerMatch matchPacket = packet as S_PlayerMatch;
-		if(matchPacket == null)
+		if(matchPacket == null || !matchPacket.Check)
 			return;
 		TownManager.Instance.UIMatching.StartMatch();
 	}
