@@ -21,8 +21,7 @@ public class UIStart : MonoBehaviour
     private TMP_Text placeHolder;
 
     private int classIdx = 0;
-    private string serverUrl = "58.229.131.23";
-    //private string serverUrl = "52.195.154.2";
+    private string serverUrl = "52.69.152.45";
     private string nickname;
     private string port = "5555";
 
