@@ -61,24 +61,20 @@ class PacketManager
         _onRecv.Add((ushort)MsgId.SMonsterAction, MakePacket<S_MonsterAction>);
         _handler.Add((ushort)MsgId.SMonsterAction, PacketHandler.S_MonsterActionHandler);
 
-        // 패킷 추가 등록
-        // _onRecv.Add((ushort)MsgId.SViewRankPoint, MakePacket<S_ViewRankPoint>);
-        // _handler.Add((ushort)MsgId.SViewRankPoint, PacketHandler.S_ViewRankPointHandler);
-
-        // _onRecv.Add((ushort)MsgId.SPlayerCurrencyNotification, MakePacket<S_PlayerCurrencyNotification>);
-        // _handler.Add((ushort)MsgId.SPlayerCurrencyNotification, PacketHandler.S_PlayerCurrencyNotificationHandler);
-
         _onRecv.Add((ushort)MsgId.SPlayerMatch, MakePacket<S_PlayerMatch>);
         _handler.Add((ushort)MsgId.SPlayerMatch, PacketHandler.S_PlayerMatchHandler);
 
         _onRecv.Add((ushort)MsgId.SPlayerMatchNotification, MakePacket<S_PlayerMatchNotification>);
         _handler.Add((ushort)MsgId.SPlayerMatchNotification, PacketHandler.S_PlayerMatchNotificationHandler);
 
+        _onRecv.Add((ushort)MsgId.SPvpPlayerMatchCancelResponse, MakePacket<S_PvpPlayerMatchCancelResponse>);
+        _handler.Add((ushort)MsgId.SPvpPlayerMatchCancelResponse, PacketHandler.S_PvpPlayerMatchCancelResponseHandler);
+
         _onRecv.Add((ushort)MsgId.SUserTurn, MakePacket<S_UserTurn>);
         _handler.Add((ushort)MsgId.SUserTurn, PacketHandler.S_UserTurnHandler);
 
-        _onRecv.Add((ushort)MsgId.SSetEnemyHp, MakePacket<S_SetPvpEnemyHp>);
-        _handler.Add((ushort)MsgId.SSetEnemyHp, PacketHandler.S_SetEnemyHpHandler);
+        _onRecv.Add((ushort)MsgId.SSetPvpEnemyHp, MakePacket<S_SetPvpEnemyHp>);
+        _handler.Add((ushort)MsgId.SSetPvpEnemyHp, PacketHandler.S_SetEnemyHpHandler);
 
 		_onRecv.Add((ushort)MsgId.SPvpBattleLog, MakePacket<S_PvpBattleLog>);
         _handler.Add((ushort)MsgId.SPvpBattleLog, PacketHandler.S_PvpBattleLogHandler);
@@ -104,8 +100,41 @@ class PacketManager
         _onRecv.Add((ushort)MsgId.SInventoryViewResponse, MakePacket<S_InventoryViewResponse>);
         _handler.Add((ushort)MsgId.SInventoryViewResponse, PacketHandler.S_InventoryViewResponseHandler);
 
+        _onRecv.Add((ushort)MsgId.SEnhanceUiResponse, MakePacket<S_EnhanceUiResponse>);
+        _handler.Add((ushort)MsgId.SEnhanceUiResponse, PacketHandler.S_EnhanceUiResponseHandler);
+
+        _onRecv.Add((ushort)MsgId.SEnhanceResponse, MakePacket<S_EnhanceResponse>);
+        _handler.Add((ushort)MsgId.SEnhanceResponse, PacketHandler.S_EnhanceResponseHandler);
+
         _onRecv.Add((ushort)MsgId.SViewRankPoint, MakePacket<S_ViewRankPoint>);
         _handler.Add((ushort)MsgId.SViewRankPoint, PacketHandler.S_ViewRankPointHandler);
+
+        _onRecv.Add((ushort)MsgId.SAcceptRequest, MakePacket<S_AcceptRequest>);
+        _handler.Add((ushort)MsgId.SAcceptRequest, PacketHandler.S_AcceptRequestHandler);
+
+        _onRecv.Add((ushort)MsgId.SBossMatchNotification, MakePacket<S_BossMatchNotification>);
+        _handler.Add((ushort)MsgId.SBossMatchNotification, PacketHandler.S_BossMatchNotificationHandler);
+
+        _onRecv.Add((ushort)MsgId.SBossBattleLog, MakePacket<S_BossBattleLog>);
+        _handler.Add((ushort)MsgId.SBossBattleLog, PacketHandler.S_BossBattleLogHandler);
+
+        _onRecv.Add((ushort)MsgId.SBossPlayerStatusNotification, MakePacket<S_BossPlayerStatusNotification>);
+        _handler.Add((ushort)MsgId.SBossPlayerStatusNotification, PacketHandler.S_BossPlayerStatusNotificationHandler);
+
+        _onRecv.Add((ushort)MsgId.SBossSetMonsterHp, MakePacket<S_BossSetMonsterHp>);
+        _handler.Add((ushort)MsgId.SBossSetMonsterHp, PacketHandler.S_BossSetMonsterHpHandler);
+
+        _onRecv.Add((ushort)MsgId.SBossPlayerActionNotification, MakePacket<S_BossPlayerActionNotification>);
+        _handler.Add((ushort)MsgId.SBossPlayerActionNotification, PacketHandler.S_BossPlayerActionNotificationHandler);
+
+        _onRecv.Add((ushort)MsgId.SBossMonsterAction, MakePacket<S_BossMonsterAction>);
+        _handler.Add((ushort)MsgId.SBossMonsterAction, PacketHandler.S_BossMonsterActionHandler);
+
+        _onRecv.Add((ushort)MsgId.SBossPhase, MakePacket<S_BossPhase>);
+        _handler.Add((ushort)MsgId.SBossPhase, PacketHandler.S_BossPhaseHandler);
+
+        _onRecv.Add((ushort)MsgId.SBossBarrierCount, MakePacket<S_BossBarrierCount>);
+        _handler.Add((ushort)MsgId.SBossBarrierCount, PacketHandler.S_BossBarrierCountHandler);
     }
 
     public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

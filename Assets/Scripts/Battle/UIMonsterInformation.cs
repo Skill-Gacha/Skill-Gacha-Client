@@ -1,26 +1,26 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIMonsterInformation : MonoBehaviour
 {
     private Transform camTr;
-    
-    [SerializeField] private GameObject checkArrow;
-    
+
     [SerializeField] private TMP_Text txtName;
     [SerializeField] private TMP_Text txtHp;
-    [SerializeField] private Image imgNameBg;
     [SerializeField] private Image imgHpFill;
-
+    [SerializeField] private GameObject[] barrier;
+    [SerializeField] private GameObject[] barrierObject;
     private float fullHP;
     private float curHP;
-    
-    private float fillWidth = 180;
-    private float fillHeight = 30;
+
+    public float fillWidth = 180;
+    public float fillHeight = 30;
 
     private void Start()
     {
@@ -30,23 +30,37 @@ public class UIMonsterInformation : MonoBehaviour
     public void SetName(string nickname)
     {
         txtName.text = nickname;
-        imgNameBg.rectTransform.sizeDelta = new Vector2(txtName.preferredWidth + 50, 50);
     }
 
-    public void SetFullHP(float hp, bool recover = true)
+    public void SetFullHp(float hp, bool recover = true)
     {
         fullHP = hp;
         txtHp.text = hp.ToString("0");
 
         if (recover)
-            SetCurHP(hp);
+            SetCurHp(hp);
     }
 
-    public void SetCurHP(float hp)
+    public void SetCurHp(float hp)
     {
         curHP = Mathf.Min(hp, fullHP);
         txtHp.text = hp.ToString("0");
         float per = curHP/fullHP;
         imgHpFill.rectTransform.sizeDelta = new Vector2(fillWidth * per, fillHeight);
+    }
+
+    public void EnableBarrierImage()
+    {
+        for(int i = 0; i < barrier.Count();i++)
+        {
+            barrier[i].SetActive(true);
+            barrierObject[i].SetActive(true);
+        }
+    }
+
+    public void BreakBarrierImage(int index)
+    {
+        barrier[index].SetActive(false);
+        barrierObject[index].SetActive(false);
     }
 }

@@ -35,6 +35,7 @@ public class UIRank : MonoBehaviour
         // 새 목록 추가하기
         for(int i = 0; i < other.Length; i++)
         {
+            Debug.Log(other[i].PlayerName+", "+other[i].PlayerRank+", "+other[i].PlayerName);
             RankData rankData = Instantiate(rankTempObj).GetComponent<RankData>();
             rankData.Score = other[i].PlayerScore;
             rankData.Rank = other[i].PlayerRank;

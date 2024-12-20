@@ -1,57 +1,31 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Google.Protobuf.Collections;
 using Google.Protobuf.Protocol;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PvpBattleManager : MonoBehaviour
 {
     private static PvpBattleManager _instance = null;
-
-    // 싱글톤 방식으로 본인 객체 참조
     public static PvpBattleManager Instance => _instance;
 
     [SerializeField] private PvpUIScreen pvpUiScreen;
     [SerializeField] private PvpBattleLog uiBattleLog;
     [SerializeField] private PvpUIPlayerInformation uiPlayerInformation;
+    [SerializeField] private Transform buttons;
+    [SerializeField] private Maps map;
+    [SerializeField] private Transform[] playerTrans;
+    [SerializeField] private Transform[] opponentTrans;
+    [SerializeField] private PvpUIOpponentInformation uiOpponentInformation;
 
     public PvpUIScreen PvpUiScreen => pvpUiScreen;
     public PvpBattleLog PvpUiBattleLog => uiBattleLog;
-
     public PvpUIPlayerInformation UiPlayerInformation => uiPlayerInformation;
-
-    [SerializeField] private Transform buttons;
-
-    // pvp 맵 환경
-    [SerializeField] private Maps map;
-
-    // 플레이어(나)의 위치 정보를 가진 배열 playerTrans
-    [SerializeField] private Transform[] playerTrans;
-
-    // 플레이어(나)의 Animator
-    private Animator playerAnimator;
-
-    private Player myPlayer;
-
-    // 상대방이 생성 될 위치
-    [SerializeField] private Transform[] opponentTrans;
-
-    // 상대방의 Animator
-    private Animator opponentAnimator;
-
-    // 상대방 정보를 모든 담은 변수
-    [HideInInspector] public Player opponentPlayer = null;
-
-    // 상대방 정보를 출력해줄 UI
-    [SerializeField] private PvpUIOpponentInformation uiOpponentInformation;
-
-    // 외부에서 사용할 수 있게 private 변수를 얕은 복사한 대상
     public PvpUIOpponentInformation UIOpponentInformation => uiOpponentInformation;
 
-    // 플레이어(나) 공격, 죽기, 때리기 모션을 hash(인트형) 코드
+    private Animator playerAnimator;
+    private Animator opponentAnimator;
+    private Player myPlayer;
+    [HideInInspector] public Player opponentPlayer = null;
+
     private int[] animCodeList = new[]
     {
         Constants.PlayerBattleAttack1,
@@ -61,46 +35,55 @@ public class PvpBattleManager : MonoBehaviour
 
     private void Awake()
     {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
         _instance = this;
+        InitializePvp();
+    }
 
-        // 초기 세팅 시작
-        Set(GameManager.Instance.Pvp);
-        // Pvp 게임 환경 조성 하는 함수
-
-        // 게임 매니저로 받은 게임 정보 초기화
-        // 다음 게임 정보를 받기 위해서 사용
-        GameManager.Instance.Pvp = null;
+    private void InitializePvp()
+    {
+        if (GameManager.Instance.Pvp != null)
+        {
+            Set(GameManager.Instance.Pvp);
+            GameManager.Instance.Pvp = null;
+        }
     }
 
     public void Set(S_PlayerMatchNotification pvp)
     {
-        // 현재는 패킷으로 보내는 부분이 없어서 문제 발생 중
         SetDungeon(pvp.DungeonCode);
-
-        // 내 캐릭터 설정
-        if (pvp.PlayerData != null)
-        {
-            // 내 캐릭터 UI 정보 설정
-            uiPlayerInformation.Set(pvp.PlayerData);
-            // 내 캐릭터 3D 모델 설정
-            SetCharacter(pvp.PlayerData.PlayerClass, true);
-        }
-
-        // 상대방 캐릭터 설정
-        if (pvp.OpponentData != null)
-        {
-            // 상대방 캐릭터 UI 정보 설정
-            uiOpponentInformation.Set(pvp.OpponentData);
-            // 상대방 캐릭터 3D 모델 설정
-            SetCharacter(pvp.OpponentData.PlayerClass, false);
-            uiOpponentInformation.gameObject.SetActive(true);
-        }
-        
-        if (pvp.BattleLog != null)
-            uiBattleLog.Set(pvp.BattleLog);
+        SetPlayerData(pvp.PlayerData);
+        SetOpponentData(pvp.OpponentData);
+        SetBattleLog(pvp.BattleLog);
     }
 
-    // 캐릭터 모델 설정 및 애니메이터 할당
+    private void SetPlayerData(PlayerStatus playerData)
+    {
+        if (playerData == null) return;
+
+        uiPlayerInformation.Set(playerData);
+        SetCharacter(playerData.PlayerClass, true);
+    }
+
+    private void SetOpponentData(PlayerStatus opponentData)
+    {
+        if (opponentData == null) return;
+
+        uiOpponentInformation.Set(opponentData);
+        SetCharacter(opponentData.PlayerClass, false);
+        uiOpponentInformation.gameObject.SetActive(true);
+    }
+
+    private void SetBattleLog(BattleLog battleLog)
+    {
+        if (battleLog != null)
+            uiBattleLog.Set(battleLog);
+    }
+
     private void SetCharacter(int classCode, bool isPlayer)
     {
         int idx = classCode - Constants.PlayerCodeFactor;
@@ -115,8 +98,14 @@ public class PvpBattleManager : MonoBehaviour
             if (select)
             {
                 animator = trans[i].GetComponent<Animator>();
-                if(isPlayer) myPlayer = trans[i].GetComponent<Player>();
-                else opponentPlayer = trans[i].GetComponent<Player>();
+                if (isPlayer)
+                {
+                    myPlayer = trans[i].GetComponent<Player>();
+                }
+                else
+                {
+                    opponentPlayer = trans[i].GetComponent<Player>();
+                }
             }
         }
 
@@ -126,25 +115,23 @@ public class PvpBattleManager : MonoBehaviour
             opponentAnimator = animator;
     }
 
-    // 던전 배경 설정 현재는 호출부가 주석 처리된 상태
     public void SetDungeon(int dungeonCode)
     {
         SetMap(dungeonCode);
     }
 
-    // 맵 설정
     public void SetMap(int id)
     {
         map.SetMap(id);
     }
 
-    public void CheckUserTurn(bool UserTurn)
+    public void CheckUserTurn(bool userTurn)
     {
-        int numChildren = buttons.transform.childCount;
-        for(int i = 0; i < numChildren; i++)
+        foreach (Transform child in buttons)
         {
-            Button button = buttons.GetChild(i).GetComponent<Button>();
-            button.interactable = UserTurn;
+            Button button = child.GetComponent<Button>();
+            if (button != null)
+                button.interactable = userTurn;
         }
     }
 
@@ -164,10 +151,16 @@ public class PvpBattleManager : MonoBehaviour
     private void TriggerPlayerAction(int code, bool isMyPlayer)
     {
         Animator animator = isMyPlayer ? playerAnimator : opponentAnimator;
+        if (animator == null) return;
 
-        animator.transform.localEulerAngles = isMyPlayer ? Vector3.zero : new Vector3(0,180,0);
-        animator.transform.localPosition = Vector3.zero;
-        animator.applyRootMotion = code == Constants.PlayerBattleDie;
+        SetAnimatorTransform(isMyPlayer, animator);
+        animator.applyRootMotion = (code == Constants.PlayerBattleDie);
         animator.SetTrigger(code);
+    }
+
+    private void SetAnimatorTransform(bool isMyPlayer, Animator animator)
+    {
+        animator.transform.localEulerAngles = isMyPlayer ? Vector3.zero : new Vector3(0, 180, 0);
+        animator.transform.localPosition = Vector3.zero;
     }
 }

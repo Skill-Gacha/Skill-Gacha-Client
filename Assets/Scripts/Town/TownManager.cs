@@ -27,8 +27,19 @@ public class TownManager : MonoBehaviour
     [SerializeField] private UIChat uiChat;
 
     [SerializeField] private UIStore uiStore;
+    [SerializeField] private UIEnhance uiEnhance;
+
+    [SerializeField] private UIMatching uIMatching;
+    [SerializeField] private UIBossMatching uIBossMatching;
+    [SerializeField] private UIBossMatchingFail uIBossMatchingFail;
+
+    public UIMatching UIMatching => uIMatching;
+
+    public UIBossMatching UIBossMatching => uIBossMatching;
+    public UIBossMatchingFail UIBossMatchingFail => uIBossMatchingFail;
 
     public UIStore UIStore => uiStore;
+    public UIEnhance UIEnhance => uiEnhance;
 
     [SerializeField] private UIRank uIRank;
 
@@ -91,6 +102,7 @@ public class TownManager : MonoBehaviour
 
     public void Spawn(PlayerInfo playerInfo)
     {
+		GameManager.Instance.SetPlayerId(playerInfo.PlayerId);
         var tr = playerInfo.Transform;
         var spawnPos = spawnArea.position;
         spawnPos.x += tr.PosX;
@@ -149,8 +161,8 @@ public class TownManager : MonoBehaviour
             // 오류 상황! 나는 던전이나 PVP로 이동했어서 마을에 없어야 했음
             var prevPlayer = playerList[playerId];
             playerList[playerId] = player;
-            if(prevPlayer)
-                Destroy(prevPlayer.gameObject);
+            if (prevPlayer)
+            Destroy(prevPlayer.gameObject);
             // 기존 유저 정보와 케릭터를 제거하고, 새롭게 넣어줍니다.
 
             // Destroy는 Unity에서 GameObject를 제거해주는 함수 입니다.
@@ -199,10 +211,31 @@ public class TownManager : MonoBehaviour
         uiAnimation.gameObject.SetActive(true);
     }
 
-    public void Pvp()
+    public void RequestPvp()
     {
         //매칭 요청
-        C_PlayerMatch response = new C_PlayerMatch() { };
+        C_PlayerMatch response = new C_PlayerMatch();
+        GameManager.Network.Send(response);
+    }
+
+    public void CancelPvp()
+    {
+        //매칭 요청 취소
+        C_PvpPlayerMatchCancelRequest response = new C_PvpPlayerMatchCancelRequest();
+        GameManager.Network.Send(response);
+    }
+
+    public void BossMatch()
+    {
+        //매칭 요청
+        C_BossMatch response = new C_BossMatch() { };
+        GameManager.Network.Send(response);
+    }
+
+    public void BossMatchAccept()
+    {
+        //매칭 요청
+        C_AcceptResponse response = new C_AcceptResponse() { };
         GameManager.Network.Send(response);
     }
 
@@ -211,7 +244,7 @@ public class TownManager : MonoBehaviour
         if (playerList.ContainsKey(playerId))
             // playerList(마을 안에 있는 유저 정보)(딕셔너리, Map)에 playerId가 포함 돼 있으면
             return playerList[playerId];
-            // playerId(key)에 따른 value인 유저 정보를 반환해준다.
+        // playerId(key)에 따른 value인 유저 정보를 반환해준다.
         return null;
     }
 }

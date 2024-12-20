@@ -59,9 +59,7 @@ public class UINameChat : MonoBehaviour
     public void SetName(string userName)
     {
         this.userName = userName;
-        
         txtNickname.text = userName;
-        
         originBgSize = txtNickname.GetPreferredValues() + new Vector2(70, 35);
         txtNickname.rectTransform.sizeDelta = originBgSize;
         txtChat.rectTransform.sizeDelta = new Vector2(originBgSize.x, 0);
@@ -78,22 +76,21 @@ public class UINameChat : MonoBehaviour
 
         SetChatText();
     }
-    
+
     private void PopText()
     {
         if (_msgList.Count != 0)
             _msgList.RemoveAt(0);
     }
-    
+
     private void ReturnToDefault()
     {
         var zeroHeight = originBgSize;
         zeroHeight.y = 0;
-        
         txtChat.rectTransform.DOSizeDelta(zeroHeight, 0.2f);
         txtChat.DOFade(0, 0.1f).OnComplete(() => { txtChat.text = string.Empty; });
     }
-    
+
     private void SetChatText()
     {
         if (_msgList.Count == 0)

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Google.Protobuf.Collections;
 using Google.Protobuf.Protocol;
 using UnityEngine;
@@ -8,7 +9,7 @@ public class BattleManager : MonoBehaviour
 {
     private static BattleManager _instance = null;
     public static BattleManager Instance => _instance;
-    
+
     [SerializeField] private UIScreen uiScreen;
     [SerializeField] private UIBattleLog uiBattleLog;
     [SerializeField] private UIPlayerInformation uiPlayerInformation;
@@ -16,21 +17,21 @@ public class BattleManager : MonoBehaviour
     public UIScreen UiScreen => uiScreen;
     public UIBattleLog UiBattleLog => uiBattleLog;
     public UIPlayerInformation UiPlayerInformation => uiPlayerInformation;
-    
+
     [SerializeField] private Maps map;
-    
+
     [SerializeField] private Transform[] players;
     private Animator playerAnimator;
-    
+
     private Dictionary<int, string> monsterDb = new Dictionary<int, string>();
-    
+
     [SerializeField] private Transform[] monsterSpawnPos;
     [SerializeField] private List<Monster> monsterObjs = new List<Monster>();
-    
+
     private List<UIMonsterInformation> monsterUis = new List<UIMonsterInformation>();
-    
+
     private string baseMonsterPath = "Monster/Monster1";
-    
+
 
     private int[] animCodeList = new[]
     {
@@ -39,13 +40,11 @@ public class BattleManager : MonoBehaviour
         Constants.PlayerBattleHit
     };
 
-    
-    
     private void Awake()
     {
         _instance = this;
 
-        for (int i = 1; i < 30; i++)
+        for (int i = 1; i <= 30; i++)
         {
             var monsterCode = Constants.MonsterCodeFactor + i;
             var monsterPath = $"Monster/Monster{i}";
@@ -81,7 +80,7 @@ public class BattleManager : MonoBehaviour
         {
             bool select = i == idx;
             players[i].gameObject.SetActive(select);
-            
+
             if (select)
                 playerAnimator = players[i].GetComponent<Animator>();
         }
@@ -115,12 +114,12 @@ public class BattleManager : MonoBehaviour
             var monsterPath = monsterDb.GetValueOrDefault(monsterCode, baseMonsterPath);
             var monsterRes = Resources.Load<Monster>(monsterPath);
             var monster = Instantiate(monsterRes, monsterSpawnPos[i]);
-            
+
             monsterObjs.Add(monster);
             monsterUis.Add(monster.UiMonsterInfo);
-            
+
             monster.UiMonsterInfo.SetName(monsterInfo.MonsterName);
-            monster.UiMonsterInfo.SetFullHP(monsterInfo.MonsterHp);
+            monster.UiMonsterInfo.SetFullHp(monsterInfo.MonsterHp);
         }
     }
 
@@ -128,9 +127,9 @@ public class BattleManager : MonoBehaviour
     {
         if(idx < 0 || idx >= monsterUis.Count)
             return;
-        
-        monsterUis[idx].SetCurHP(hp);
+        monsterUis[idx].SetCurHp(hp);
     }
+
 
     public Monster GetMonster(int idx)
     {
@@ -141,6 +140,11 @@ public class BattleManager : MonoBehaviour
         }
 
         return null;
+    }
+
+    public List<Monster> GetMonster(int[] monsterIndex)
+    {
+        return monsterIndex.Where(index => index >= 0 && index < monsterObjs.Count).Select(index => monsterObjs[index]).ToList();
     }
 
     public void PlayerHit()
@@ -160,7 +164,7 @@ public class BattleManager : MonoBehaviour
     {
         if(idx < 0 || idx >= animCodeList.Length)
             return;
-        
+
         var animCode = animCodeList[idx];
         TriggerAnim(animCode);
     }

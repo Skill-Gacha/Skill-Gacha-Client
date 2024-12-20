@@ -1,10 +1,7 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using ServerCore;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,7 +14,6 @@ class PacketHandler
         S_Enter enterPacket = packet as S_Enter;
         if (enterPacket == null)
 	        return;
-
 		TownManager.Instance.Spawn(enterPacket.Player);
 	}
 
@@ -196,6 +192,13 @@ class PacketHandler
 			return;
 		}
 
+		else if(BossManager.Instance != null)
+		{
+			var BossUiScreen= BossManager.Instance.BossUiScreen;
+			BossUiScreen.Set(pkt.ScreenText);
+			return;
+		}
+
 		if (pkt.ScreenText != null)
 		{
 			var uiScreen = BattleManager.Instance.UiScreen;
@@ -218,6 +221,7 @@ class PacketHandler
 		S_BattleLog pkt = packet as S_BattleLog;
 		if (pkt == null)
 			return;
+		if(pkt.BattleLog == null) return;
 
 		if (pkt.BattleLog != null)
 		{
@@ -260,14 +264,13 @@ class PacketHandler
 		S_PlayerAction pkt = packet as S_PlayerAction;
 		if (pkt == null)
 			return;
-
-		Monster monster = BattleManager.Instance.GetMonster(pkt.TargetMonsterIdx);
-		monster.Hit();
+		int[] monsterIndex = pkt.TargetMonsterIdx.ToArray();
+		if(monsterIndex.Length != 0) BattleManager.Instance.GetMonster(monsterIndex).ForEach(monster => monster.Hit());
 
 		BattleManager.Instance.PlayerAnim(pkt.ActionSet.AnimCode);
 
-		if(pkt.TargetMonsterIdx == -1) EffectManager.Instance.SetEffectToPlayer(pkt.ActionSet.EffectCode);
-		else EffectManager.Instance.SetEffectToMonster(pkt.TargetMonsterIdx, pkt.ActionSet.EffectCode);
+		if(monsterIndex.Length == 0) EffectManager.Instance.SetEffectToPlayer(pkt.ActionSet.EffectCode);
+		else EffectManager.Instance.SetEffectToMonster(monsterIndex, pkt.ActionSet.EffectCode);
 	}
 
 	public static void S_MonsterActionHandler(PacketSession session, IMessage packet)
@@ -290,8 +293,18 @@ class PacketHandler
 	public static void S_PlayerMatchHandler(PacketSession session, IMessage packet)
 	{
 		S_PlayerMatch matchPacket = packet as S_PlayerMatch;
-		if(matchPacket == null)
+		if(matchPacket == null || !matchPacket.Check)
 			return;
+		TownManager.Instance.UIMatching.StartMatch();
+	}
+
+	public static void S_PvpPlayerMatchCancelResponseHandler(PacketSession session, IMessage packet)
+	{
+		S_PvpPlayerMatchCancelResponse cancelPacket = packet as S_PvpPlayerMatchCancelResponse;
+		if(cancelPacket == null || !cancelPacket.Success)
+			return;
+
+		TownManager.Instance.UIMatching.StopMatch();
 	}
 
 	public static void S_PlayerMatchNotificationHandler(PacketSession session, IMessage packet)
@@ -301,6 +314,7 @@ class PacketHandler
 			return;
 		Scene scene = SceneManager.GetActiveScene();
 
+		TownManager.Instance.UIMatching.StopMatch();
 		if(scene.name == GameManager.PvpScene)
 		{
 			PvpBattleManager.Instance.Set(matchPacket);
@@ -336,12 +350,14 @@ class PacketHandler
 	public static void S_PvpPlayerActionHandler(PacketSession session, IMessage packet)
 	{
 		// 내 행동은 true를 HandlePvpAction에 전달
+		Debug.Log("나 : "+packet);
 		HandlePvpAction(packet, true);
 	}
 
 	public static void S_PvpEnemyActionHandler(PacketSession session, IMessage packet)
 	{
 		// 상대방 행동은 false를 HandlePvpAction에 전달
+		Debug.Log("너 : "+packet);
 		HandlePvpAction(packet, false);
 	}
 
@@ -366,16 +382,20 @@ class PacketHandler
 	private static void ProcessPvpAction(ActionSet actionSet, bool isMyAction)
 	{
 		var animCode = actionSet.AnimCode;
-		int? effectCode = actionSet.EffectCode;
+		int effectCode = actionSet.EffectCode;
 
 		// 때리는 사람 처리(나 : true, 상대방 : false)
 		PvpBattleManager.Instance.PlayerAnim(animCode, isMyAction);
 
-		// 맞는 이펙트 처리(상대방 : true, 나 : false)
-		if(effectCode is not null)
+		if(effectCode != 0 && effectCode <= 3028)
 		{
+			// 맞는 이펙트 처리(상대방 : true, 나 : false)
 			PvpEffectManager.Instance.SetEffectToPlayer(effectCode, isMyAction);
 			PvpBattleManager.Instance.PlayerHit(!isMyAction);
+		}
+		else if(effectCode != 0 && effectCode > 3028)
+		{
+			PvpEffectManager.Instance.SetEffectToPlayer(effectCode, !isMyAction);
 		}
 	}
 
@@ -407,10 +427,166 @@ class PacketHandler
 		opponentInfo.SetCurHP(enemyHp.Hp);
 	}
 
-	#endregion
+    #endregion
 
-	#region Shore
-	public static void S_OpenStoreResponseHandler(Session session, IMessage packet)
+    #region Boss
+
+	// 포탈에 3명이 존재할 경우 레이드에 참여 여부 물어보기
+    public static void S_AcceptRequestHandler(PacketSession session, IMessage packet)
+    {
+        S_AcceptRequest acceptPacket = packet as S_AcceptRequest;
+        if (acceptPacket == null)
+            return;
+        TownManager.Instance.UIBossMatching.ShowBossMatchingUi();
+    }
+
+	// Boss Raid 매칭 성공할 경우 씬 이동 및 보스 배치 함수
+    public static void S_BossMatchNotificationHandler(Session session, IMessage packet)
+	{
+		S_BossMatchNotification Boss = packet as S_BossMatchNotification;
+
+		//TODO: Success가 false일 때 모든 유저가 포탈 위치가 아닌 위치로 이동시키기
+		if(!Boss.Success)
+		{
+            TownManager.Instance.UIBossMatching.StopMatch();
+            TownManager.Instance.UIBossMatchingFail.ShowBossMatchingFailUi();
+			return;
+        }
+
+		Scene scene = SceneManager.GetActiveScene();
+
+		if(scene.name == GameManager.BossScene)
+		{
+			BossManager.Instance.Set(Boss);
+		}
+		else
+		{
+			GameManager.Instance.Boss = Boss;
+			SceneManager.LoadScene(GameManager.BossScene);
+		}
+	}
+
+	// 배틀로그(버튼과 텍스트 메시지가 포함 돼 온다)
+	public static void S_BossBattleLogHandler(Session session, IMessage packet)
+	{
+		S_BossBattleLog battleLog = packet as S_BossBattleLog;
+		if(battleLog == null)
+			return;
+
+		if(battleLog.BattleLog != null)
+		{
+			var uiBattleLog = BossManager.Instance.UiBattleLog;
+			uiBattleLog.Set(battleLog.BattleLog);
+		}
+	}
+
+	// 모든 유저의 HP와 MP 상태
+	// TODO : 향후 내 HP, MP 사이트와 팀 HP, MP 파티 창에 반영
+	public static void S_BossPlayerStatusNotificationHandler(Session session, IMessage packet)
+	{
+		S_BossPlayerStatusNotification playerStatus = packet as S_BossPlayerStatusNotification;
+
+		if(playerStatus == null) return;
+		int[] PlayerIds = playerStatus.PlayerId.ToArray();
+		int[] Hps = playerStatus.Hp.ToArray();
+		int[] Mps = playerStatus.Mp.ToArray();
+
+        for (int i = 0; i < PlayerIds.Length; i++)
+		{
+			BossManager.Instance.SetPartyStatus(PlayerIds[i], Hps[i], Mps[i]);
+        }
+    }
+
+	// 보스 몹의 HP(서버로 부터 오는 수신 구간)
+	public static void S_BossSetMonsterHpHandler(Session session, IMessage packet)
+	{
+		// 보스 몹이나 쫄 체력 변경될 경우
+		S_BossSetMonsterHp bossMonsterHp = packet as S_BossSetMonsterHp;
+
+		if(bossMonsterHp == null)
+			return;
+		BossManager.Instance.SetMonsterHp(bossMonsterHp.MonsterIdx, bossMonsterHp.Hp);
+	}
+
+	public static void S_BossPlayerActionNotificationHandler(Session session, IMessage packet)
+	{
+		S_BossPlayerActionNotification playerAction = packet as S_BossPlayerActionNotification;
+
+		if(playerAction == null) return;
+
+		int[] monsterIndex = playerAction.TargetMonsterIdx.ToArray();
+
+
+		if(monsterIndex.Length != 0) BossManager.Instance.GetMonster(monsterIndex).ForEach(monster=> monster.Hit());
+
+		BossManager.Instance.PlayerAnim(playerAction.PlayerId,playerAction.ActionSet.AnimCode);
+
+		if(monsterIndex.Length == 0) BossEffectManager.Instance.SetEffectToPlayer(playerAction.ActionSet.EffectCode);
+		else BossEffectManager.Instance.SetEffectToMonster(monsterIndex,playerAction.ActionSet.EffectCode);
+	}
+
+	// Boss 몬스터의 행동
+	public static void S_BossMonsterActionHandler(Session session, IMessage packet)
+	{
+		S_BossMonsterAction bossMonsterAction = packet as S_BossMonsterAction;
+		if(bossMonsterAction == null) return;
+		int effectCode = bossMonsterAction.ActionSet.EffectCode;
+		// 해야할 일
+		// 1페이지
+		// 일반 광역기
+
+		// 2페이지
+		// 전체 디버프
+
+		// 3페이지
+		// 단일기 HP, MP 바꾸기
+		Debug.Log("보스 공격 확인 : "+bossMonsterAction);
+		Monster monster = BossManager.Instance.GetMonster(bossMonsterAction.ActionMonsterIdx);
+		if(monster) monster.SetAnim(bossMonsterAction.ActionSet.AnimCode);
+
+		int[] playerIds = bossMonsterAction.PlayerIds.ToArray();
+		// 보스가 죽을 때는 유저를 공격할 필요가 없다.
+		if(bossMonsterAction.ActionSet.AnimCode != 4) BossManager.Instance.PlayerHit(playerIds);
+
+		// 3페이지
+		// 단일기 HP, MP 바꾸기
+		if(playerIds.Count() == 1 && effectCode == 3032) BossEffectManager.Instance.SetEffectToPlayer(effectCode, playerIds[0],false);
+		// 1페이지, 2페이지 일반 광역기, 전체 디버프
+		else BossEffectManager.Instance.SetEffectToPlayer(effectCode);
+	}
+
+	public static void S_BossPhaseHandler(Session session, IMessage packet)
+	{
+		S_BossPhase bossPhase = packet as S_BossPhase;
+		//bossPhase
+		if(bossPhase == null) return;
+
+		// 2페이지 시작할 경우 속성 바꾸기
+		if(bossPhase.Phase == 2)
+		{
+			BossManager.Instance.BossMaterialChange(bossPhase.RandomElement);
+		}
+		// 3페이지 시작할 경우 속성 바꾸기 및 보호막
+		else if(bossPhase.Phase == 3)
+		{
+			BossManager.Instance.BossMaterialChange(bossPhase.RandomElement);
+			BossManager.Instance.BossBarrierEnable();
+		}
+	}
+
+	public static void S_BossBarrierCountHandler(Session session, IMessage packet)
+	{
+		S_BossBarrierCount barrierCount = packet as S_BossBarrierCount;
+
+		if(barrierCount == null) return;
+		int remainCount = barrierCount.BarrierCount;
+		BossManager.Instance.BossBarrierBreak(remainCount);
+	}
+
+    #endregion
+
+    #region Store
+    public static void S_OpenStoreResponseHandler(Session session, IMessage packet)
 	{
 		S_OpenStoreResponse openStore = packet as S_OpenStoreResponse;
 		TownManager.Instance.UIStore.ShowStoreUi(openStore);
@@ -432,9 +608,26 @@ class PacketHandler
       	TownManager.Instance.UIInventory.ShowInventoryUi(openInventory);
     }
 
-	#endregion
+    #endregion
 
-	#region
+    #region Enhance
+
+    public static void S_EnhanceUiResponseHandler(Session session, IMessage packet)
+    {
+        S_EnhanceUiResponse openEnhance = packet as S_EnhanceUiResponse;
+        TownManager.Instance.UIEnhance.ShowEnhanceUi(openEnhance);
+
+    }
+
+    public static void S_EnhanceResponseHandler(Session session, IMessage packet)
+    {
+        S_EnhanceResponse enhanceSuccess = packet as S_EnhanceResponse;
+        TownManager.Instance.UIEnhance.EnhanceSuccess(enhanceSuccess);
+    }
+
+    #endregion
+
+	#region Rank
 
 	public static void S_ViewRankPointHandler(Session session, IMessage packet)
 	{

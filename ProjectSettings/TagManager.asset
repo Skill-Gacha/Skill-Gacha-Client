@@ -8,6 +8,8 @@ TagManager:
   - Bullet
   - Store
   - VillageHead
+  - Enhance
+  - Boss
   layers:
   - Default
   - TransparentFX

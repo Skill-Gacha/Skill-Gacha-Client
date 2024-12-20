@@ -1,0 +1,30 @@
+Hi there!
+
+Thanks for your support of my work.
+
+The bonus files are here for those who want to go a bit further and do a bit more with the assets. Not all assets will have the same kind of bonus files. Here's a breakdown of what you may find:
+
+SUBSTANCE PAINTER FILES
+To customize the textures, use the Substance Painter files. These are large files, as mostly they're in 4k and have a lot of layers. I try hard to keep the organization clear so that it is easy to create new looks without getting to involved in Painter. Please check out these YouTube tutorials I've created:
+
+https://www.youtube.com/watch?v=5-G4OuevblM
+https://www.youtube.com/watch?v=o8Azx0aRRbM
+
+CONCEPT ART
+The concept art is usually presented in layers (Photoshop PSD file), so you can more easily customize the colors etc. Also, layers allows for removing body parts or wardrobe/weapons etc. These are presented in ultra-high resolution and are intended to be used on your website or in other marketing, if you so choose.
+
+https://www.youtube.com/watch?v=7hPhaxpjnSA
+
+ANIMATION RIG
+The rig may have been made in Maya or 3DS Max. I don't think we've had any in other formats. For those who want to create or customize animations without using the rig, or where the rig is unavailable, I suggest checking out UMotion Community on the Asset Store, or Puppet 3D.
+
+MUSIC STEMS
+These are usually included in the main pack, but in some cases, may be in the Bonus download instead. Each stem is usually one or a few related instruments in the track. They are separated out so you can create your own mixes! Use the demo scene included with the character to export them easily.
+
+https://www.youtube.com/watch?v=OLhvu0Ddcl4
+
+OTHER THINGS
+In some cases there may be additional bonus files that are not too common.
+
+
+NOTE: In some of my videos or other files, I may reference downloads from my site, www.InfinityPBR.com. Now that I am able to host bonus content on the Asset Store, I am slowly moving away from hosting it on my site, as it will save me a good amount of expense. Thanks for understanding!
